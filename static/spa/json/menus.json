@@ -1,0 +1,24 @@
+[
+  {
+    "name": "控制台",
+    "url": "javascript:;",
+    "icon": "layui-icon layui-icon-home",
+    "subMenus": [
+      {
+        "name": "控制台",
+        "url": "#/console/index"
+      }
+    ]
+  },
+  {
+    "name": "资产管理",
+    "icon": "layui-icon layui-icon-form",
+    "url": "javascript:;",
+    "subMenus": [
+      {
+        "name": "资产列表",
+        "url": "#/assetmanage/list"
+      }
+    ]
+  }
+]

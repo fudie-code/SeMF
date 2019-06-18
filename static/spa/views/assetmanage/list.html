@@ -1,0 +1,56 @@
+<div class="layui-fluid">
+	<div class="layui-row layui-col-space15">
+		<!-- 查询 -->
+		<div class="layui-col-md12">
+			<div class="layui-card">
+				<div class="layui-card-body layui-form layui-row layui-col-space10" id="projcet-query" lay-filter="projcet-query">
+					<div class="layui-col-md4">
+						<label class="layui-form-label">模糊查询</label>
+						<div class="layui-input-block">
+							<input type="text" name="condition" placeholder="" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-col-md1 layui-col-md-offset6">
+						<div class="layui-input-block">
+							<button class="layui-btn" lay-submit lay-filter="query">查询</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 资产表格 -->
+		<div class="layui-col-md12">
+			<div class="layui-card">
+				<div class="layui-card-header">资产列表</div>
+				<div class="layui-card-body">
+					<table class="layui-table" id="rootasset-list" lay-filter="rootasset-list"></table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/html" id="rootasset-toolbar">
+	<div class="layui-btn-container">
+      <button class="layui-btn layui-btn-sm" lay-event="add">资产录入</button>
+    </div>
+ </script>
+
+<script type="text/html" id="rootasset-bar">
+	<!-- <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">编辑</a> -->
+    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="detial">详情</a>
+    <a class="layui-btn layui-btn-xs" data-dropdown="#dropdown-{{d.id}}" data-anchor="top-right">
+      更多
+  </a>
+  <!-- 下拉菜单 -->
+  <div class="dropdown-menu fixed" id="dropdown-{{d.id}}">
+      <ul>
+          <li><a lay-event="edit"><i class="layui-icon layui-icon-edit"></i> 修改</a></li>
+          <li><a lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a></li>
+      </ul>
+  </div>
+</script>
+
+<script src="assets/js/assetmanage/list.js"></script>
