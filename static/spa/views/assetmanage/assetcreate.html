@@ -1,0 +1,133 @@
+<div class="layui-card-body" style="padding: 15px;" id='formedit'>
+	<form class="layui-form" action="" lay-filter="component-form-group">
+		<input type='hidden' name="csrfmiddlewaretoken" id='csrf'>
+		<input type='hidden' name="parent" id='parent'>
+		<input type='hidden' name="id" id='id'>
+		<div class="layui-form-item">
+			<label class="layui-form-label">资产名称</label>
+			<div class="layui-input-block">
+				<input name="name" id="name" lay-verify="required" autocomplete="off" placeholder="请输入资产名称"
+					class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+            <label class="layui-form-label">资产标识</label>
+            <div class="layui-input-block">
+                <input name="key" id="key" lay-verify="required" autocomplete="off" placeholder="域名或IP地址"
+                    class="layui-input">
+            </div>
+        </div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">资产类型</label>
+			<div class="layui-input-block">
+				<select name="type" id="type" lay-verify="required">
+					<option value=""></option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">负责人</label>
+			<div class="layui-input-block">
+				<input name="manage" id="manage" lay-verify="required" autocomplete="off" placeholder="负责人"
+					class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">联系电话</label>
+			<div class="layui-input-block">
+				<input name="telephone" id="telephone" autocomplete="off" lay-verify="phone" placeholder="请输入手机号码"
+					class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">邮箱</label>
+			<div class="layui-input-block">
+				<input name="email" id="email" autocomplete="off" lay-verify="email" placeholder="请输入邮箱"
+					class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">资产描述</label>
+			<div class="layui-input-block">
+				<textarea name="description" id="description" placeholder="请输入描述内容" class="layui-textarea"></textarea>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs-offset3">
+			<div class="layui-input-block">
+				<button class="layui-btn" lay-submit="" lay-filter="sub">立即提交</button>
+				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+
+<script>
+	layui.use(['admin', 'form'], function () {
+		var $ = layui.$
+			, layer = layui.layer
+			, admin = layui.admin
+			, form = layui.form
+
+
+		form.render();
+
+		// admin.req({
+		// 	url: '/csrf/' //实际使用请改成服务端真实接口
+		// 	, type: 'GET'
+		// 	, done: function (res) {
+		// 		$('#csrf').val(res.data.token);
+		// 	}
+		// });
+		
+
+		// admin.req({
+		// 	url: '/assetmanage/assettype/' //实际使用请改成服务端真实接口
+		// 	, type: 'GET'
+		// 	, done: function (res) {
+		// 		let data = res.data;
+		// 		$.each(data, function (index, item) {
+		// 			$('#type').append(new Option(item.name, item.id));// 下拉菜单里添加元素
+		// 		});
+        //         form.render()
+		// 	}
+		// });
+
+		form.on('submit(sub)', function (obj) {
+			if (obj.field.id == "") {
+                    admin.req({
+                        url: '/assetmanage/assetcreate/' //实际使用请改成服务端真实接口
+                        , type: 'POST'
+                        , data: obj.field
+                        , done: function (res) {
+                            //成功的提示与跳转
+                            layer.msg(res.msg, {
+                                offset: '15px'
+                                , icon: 1
+                                , time: 1000
+                            }, function () {
+                                layui.index.render();
+                            });
+                        }
+                    });
+                } else {
+                    admin.req({
+                        url: '/assetmanage/assetupdate/' + obj.field.id + '/'//实际使用请改成服务端真实接口
+                        , type: 'POST'
+                        , data: obj.field
+                        , done: function (res) {
+                            //成功的提示与跳转
+                            layer.msg(res.msg, {
+                                offset: '15px'
+                                , icon: 1
+                                , time: 1000
+                            }, function () {
+                                layui.index.render();
+                            });
+                        }
+                    });
+                }
+                return false;
+		});
+	});
+</script>
