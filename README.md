@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-# SecurityManageFramwork-SeMF
+# SeMF
 
 #### 项目介绍
 企业内网安全管理平台，包含资产管理，漏洞管理，账号管理，知识库管、安全扫描自动化功能模块，可用于企业内部的安全管理。
@@ -81,4 +80,3 @@
 4. [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
 5. 码云官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
 6. 码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
->>>>>>> 6541b3851bb8f46efda344e16d0296f12d0fd515
