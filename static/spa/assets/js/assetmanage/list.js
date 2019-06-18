@@ -1,12 +1,16 @@
-layui.use(['admin', 'table', 'form', 'dropdown'], function () {
+layui.use(['admin', 'table', 'form', 'dropdown','index'], function () {
     var table = layui.table,
         form = layui.form,
         $ = layui.$,
         admin = layui.admin,
-        dropdown = layui.dropdown;
+        dropdown = layui.dropdown
+        index = layui.index;
 
     form.render();
 
+    $('#jump').click(()=>{
+        index.go('/assetmanage/detial');
+    })
     //获取资产类型
     $.ajax({
         url: '/assetmanage/assettype/',
