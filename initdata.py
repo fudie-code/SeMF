@@ -18,7 +18,7 @@ def initmenu():
          {'name':'资产管理','key':'assetmanage','icon':"layui-icon-form",'jump':'','parent':''},
          {'name':'项目列表','key':'rootlist','icon':"",'jump':'assetmanage/rootlist','parent':'assetmanage'},
          {'name':'资产列表','key':'list','icon':"",'jump':'assetmanage/list','parent':'assetmanage'},
-         
+         '''
          {'name':'漏洞管理','key':'vulnmanage','icon':"layui-icon-template",'jump':'','parent':''},
          {'name':'漏洞列表','key':'list','icon':"",'jump':'vulnmanage/list','parent':'vulnmanage'},
          
@@ -46,7 +46,7 @@ def initmenu():
 
          {'name':'知识库','key':'article','icon':"layui-icon-read",'jump':'','parent':''},
          {'name':'文章管理','key':'list','icon':"",'jump':'article/list','parent':'article'},
-         {'name':'文章列表','key':'artlist','icon':"",'jump':'article/artlist','parent':'article'}
+         {'name':'文章列表','key':'artlist','icon':"",'jump':'article/artlist','parent':'article'}'''
          ]
     for item in menu_list:
         menu_get = Menu.objects.get_or_create(
@@ -78,7 +78,7 @@ def initPermission():
     
 def initRole():
     role_list=[
-        {'name':'普通账号','description':'系统基本使用权限','menu':['assetmanage','vulnmanage','taskmanage','evaluationmanage','set']},
+        {'name':'普通账号','description':'系统基本使用权限','menu':['asset','vuln','task','set']},
         {'name':'管理账号','description':'普通管理权限','menu':['administrators']},
         ]
     for item in role_list:
