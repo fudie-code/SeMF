@@ -6,48 +6,20 @@ Created on 2018年11月8日
 '''
 
 import django,os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'SecurityEvaluationManage.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'SeMF.settings')
 django.setup()
 from RBAC.models import Permission,Menu,Role
 from AssetManage import models as assetmodels
-from VulnManage import models as vulnmodels
+#from VulnManage import models as vulnmodels
 
 
 def initmenu():
     menu_list = [
+        
          {'name':'资产管理','key':'assetmanage','icon':"layui-icon-form",'jump':'','parent':''},
-         {'name':'项目列表','key':'rootlist','icon':"",'jump':'assetmanage/rootlist','parent':'assetmanage'},
-         {'name':'资产列表','key':'list','icon':"",'jump':'assetmanage/list','parent':'assetmanage'},
-         '''
-         {'name':'漏洞管理','key':'vulnmanage','icon':"layui-icon-template",'jump':'','parent':''},
-         {'name':'漏洞列表','key':'list','icon':"",'jump':'vulnmanage/list','parent':'vulnmanage'},
-         
-         {'name':'任务管理','key':'taskmanage','icon':"layui-icon-template-1",'jump':'','parent':''},
-         {'name':'任务列表','key':'list','icon':"",'jump':'taskmanage/list','parent':'taskmanage'},
-         
-         {'name':'评测管理','key':'evaluationmanage','icon':"layui-icon-app",'jump':'','parent':''},
-         {'name':'评测列表','key':'list','icon':"",'jump':'evaluationmanage/list','parent':'evaluationmanage'},
-         
-         #{'name':'知识库','key':'articlemanage','icon':"layui-icon-read",'jump':'','parent':''},
-         #{'name':'知识库列表','key':'list','icon':"",'jump':'articlemanage/list','parent':'articlemanage'},
-         
-         {'name':'用户管理','key':'administrators','icon':"layui-icon-user",'jump':'','parent':''},
-         {'name':'用户列表','key':'list','icon':"",'jump':'administrators/list','parent':'administrators'},
-         {'name':'企业列表','key':'company','icon':"",'jump':'administrators/company','parent':'administrators'},
-
-         {'name':'通告管理','key':'noticemanage','icon':"layui-icon-speaker",'jump':'','parent':''},
-         {'name':'通告列表','key':'list','icon':"",'jump':'noticemanage/list','parent':'noticemanage'},
-         
-         
-         {'name':'系统设置','key':'set','icon':"layui-icon-set",'jump':'','parent':''},
-         {'name':'我的设置','key':'user','icon':"",'jump':'','parent':'set'},
-         {'name':'修改密码','key':'password','icon':"",'jump':'set/user/password','parent':'user'},
-         {'name':'企业信息','key':'company','icon':"",'jump':'set/user/company','parent':'user'},
-
-         {'name':'知识库','key':'article','icon':"layui-icon-read",'jump':'','parent':''},
-         {'name':'文章管理','key':'list','icon':"",'jump':'article/list','parent':'article'},
-         {'name':'文章列表','key':'artlist','icon':"",'jump':'article/artlist','parent':'article'}'''
+         {'name':'资产列表','key':'list','icon':"",'jump':'assetmanage/list','parent':'assetmanage'}
          ]
+         
     for item in menu_list:
         menu_get = Menu.objects.get_or_create(
             name=item['name']
