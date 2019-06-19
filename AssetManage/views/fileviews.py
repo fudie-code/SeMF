@@ -77,7 +77,7 @@ def filecreate(request,asset_id):
             data['code'] = 0
             data['msg'] = '添加成功'
         else:
-            data['msg'] = '请检查输入'
+            data['msg'] = form.errors
     else:
         data['msg'] = '请检查权限'
     return JsonResponse(data)

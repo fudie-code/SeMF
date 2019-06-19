@@ -67,9 +67,12 @@ def sqlupdate(request,sql_id):
         item_get = models.SQLInfo.objects.filter(id = sql_id,asset__user = user).first()
     if item_get:
         form = forms.SQLInfoForm(request.POST,instance=item_get)
-        form.save()
-        data['code'] = 0
-        data['msg'] = 'success'
+        if form.is_valid():
+            form.save()
+            data['code'] = 0
+            data['msg'] = 'success'
+        else:
+            data['msg'] = form.errors
     else:
         data['msg'] = '请检查权限'
     return JsonResponse(data)

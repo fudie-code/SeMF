@@ -72,9 +72,9 @@ def portcreate(request,asset_id):
                 data['code'] = 0
                 data['msg'] = '添加成功'
             else:
-                data['msg'] = '端口已存在'
+                data['msg'] = '组件已存在'
         else:
-            data['msg'] = '请检查输入'
+            data['msg'] = form.errors
     else:
         data['msg'] = '请检查权限'
     return JsonResponse(data)
@@ -117,9 +117,12 @@ def portupdate(request,port_id):
         item_get = models.PortInfo.objects.filter(id = port_id,asset__user = user).first()
     if item_get:
         form = forms.PortForm(request.POST,instance=item_get)
-        form.save()
-        data['code'] = 0
-        data['msg'] = 'success'
+        if form.is_valid():
+            form.save()
+            data['code'] = 0
+            data['msg'] = 'success'
+        else:
+            data['msg'] = form.errors
     else:
         data['msg'] = '请检查权限'
     return JsonResponse(data)
