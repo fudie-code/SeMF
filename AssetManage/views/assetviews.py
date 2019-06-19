@@ -27,9 +27,9 @@ def assetcreate(request):
         description_get = form.cleaned_data['description']
         manage_get = form.cleaned_data['manage']
         telephone_get = form.cleaned_data['telephone']
-        user_get = form.cleaned_data['email']
-        email_get = form.cleaned_data['user']
-        #parent = form.cleaned_data['parent']
+        user_get = form.cleaned_data['user']
+        email_get = form.cleaned_data['email']
+        parent_get = form.cleaned_data['parent']
         asset_get = models.Asset.objects.get_or_create(key=key_get)
         if asset_get[1]:
             asset_get=asset_get[0]
@@ -40,19 +40,22 @@ def assetcreate(request):
                 asset_get.manage = manage_get
                 asset_get.telephone = telephone_get
                 asset_get.email = email_get
-                asset_get.user.add(user_get)
+                for user_item in user_get:
+                    asset_get.user.add(user_item)
             else:
                 asset_get.manage = user.username
                 asset_get.telephone = user.telephone
                 asset_get.email = user.email
                 asset_get.user.add(user)
+            for parent_item in parent_get:
+                asset_get.parent.add(parent_item)
             asset_get.save()
             data['code'] = 0
             data['msg'] = '添加成功'
         else:
             data['msg'] = '资产已存在，请勿重复添加'
     else:
-        data['msg'] = '请检查输入'
+        data['msg'] = form.errors
     return JsonResponse(data)
 
 
