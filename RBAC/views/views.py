@@ -296,15 +296,16 @@ def getmenu(request):
         json_data['code']=1
         json_data['msg']='无可访问的资源或菜单初始化失败,请联系管理员'
         json_data['data'] = [{
-            "title": "主页"
+            "name": "主页"
             ,"icon": "layui-icon-home"
-            ,"list": [{
-              "title": "控制台"
-              ,"jump": "index"
+            ,"subMenus": [{
+              "name": "控制台"
+              ,"url": "index"
             }]
           }]
     else:
-        json_data['data'] = menu.menutotree(menu_list, True)
+        #json_data['data'] = menu.menutotree(menu_list, True)
+        json_data['data'] = menu.menutotree_easyweb(menu_list, True)
     return JsonResponse(json_data)
 
 
