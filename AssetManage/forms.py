@@ -6,7 +6,6 @@ Created on 2019年6月15日
 '''
 from django.forms import ModelForm
 from . import models
-from django import forms
 
 class AssetForm(ModelForm):
     class Meta:
@@ -48,5 +47,5 @@ class WebInfoForm(ModelForm):
 
 class FileForm(ModelForm):
     class Meta:
-        model  = models.SQLInfo
+        model  = models.File
         fields= ('file','file_info')
