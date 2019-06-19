@@ -63,11 +63,12 @@
 
 
 <script>
-	layui.use(['admin', 'form'], function () {
+	layui.use(['admin', 'form','config'], function () {
 		var $ = layui.$
 			, layer = layui.layer
 			, admin = layui.admin
 			, form = layui.form
+			, config = layui.config
 
 
 		form.render();
@@ -81,18 +82,22 @@
 		// });
 		
 
-		// admin.req({
-		// 	url: '/assetmanage/assettype/' //实际使用请改成服务端真实接口
-		// 	, type: 'GET'
-		// 	, done: function (res) {
-		// 		let data = res.data;
-		// 		$.each(data, function (index, item) {
-		// 			$('#type').append(new Option(item.name, item.id));// 下拉菜单里添加元素
-		// 		});
-        //         form.render()
-		// 	}
-		// });
-
+		admin.ajax({
+			url: '/asset/assettypelist/' 
+			, type: 'GET'
+			, dataType:'JSON'
+			, headers: {
+				['Authorization']:'JWT '+config.getToken()
+			}
+			, success: function (res) {
+				let data = res.data;
+				$.each(data, function (index, item) {
+					$('#type').append(new Option(item.name, item.id));
+				});
+                form.render()
+			}
+		});
+		
 		form.on('submit(sub)', function (obj) {
 			if (obj.field.id == "") {
                     admin.req({
