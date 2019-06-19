@@ -26,5 +26,6 @@ urlpatterns = [
     
     
     path('rbac/',include('RBAC.urls')),
+    path('asset/',include('AssetManage.urls')),
     path('semf/', admin.site.urls),
 ]+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
