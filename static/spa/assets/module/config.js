@@ -64,7 +64,7 @@ layui.define(function (exports) {
             if (token) {
                 headers.push({
                     name: 'Authorization',
-                    value: 'jwt ' + token
+                    value: 'JWT ' + token
                 });
             } 
             return headers;
@@ -72,10 +72,11 @@ layui.define(function (exports) {
         // ajax请求结束后的处理，返回false阻止代码执行
         ajaxSuccessBefore: function (res, requestUrl) {
             if (res.code == 401) {
-                config.removeToken();
-                layer.msg('登录过期', {icon: 2, time: 1500}, function () {
-                    location.reload();
-                });
+                layer.msg('没有访问权限', {icon: 2});
+                // config.removeToken();
+                // layer.msg('登录过期', {icon: 2, time: 1500}, function () {
+                //     location.reload();
+                // });
                 return false;
             } else if (res.code == 403) {
                 layer.msg('没有访问权限', {icon: 2});

@@ -51,11 +51,12 @@
 <script>
     layui.config({
         base: '../../assets/module/'
-    }).use(['config','form','admin'], function () {
+    }).use(['config','form','admin','table'], function () {
         var $ = layui.jquery;
         var form = layui.form;
-        var config = layui.config
+        var config = layui.config;
         var admin = layui.admin;
+        var table = layui.table;
 
         if (config.getToken()) {
             // location.replace('./');
@@ -78,6 +79,7 @@
                 success: function (res) {
                     if (res.code == 0) {
                         config.putToken(res.data.access_token);
+                        // table.set({headers:{['Authorization']: 'JWT' + config.getToken() }});
                         layer.msg('登录成功', { icon: 1, time: 1000 }, function () {
                             location.replace('../../index.html');
                         });

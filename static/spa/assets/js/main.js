@@ -14,7 +14,7 @@ layui.config({
     tableSelect: 'tableSelect/tableSelect',
     cropper: 'cropper/cropper',
     zTree: 'zTree/zTree'
-}).use(['config', 'layer', 'element', 'index', 'admin', 'laytpl'], function () {
+}).use(['config', 'layer', 'element', 'index', 'admin', 'laytpl','table'], function () {
     var $ = layui.jquery;
     var layer = layui.layer;
     var element = layui.element;
@@ -22,13 +22,10 @@ layui.config({
     var index = layui.index;
     var admin = layui.admin;
     var laytpl = layui.laytpl;
+    var table = layui.table;
 
-
-    // admin.getAjaxHeaders = function (requestUrl) {
-    //     var headers = new Array();
-    //     headers.push({['Authorization']:'JWT ' + config.getToken()});
-    //     return headers;
-    // };
+    table.set({headers:{['Authorization']:'JWT ' + config.getToken()}});
+    
 
     // 检查是否登录
     if (!config.getToken()) {
@@ -47,35 +44,21 @@ layui.config({
     // }, 'get');
 
 
-    //注册全局路由
-    // admin.ajax({
-    //     url: 'json/router.json'
-    //     , type: 'get'
-    //     , dataType:'JSON'
-    //     // , headers:{['Authorization']:'JWT ' + config.getToken()}
-    //     , success: (res) => {
-    //         // console.log(res);
-    //         index.regRouter(res);  // 注册路由
-    //     }
-    // })
+    //注册全局路由\
+    admin.ajax({
+        url: 'json/router.json'
+        , type: 'get'
+        , dataType:'JSON'
+        , success: (res) => {
+            index.regRouter(res);  // 注册路由
+        }
+    })
 
     // 加载侧边栏
-    // admin.req('json/menus.json?v=307', {}, function (res) {
-    //     console.log(res);
-    //     laytpl(sideNav.innerHTML).render(res, function (html) {
-    //         $('.layui-layout-admin .layui-side .layui-nav').html(html);
-    //         element.render('nav');
-    //     });
-    //     index.regRouter(res);  // 注册路由
-    //     index.loadHome({  // 加载主页
-    //         url: '#/index',
-    //         name: '<i class="layui-icon layui-icon-home"></i>'
-    //     });
-    // }, 'get')
-    $.ajax({
+    admin.ajax({
         url: 'json/menus.json'
         , type: 'get'
-        // , headers:{['Authorization']:'JWT ' + config.getToken()}
+        , dataType:'JSON'
         , success: (res) => {
             laytpl(sideNav.innerHTML).render(res, function (html) {
                 $('.layui-layout-admin .layui-side .layui-nav').html(html);
@@ -92,20 +75,7 @@ layui.config({
     // 移除loading动画
     setTimeout(function () {
         admin.removeLoading();
-    }, 300);
+    }, 100);
 
-    // 提示
-    // if (!config.pageTabs) {
-    //     layer.confirm('SPA版本默认关闭多标签功能，你可以在设置界面开启', {
-    //         skin: 'layui-layer-admin',
-    //         area: '280px',
-    //         title: '温馨提示',
-    //         shade: 0,
-    //         btn: ['打开设置', '知道了']
-    //     }, function (i) {
-    //         layer.close(i);
-    //         $('a[ew-event="theme"]').trigger('click');
-    //     });
-    // }
 
 });

@@ -1,36 +1,25 @@
-layui.use(['admin', 'table', 'form', 'dropdown','index'], function () {
+layui.use(['admin', 'table', 'form', 'dropdown','index','config'], function () {
     var table = layui.table,
         form = layui.form,
         $ = layui.$,
         admin = layui.admin,
         dropdown = layui.dropdown
         index = layui.index;
+    var config = layui.config;
 
     form.render();
 
     $('#jump').click(()=>{
         index.go('/assetmanage/detial');
     })
-    //获取资产类型
-    $.ajax({
-        url: '/assetmanage/assettype/',
-        type: 'GET',
-        done: function (res) {
-            let data = res.data;
-            $.each(data, function (index, item) {
-                $('#assettype').append(new Option(item.name, item.id));
-            });
-            form.render()
-        }
-    });
 
     table.render({
         elem: '#rootasset-list',
-        url: '/assetmanage/assetlist/',
+        url: '/asset/assetlist/',
         toolbar: '#rootasset-toolbar',
-        // headers: {
-        // 	[layui.setter.request.tokenName]: 'JWT ' + layui.data(layui.setter.tableName)[layui.setter.request.tokenName]
-        // },
+        headers: {
+        	['Authorization']: 'JWT ' + config.getToken()
+        },
         defaultToolbar: ['print', 'exports'],
         title: '资产列表',
         cols: [
