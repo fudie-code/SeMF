@@ -24,12 +24,11 @@ layui.config({
     var laytpl = layui.laytpl;
 
 
-    admin.getAjaxHeaders = function (requestUrl) {
-        var headers = new Array();
-        headers.push({['Authorization']:'JWT ' + config.getToken()});
-        return headers;
-    };
-
+    // admin.getAjaxHeaders = function (requestUrl) {
+    //     var headers = new Array();
+    //     headers.push({['Authorization']:'JWT ' + config.getToken()});
+    //     return headers;
+    // };
 
     // 检查是否登录
     if (!config.getToken()) {
@@ -48,7 +47,17 @@ layui.config({
     // }, 'get');
 
 
-
+    //注册全局路由
+    // admin.ajax({
+    //     url: 'json/router.json'
+    //     , type: 'get'
+    //     , dataType:'JSON'
+    //     // , headers:{['Authorization']:'JWT ' + config.getToken()}
+    //     , success: (res) => {
+    //         // console.log(res);
+    //         index.regRouter(res);  // 注册路由
+    //     }
+    // })
 
     // 加载侧边栏
     // admin.req('json/menus.json?v=307', {}, function (res) {
@@ -62,13 +71,12 @@ layui.config({
     //         url: '#/index',
     //         name: '<i class="layui-icon layui-icon-home"></i>'
     //     });
-    // }, 'get');
+    // }, 'get')
     $.ajax({
         url: 'json/menus.json'
         , type: 'get'
-        , headers:{['Authorization']:'JWT ' + config.getToken()}
+        // , headers:{['Authorization']:'JWT ' + config.getToken()}
         , success: (res) => {
-            console.log(res);
             laytpl(sideNav.innerHTML).render(res, function (html) {
                 $('.layui-layout-admin .layui-side .layui-nav').html(html);
                 element.render('nav');

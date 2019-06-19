@@ -2,7 +2,7 @@
 
 layui.define(function (exports) {
     var config = {
-        version: '312',  // 版本号，模块js和页面加版本号防止缓存
+        version: new Date().getTime(),  // 版本号，模块js和页面加版本号防止缓存
         base_server: '127.0.0.0:8000', // 接口地址，实际项目请换成http形式的地址
         tableName: 'easyweb-spa',  // 存储表名
         pageTabs: false,   // 是否开启多标签
@@ -60,13 +60,13 @@ layui.define(function (exports) {
         // ajax请求的header
         getAjaxHeaders: function (requestUrl) {
             var headers = [];
-            /* var token = config.getToken();
+             var token = config.getToken();
             if (token) {
                 headers.push({
                     name: 'Authorization',
-                    value: 'Bearer ' + token.access_token
+                    value: 'jwt ' + token
                 });
-            } */
+            } 
             return headers;
         },
         // ajax请求结束后的处理，返回false阻止代码执行
