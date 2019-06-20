@@ -1,34 +1,35 @@
 <div class="layui-fluid">
-	<div class="layui-row layui-col-space15">
-		<!-- 查询 -->
-		<div class="layui-col-md12">
-			<div class="layui-card">
-				<div class="layui-card-body layui-form layui-row layui-col-space10" id="projcet-query" lay-filter="projcet-query">
-					<div class="layui-col-md4">
-						<label class="layui-form-label">模糊查询</label>
-						<div class="layui-input-block">
-							<input type="text" name="condition" placeholder="" autocomplete="off" class="layui-input">
-						</div>
-					</div>
-					<div class="layui-col-md1 layui-col-md-offset6">
-						<div class="layui-input-block">
-							<button class="layui-btn" lay-submit lay-filter="query">查询</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+    <div class="layui-row layui-col-space15">
+        <!-- 查询 -->
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body layui-form layui-row layui-col-space10" id="projcet-query"
+                    lay-filter="projcet-query">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">模糊查询</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="condition" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md1 layui-col-md-offset6">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="query">查询</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-		<!-- 资产表格 -->
-		<div class="layui-col-md12">
-			<div class="layui-card">
-				<div class="layui-card-header">资产列表</div>
-				<div class="layui-card-body">
-					<table class="layui-table" id="rootasset-list" lay-filter="rootasset-list"></table>
-				</div>
-			</div>
-		</div>
-	</div>
+        <!-- 资产表格 -->
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">资产列表</div>
+                <div class="layui-card-body">
+                    <table class="layui-table" id="rootasset-list" lay-filter="rootasset-list"></table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script type="text/html" id="rootasset-toolbar">
@@ -38,206 +39,354 @@
  </script>
 
 <script type="text/html" id="rootasset-bar">
-	<!-- <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
-    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">编辑</a> -->
     <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="detial">详情</a>
     <a class="layui-btn layui-btn-xs" data-dropdown="#dropdown-{{d.id}}" data-anchor="top-right">
       更多
   </a>
-  <!-- 下拉菜单 -->
-  <div class="dropdown-menu fixed" id="dropdown-{{d.id}}">
-      <ul>
-          <li><a lay-event="edit"><i class="layui-icon layui-icon-edit"></i> 修改</a></li>
-          <li><a lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a></li>
-      </ul>
-  </div>
+  <ul class="dropdown-menu-nav dropdown-bottom-right layui-hide" id="dropdown-{{d.id}}">
+    <div class="dropdown-anchor"></div>
+    <li><a lay-event="edit"><i class="layui-icon layui-icon-edit"></i>修改</a></li>
+    <li><a lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a></li>
+</ul>
+</script>
+
+<!-- 表格弹窗 -->
+<div id="assetCreateForm" class="layui-hide">
+    <div class="layui-card-body" style="padding: 15px;" id='formedit'>
+        <form class="layui-form" action="" lay-filter="component-form-group">
+            <input type='hidden' name="csrfmiddlewaretoken" id='csrf'>
+            <input type='hidden' name="id" id='id'>
+            <div class="layui-form-item">
+                <label class="layui-form-label">资产名称</label>
+                <div class="layui-input-block">
+                    <input name="name" id="name" lay-verify="required" autocomplete="off" placeholder="请输入资产名称"
+                        class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">资产标识</label>
+                <div class="layui-input-block">
+                    <input name="key" id="key" lay-verify="required" autocomplete="off" placeholder="域名或IP地址"
+                        class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">资产类型</label>
+                <div class="layui-input-block">
+                    <select name="type" id="type" lay-verify="required">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">负责人</label>
+                <div class="layui-input-block">
+                    <input name="manage" id="manage" lay-verify="required" autocomplete="off" placeholder="负责人"
+                        class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">联系电话</label>
+                <div class="layui-input-block">
+                    <input name="telephone" id="telephone" autocomplete="off" lay-verify="phone" placeholder="请输入手机号码"
+                        class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">邮箱</label>
+                <div class="layui-input-block">
+                    <input name="email" id="email" autocomplete="off" lay-verify="email" placeholder="请输入邮箱"
+                        class="layui-input">
+                </div>
+            </div>
+            <div id="view"></div>
+            <script id="demo" type="text/html">
+                        {{# if(d.deny == true) {}}
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">所属用户</label>
+                            <div class="layui-input-block">
+                                <select name="user" id="user" lay-verify="required">
+                                    <option value=""></option>
+                                    <option value="1">1</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">关联资产</label>
+                            <div class="layui-input-block">
+                                <select name="parent" id="parent" lay-verify="required">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        {{#   }}}
+                    </script>
+            <div class="layui-form-item">
+                <label class="layui-form-label">资产描述</label>
+                <div class="layui-input-block">
+                    <textarea name="description" id="description" placeholder="请输入描述内容" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs-offset3">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="sub">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.use(['admin', 'form', 'config', 'laytpl'], function () {
+        var $ = layui.$
+            , layer = layui.layer
+            , admin = layui.admin
+            , form = layui.form
+            , config = layui.config
+            , laytpl = layui.laytpl;
+
+        var data = {
+            "deny": config.getdeny()
+        }
+        var getTpl = demo.innerHTML
+            , view = document.getElementById('view');
+        laytpl(getTpl).render(data, function (html) {
+            view.innerHTML = html;
+        });
+        
+        form.render();
+
+        admin.ajax({
+            url: '/csrf/'
+            , type: 'GET'
+            , dataType: 'JSON'
+            , success: function (res) {
+                $('#csrf').val(res.data.token);
+            }
+        });
+        
+        admin.ajax({
+            url: '/asset/assettypelist/'
+            , type: 'GET'
+            , dataType: 'JSON'
+            , headers: {
+                ['Authorization']: 'JWT ' + config.getToken()
+            }
+            , success: function (res) {
+                let data = res.data;
+                $.each(data, function (index, item) {
+                    $('#type').append(new Option(item.name, item.id));
+                });
+                form.render()
+            }
+        });
+
+        admin.ajax({
+            url: '/asset/assetlist/'
+            , type: 'GET'
+            , dataType: 'JSON'
+            , headers: {
+                ['Authorization']: 'JWT ' + config.getToken()
+            }
+            , success: function (res) {
+                let data = res.data;
+                $.each(data, function (index, item) {
+                    $('#parent').append(new Option(item.name, item.id));
+                });
+                form.render()
+            }
+        });
+    });
 </script>
 
 <!-- <script src="assets/js/assetmanage/list.js"></script> -->
 <script>
-layui.use(['admin', 'table', 'form', 'dropdown','index','config'], function () {
-    var table = layui.table,
-        form = layui.form,
-        $ = layui.$,
-        admin = layui.admin,
-        dropdown = layui.dropdown
-        index = layui.index;
-    var config = layui.config;
+    layui.use(['admin', 'table', 'form', 'dropdown', 'index', 'uncode'], function () {
+        var table = layui.table,
+            form = layui.form,
+            $ = layui.$,
+            admin = layui.admin,
+            dropdown = layui.dropdown,
+            uncode = layui.uncode,
+            index = layui.index;
 
-    form.render();
+        form.render();
 
-    // $('#jump').click(()=>{
-    //     index.go('/assetmanage/detial');
-    // })
-
-    table.render({
-        elem: '#rootasset-list',
-        url: '/asset/assetlist/',
-        toolbar: '#rootasset-toolbar',
-        defaultToolbar: ['print', 'exports'],
-        title: '资产列表',
-        cols: [
-            [{
-                field: 'name',
-                title: '资产名称',
-                align: 'center',
-                unresize: true
-            }, {
-                field: 'key',
-                title: '访问地址',
-                align: 'center',
-                unresize: true
-            }, {
-                field: 'type',
-                title: '类型',
-                align: 'center',
-                unresize: true
-            }, {
-                field: 'manage',
-                title: '负责人',
-                align: 'center',
-                unresize: true
-            }, {
-                field: 'telephone',
-                title: '联系电话',
-                align: 'center',
-                unresize: true
-            }, {
-                field: 'email',
-                title: '邮箱',
-                align: 'center',
-                unresize: true
-            }, {
-                field: 'updatetime',
-                title: '更新时间',
-                align: 'center',
-                unresize: true
-            }, {
-                field: 'description',
-                title: '工程描述',
-                hide: true,
-                unresize: true
-            }, {
-                field: 'parent_check',
-                title: 'parent',
-                hide: true,
-                unresize: true
-            }, {
-                field: 'id',
-                title: 'ID',
-                hide: true
-            }, {
-                fixed: 'right',
-                title: '操作',
-                toolbar: '#rootasset-bar',
-                align: 'center',
-                width: 150,
-                unresize: true
-            }]
-        ],
-        page: true
-    });
-    // 
-    // 		//头工具栏事件
-    table.on('toolbar(rootasset-list)', function (obj) {
-        switch (obj.event) {
-            case 'add':
-                admin.open({
-                    title: '资产录入',
-                    area: ['500px', '660px'],
-					url: './views/assetmanage/assetcreate.html',
-					end: function () {
-						table.reload('rootasset-list');
-					}
-                });
-            // admin.popup({
-            // 	title: '资产录入',
-            // 	area: ['500px', '660px'],
-            // 	fixed: true,
-            // 	maxmin: true,
-            // 	success: function(layero, index) {
-            // 		//将 views 目录下的某视图文件内容渲染给该面板
-            // 		layui.view(this.id).render('assetmanage/create').done(function() {
-
-            // 		});
-            // 	},
-            // 	end: function() {
-            // 		table.reload('rootasset-list');
-            // 	}
-            // });
-        };
-    });
-    // 
-    // 		//监听行工具事件
-    // 		table.on('tool(rootasset-list)', function(obj) {
-    // 			var data = obj.data;
-    // 			if (obj.event === 'del') {
-    // 				layer.confirm('确定删除资产', function(index) {
-    // 					admin.req({
-    // 						url: '/assetmanage/assetdelete/' + data.id + "/" //实际使用请改成服务端真实接口
-    // 							,
-    // 						type: 'GET',
-    // 						done: function(res) {
-    // 							//成功的提示与跳转
-    // 							layer.msg(res.msg, {
-    // 								offset: '15px',
-    // 								icon: 1,
-    // 								time: 1000
-    // 							}, function() {
-    // 								layui.index.render();
-    // 							});
-    // 						}
-    // 					});
-    // 					obj.del();
-    // 					layer.close(index);
-    // 				});
-    // 			} else if (obj.event === 'detial') {
-    // 				location.hash = '/assetmanage/assetdetial/id=' + data.id;
-    // 			} else if (obj.event === 'edit') {
-    // 				admin.popup({
-    // 					title: '修改资产信息',
-    // 					area: ['500px', '660px'],
-    // 					fixed: true,
-    // 					maxmin: true,
-    // 					success: function(layero, index) {
-    // 						//将 views 目录下的某视图文件内容渲染给该面板
-    // 						layui.view(this.id).render('assetmanage/create').done(function() {
-    // 							$("#id").val(data.id);
-    // 							$("#name").val(uncode(data.name));
-    // 							$("#key").val(uncode(data.key));
-    // 							$("#type").html(data.type);
-    // 							$("#manage").val(uncode(data.manage));
-    // 							$("#telephone").val(data.telephone);
-    // 							$("#email").val(uncode(data.email));
-    // 							$("#description").val(uncode(data.description));
-    // 							$("#parent_name").val(uncode(data.parent_check.name)).attr("ts-selected", data.parent_check.id);
-    // 							$("#parent").val(data.parent_check.id);
-    // 						});
-    // 					},
-    // 					end: function() {
-    // 						table.reload('rootasset-list');
-    // 					}
-    // 				});
-    // 			} else if (obj.event == 'info') {
-    // 				layer.tips(data.description, '.layui-table-hover', {
-    // 					tips: 1,
-    // 					time: 4000
-    // 				});
-    // 			};
-    // 		});
-    // 
-
-    //查询并重载表格
-    form.on('submit(query)', (d) => {
-        table.reload('rootasset-list', {
-            page: {
-                curr: 1 //重新从第 1 页开始
-            },
-            where: {
-                key: d.field.condition
-            }
+        table.render({
+            elem: '#rootasset-list',
+            url: '/asset/assetlist/',
+            toolbar: '#rootasset-toolbar',
+            defaultToolbar: ['print', 'exports'],
+            title: '资产列表',
+            cols: [
+                [{
+                    field: 'name',
+                    title: '资产名称',
+                    align: 'center',
+                    unresize: true
+                }, {
+                    field: 'key',
+                    title: '访问地址',
+                    align: 'center',
+                    unresize: true
+                }, {
+                    field: 'type',
+                    title: '类型',
+                    align: 'center',
+                    unresize: true
+                }, {
+                    field: 'manage',
+                    title: '负责人',
+                    align: 'center',
+                    unresize: true
+                }, {
+                    field: 'telephone',
+                    title: '联系电话',
+                    align: 'center',
+                    unresize: true
+                }, {
+                    field: 'email',
+                    title: '邮箱',
+                    align: 'center',
+                    unresize: true
+                }, {
+                    field: 'updatetime',
+                    title: '更新时间',
+                    align: 'center',
+                    unresize: true
+                }, {
+                    field: 'description',
+                    title: '工程描述',
+                    hide: true,
+                    unresize: true
+                }, {
+                    field: 'parent_check',
+                    title: 'parent',
+                    hide: true,
+                    unresize: true
+                }, {
+                    field: 'id',
+                    title: 'ID',
+                    hide: true
+                }, {
+                    fixed: 'right',
+                    title: '操作',
+                    toolbar: '#rootasset-bar',
+                    align: 'center',
+                    width: 150,
+                    unresize: true
+                }]
+            ],
+            page: true
         });
-    })
 
-});
+        function showEditModel(mUser) {
+            admin.open({
+                type: 1,
+                title: (mUser ? '修改' : '添加') + '资产',
+                content:$('#assetCreateForm').html(),
+                // url: './views/assetmanage/assetcreate.html',
+                area: ['500px', '680px'],
+                success: function (layero, dIndex) {
+                    var url = mUser ? '/asset/assetupdate/' + mUser.id + '/' : '/asset/assetcreate/';
+
+                    form.val('component-form-group',mUser);
+                    console.log(mUser);
+                    form.on('submit(sub)', function (obj) {
+                        admin.ajax({
+                            url:url
+                            , type: 'POST'
+                            , data: obj.field
+                            , dataType: 'JSON'
+                            , success: function (res) {
+                                layer.close(dIndex);
+                                layer.msg(res.msg, {
+                                    offset: '15px'
+                                    , icon: 1
+                                    , time: 1000
+                                });
+                            }
+                        });
+                        return false;
+                    });
+                },
+                end: function () {
+                    table.reload('rootasset-list');
+                }
+            });
+        }
+
+        table.on('toolbar(rootasset-list)', function (obj) {
+            switch (obj.event) {
+                case 'add':
+                showEditModel()
+                break;
+            };
+        });
+
+        //监听行工具事件
+        table.on('tool(rootasset-list)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('确定删除资产', function (index) {
+                    admin.ajax({
+                        url: '/asset/assetdelete/' + data.id + "/",
+                        type: 'GET',
+                        dataType: 'JSON',
+                        success: function (res) {
+                            //成功的提示与跳转
+                            layer.msg(res.msg, {
+                                offset: '15px',
+                                icon: 1,
+                                time: 1000
+                            }, function () {
+                                table.reload('rootasset-list');
+                            });
+                        }
+                    });
+                    obj.del();
+                    layer.close(index);
+                });
+            } else if (obj.event === 'detial') {
+                index.go('/assetmanage/detial/id=' + data.id);
+            } else if (obj.event === 'edit') {
+                showEditModel(data);
+                // admin.open({
+                //     title: '修改资产信息',
+                //     area: ['500px', '660px'],
+                //     fixed: true,
+                //     maxmin: true,
+                //     url: './views/assetmanage/assetcreate.html',
+                //     success: function (layero, index) {
+                //         $("#id").val(data.id);
+                //         $("#name").val(uncode(data.name));
+                //         $("#key").val(uncode(data.key));
+                //         $("#type").html(data.type);
+                //         $("#manage").val(uncode(data.manage));
+                //         $("#telephone").val(data.telephone);
+                //         $("#email").val(uncode(data.email));
+                //         $("#description").val(uncode(data.description));
+                //     },
+                //     end: function () {
+                //         table.reload('rootasset-list');
+                //     }
+                // });
+            };
+        });
+
+
+        //查询并重载表格
+        form.on('submit(query)', (d) => {
+            table.reload('rootasset-list', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+                where: {
+                    key: d.field.condition
+                }
+            });
+        })
+
+    });
 </script>

@@ -1,7 +1,6 @@
 <div class="layui-card-body" style="padding: 15px;" id='formedit'>
 	<form class="layui-form" action="" lay-filter="component-form-group">
 		<input type='hidden' name="csrfmiddlewaretoken" id='csrf'>
-		<input type='hidden' name="parent" id='parent'>
 		<input type='hidden' name="id" id='id'>
 		<div class="layui-form-item">
 			<label class="layui-form-label">资产名称</label>
@@ -11,12 +10,12 @@
 			</div>
 		</div>
 		<div class="layui-form-item">
-            <label class="layui-form-label">资产标识</label>
-            <div class="layui-input-block">
-                <input name="key" id="key" lay-verify="required" autocomplete="off" placeholder="域名或IP地址"
-                    class="layui-input">
-            </div>
-        </div>
+			<label class="layui-form-label">资产标识</label>
+			<div class="layui-input-block">
+				<input name="key" id="key" lay-verify="required" autocomplete="off" placeholder="域名或IP地址"
+					class="layui-input">
+			</div>
+		</div>
 		<div class="layui-form-item">
 			<label class="layui-form-label">资产类型</label>
 			<div class="layui-input-block">
@@ -46,6 +45,28 @@
 					class="layui-input">
 			</div>
 		</div>
+		<div id="view"></div>
+		<script id="demo" type="text/html">
+			{{# if(d.deny == true) {}}
+			<div class="layui-form-item">
+				<label class="layui-form-label">所属用户</label>
+				<div class="layui-input-block">
+					<select name="user" id="user" lay-verify="required">
+						<option value=""></option>
+						<option value="1">1</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">关联资产</label>
+				<div class="layui-input-block">
+					<select name="parent" id="parent" lay-verify="required">
+						<option value=""></option>
+					</select>
+				</div>
+			</div>
+			{{#   }}}
+		</script>
 		<div class="layui-form-item">
 			<label class="layui-form-label">资产描述</label>
 			<div class="layui-input-block">
@@ -63,76 +84,116 @@
 
 
 <script>
-	layui.use(['admin', 'form','config'], function () {
+	layui.use(['admin', 'form', 'config','laytpl'], function () {
 		var $ = layui.$
 			, layer = layui.layer
 			, admin = layui.admin
 			, form = layui.form
 			, config = layui.config
+			, laytpl = layui.laytpl;
 
-
+		var data = { //数据
+			"deny": config.getdeny()
+		}
+		var getTpl = demo.innerHTML
+			, view = document.getElementById('view');
+		laytpl(getTpl).render(data, function (html) {
+			view.innerHTML = html;
+		});
+	//    console.log(config.getdeny());	
 		form.render();
 
-		// admin.req({
-		// 	url: '/csrf/' //实际使用请改成服务端真实接口
-		// 	, type: 'GET'
-		// 	, done: function (res) {
-		// 		$('#csrf').val(res.data.token);
-		// 	}
-		// });
-		
-
 		admin.ajax({
-			url: '/asset/assettypelist/' 
+			url: '/csrf/' 
 			, type: 'GET'
 			, dataType:'JSON'
+			, success: function (res) {
+				$('#csrf').val(res.data.token);
+			}
+		});
+
+
+		admin.ajax({
+			url: '/asset/assettypelist/'
+			, type: 'GET'
+			, dataType: 'JSON'
 			, headers: {
-				['Authorization']:'JWT '+config.getToken()
+				['Authorization']: 'JWT ' + config.getToken()
 			}
 			, success: function (res) {
 				let data = res.data;
 				$.each(data, function (index, item) {
 					$('#type').append(new Option(item.name, item.id));
 				});
-                form.render()
+				form.render()
 			}
 		});
-		
-		form.on('submit(sub)', function (obj) {
-			if (obj.field.id == "") {
-                    admin.req({
-                        url: '/assetmanage/assetcreate/' //实际使用请改成服务端真实接口
-                        , type: 'POST'
-                        , data: obj.field
-                        , done: function (res) {
-                            //成功的提示与跳转
-                            layer.msg(res.msg, {
-                                offset: '15px'
-                                , icon: 1
-                                , time: 1000
-                            }, function () {
-                                layui.index.render();
-                            });
-                        }
-                    });
-                } else {
-                    admin.req({
-                        url: '/assetmanage/assetupdate/' + obj.field.id + '/'//实际使用请改成服务端真实接口
-                        , type: 'POST'
-                        , data: obj.field
-                        , done: function (res) {
-                            //成功的提示与跳转
-                            layer.msg(res.msg, {
-                                offset: '15px'
-                                , icon: 1
-                                , time: 1000
-                            }, function () {
-                                layui.index.render();
-                            });
-                        }
-                    });
-                }
-                return false;
+
+		admin.ajax({
+			url: '/asset/assetlist/'
+			, type: 'GET'
+			, dataType: 'JSON'
+			, headers: {
+				['Authorization']: 'JWT ' + config.getToken()
+			}
+			, success: function (res) {
+				let data = res.data;
+				$.each(data, function (index, item) {
+					$('#parent').append(new Option(item.name, item.id));
+				});
+				form.render()
+			}
 		});
+
+		// form.on('submit(sub)', function (obj) {
+		// 	admin.ajax({
+		// 		url: '/asset/assetcreate/'
+		// 		, type: 'POST'
+		// 		, data: obj.field
+		// 		, dataType: 'JSON'
+		// 		, success: function (res) {
+		// 			layer.msg(res.msg, {
+		// 				offset: '15px'
+		// 				, icon: 1
+		// 				, time: 1000
+		// 			},function(){
+		// 				parent.layer.close(index);
+		// 			});
+		// 		}
+		// 	});
+		// 	// if (obj.field.id == "") {
+		// 	// 	admin.ajax({
+		// 	// 		url: '/asset/assetcreate/'
+		// 	// 		, type: 'POST'
+		// 	// 		, data: obj.field
+		// 	// 		, dataType: 'JSON'
+		// 	// 		, success: function (res) {
+		// 	// 			layer.msg(res.msg, {
+		// 	// 				offset: '15px'
+		// 	// 				, icon: 1
+		// 	// 				, time: 1000
+		// 	// 			}, function () {
+		// 	// 				layui.index.render();
+		// 	// 			});
+		// 	// 		}
+		// 	// 	});
+		// 	// } else {
+		// 	// 	admin.req({
+		// 	// 		url: '/assetmanage/assetupdate/' + obj.field.id + '/'
+		// 	// 		, type: 'POST'
+		// 	// 		, data: obj.field
+		// 	// 		, done: function (res) {
+		// 	// 			layer.msg(res.msg, {
+		// 	// 				offset: '15px'
+		// 	// 				, icon: 1
+		// 	// 				, time: 1000
+		// 	// 			}, function () {
+		// 	// 				layui.index.render();
+		// 	// 			});
+		// 	// 		}
+		// 	// 	});
+		// 	// }
+		// 	return false;
+		// });
 	});
 </script>

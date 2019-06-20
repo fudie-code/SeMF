@@ -48,6 +48,20 @@ layui.define(function (exports) {
                 value: user
             });
         },
+        // 缓存deny
+        putdeny: function (deny) {
+            layui.data(config.tableName, {
+                key: 'deny',
+                value: deny
+            });
+        },
+        // 缓存deny
+        getdeny: function () {
+            var cacheData = layui.data(config.tableName);
+            if (cacheData) {
+                return cacheData.deny;
+            }
+        },
         // 获取用户所有权限
         getUserAuths: function () {
             var auths = [];
@@ -72,11 +86,10 @@ layui.define(function (exports) {
         // ajax请求结束后的处理，返回false阻止代码执行
         ajaxSuccessBefore: function (res, requestUrl) {
             if (res.code == 401) {
-                layer.msg('没有访问权限', {icon: 2});
-                // config.removeToken();
-                // layer.msg('登录过期', {icon: 2, time: 1500}, function () {
-                //     location.reload();
-                // });
+                config.removeToken();
+                layer.msg('登录过期', {icon: 2, time: 1500}, function () {
+                    location.reload();
+                });
                 return false;
             } else if (res.code == 403) {
                 layer.msg('没有访问权限', {icon: 2});
@@ -87,7 +100,7 @@ layui.define(function (exports) {
         },
         // 路由不存在处理
         routerNotFound: function (r) {
-            // location.replace('#/template/error/error-404');
+            location.replace('#/template/error/error-404');
             layer.alert('路由' + location.hash + '不存在', {
                 title: '提示',
                 skin: 'layui-layer-admin',
