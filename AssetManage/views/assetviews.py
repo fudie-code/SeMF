@@ -49,7 +49,8 @@ def assetcreate(request):
                 asset_get.email = user.email
                 asset_get.user.add(user)
             for parent_item in parent_get:
-                asset_get.parent.add(parent_item)
+                if parent_item != asset_get:
+                    asset_get.parent.add(parent_item)
             asset_get.save()
             data['code'] = 0
             data['msg'] = '添加成功'

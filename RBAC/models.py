@@ -76,6 +76,8 @@ class Profile(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     title =  models.CharField('职位名称',max_length=50,null=True,blank=True)
     
+    is_resetpsd = models.BooleanField('强制修改密码',default=True)
+    
     mobilephone = models.CharField('手机号码',max_length=50)
     error_count = models.IntegerField('错误登录',default=0)
     login_count = models.IntegerField('登录统计',default=0)

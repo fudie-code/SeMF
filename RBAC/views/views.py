@@ -55,6 +55,7 @@ def login(request):
                     json_data['msg'] = '登陆成功'
                     json_data['data']['access_token'] = token
                     json_data['data']['deny'] = user.is_superuser
+                    json_data['data']['is_resetpsd'] = user.profile.is_resetpsd
                     log['status']=True
                 else:
                     user_get.profile.error_count += 1

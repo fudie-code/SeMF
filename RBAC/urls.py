@@ -15,8 +15,8 @@ urlpatterns = [
     path('infomain/',views.info_main,name='infomain'),
     path('menu/',views.getmenu,name='getmenu'),
     
-    path('forgetpsd/',views.forgetpsd,name='forgetpsd'),
-    path('forgetchangepsd/',views.forgetchangepsd,name='forgetchangepsd'),
+    #path('forgetpsd/',views.forgetpsd,name='forgetpsd'),
+    #path('forgetchangepsd/',views.forgetchangepsd,name='forgetchangepsd'),
     
     path('registinit/',views.registinit,name='registinit'),
     ]
