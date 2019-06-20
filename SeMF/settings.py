@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'svu17o8=ut#f%rxq70!(-50lc)dz)$ax91q@46&znrzk$h$(w%'
 #以下字符请自定义
-JWT_KEY = '!qadfesdf4DASADADQ%^&*&(%@31313253543dsadaDSADACSA#@@'
+JWT_KEY = 'Fdsgfesdf4DASADADQ%^&*&(%@31313253543dsadaDSADACSA#@@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 #设置登录session有效时间
@@ -57,8 +57,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'RBAC',
+    'AdvanceManage',
     'AssetManage',
     'VulnManage',
+    'TaskManage',
 ]
 
 

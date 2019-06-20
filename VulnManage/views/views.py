@@ -70,7 +70,7 @@ def statuslist(request):
       "data": []
     }
     #user = request.user
-    list_get = models.Type.objects.all().order_by('id')
+    list_get = models.STATUS.objects.all().order_by('id')
     serializers_get = serializers.VulnSTATUSSerializer(instance= list_get,many=True)
     data['msg'] = 'success'
     data['data'] = xssfilter(serializers_get.data)
@@ -85,7 +85,7 @@ def levellist(request):
       "data": []
     }
     #user = request.user
-    list_get = models.Type.objects.all().order_by('id')
+    list_get = models.LEVEL.objects.all().order_by('id')
     serializers_get = serializers.VulnLEVELSerializer(instance= list_get,many=True)
     data['msg'] = 'success'
     data['data'] = xssfilter(serializers_get.data)

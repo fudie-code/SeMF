@@ -5,7 +5,7 @@ Created on 2019年6月17日
 @author: 残源
 '''
 from django.urls import path
-from .views import views,assetviews,portsviews,pluginsviews,sqlviews,osviews,webinfoviews,fileviews
+from .views import views,assetviews,portsviews,pluginsviews,sqlviews,osviews,webinfoviews,fileviews,vulnviews
 
 urlpatterns = [
     path('assetlist/',views.mainlist,name='assetlist'),
@@ -45,5 +45,8 @@ urlpatterns = [
     path('fileslist/<str:asset_id>/',fileviews.fileslist,name='fileslist'),
     path('filecreate/<str:asset_id>/',fileviews.filecreate,name='filecreate'),
     path('filedelete/<str:file_id>/',fileviews.filedelete,name='filedelete'),
+    
+    
+    path('vulncreate/<str:asset_id>/',vulnviews.vulncreate,name='vulncreate'),
     
     ]

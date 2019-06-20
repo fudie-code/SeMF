@@ -2,6 +2,7 @@
 
 from django.db import models
 from AssetManage.models import Asset
+from TaskManage.models import Task
 # Create your models here.
 class LEVEL(models.Model):
     name = models.CharField('风险等级',max_length= 100)
@@ -59,7 +60,8 @@ class Vuln(models.Model):
     create_data = models.DateTimeField('发现时间',auto_now_add=True)
     update_data = models.DateTimeField('更新时间',auto_now=True)
     
-    #task = models.ForeignKey(Task,related_name='vuln_for_task',on_delete=models.SET_NULL,null=True,blank=True)
+    is_check = models.BooleanField('是否删除',default=False)
+    task = models.ForeignKey(Task,related_name='vuln_for_task',on_delete=models.SET_NULL,null=True,blank=True)
     asset = models.ForeignKey(Asset,related_name='vuln_for_asset',on_delete=models.CASCADE,limit_choices_to={'type__is_root':False})
     
     def __str__(self):

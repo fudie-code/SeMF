@@ -14,7 +14,6 @@ urlpatterns = [
     path('levellist/',views.levellist,name='levellist'),
     
     
-    path('vulncreate/<str:asset_id>/',vulnviews.vulncreate,name='vulncreate'),
     path('vulndelete/<str:vuln_id>/',vulnviews.vulndelete,name='vulndelete'),
     path('vulnupdate/<str:vuln_id>/',vulnviews.vulnupdate,name='vulnupdate'),
     path('vulndetails/<str:vuln_id>/',vulnviews.vulndetails,name='vulndetails'),

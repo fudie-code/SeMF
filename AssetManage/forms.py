@@ -6,6 +6,7 @@ Created on 2019年6月15日
 '''
 from django.forms import ModelForm
 from . import models
+from VulnManage import models as vulnmodels
 
 class AssetForm(ModelForm):
     class Meta:
@@ -49,3 +50,9 @@ class FileForm(ModelForm):
     class Meta:
         model  = models.File
         fields= ('file','file_info')
+        
+        
+class VulnForm(ModelForm):
+    class Meta:
+        model  = vulnmodels.Vuln
+        fields= ('name','cve','type','level','introduce','info','scopen','fix','fix_status')

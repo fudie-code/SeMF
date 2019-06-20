@@ -11,6 +11,7 @@ django.setup()
 from RBAC.models import Permission,Menu,Role
 from AssetManage import models as assetmodels
 from VulnManage import models as vulnmodels
+from TaskManage import models as taskmodels
 
 
 def initmenu():
@@ -188,8 +189,16 @@ def initVulnType():
         item_get = vulnmodels.Type.objects.get_or_create(name=item['name'])
     print('initVulnType ok')
     
-    
-'''
+def initTaskType():
+    type_list=[
+        {'name':'系统扫描'},
+        {'name':'网站骚猫'},
+        {'name':'周期巡检'},
+        ]
+    for item in type_list:
+        item_get = taskmodels.Type.objects.get_or_create(name=item['name'])
+    print('initTaskStatus ok')   
+
 def initTaskStatus():
     type_list=[
         {'name':'待执行'},
@@ -200,7 +209,7 @@ def initTaskStatus():
     for item in type_list:
         item_get = taskmodels.STATUS.objects.get_or_create(name=item['name'])
     print('initTaskStatus ok')
-
+'''
     
 def initArticleStatus():
     type_list=[
@@ -243,7 +252,8 @@ if __name__ == "__main__":
     initVulnLevel()
     initVulnStatus()
     initVulnType()
-    '''initTaskStatus()
-    initArticleStatus()
+    initTaskStatus()
+    initTaskType()
+    '''initArticleStatus()
     initArticleType()
     initNoticeStatus()'''

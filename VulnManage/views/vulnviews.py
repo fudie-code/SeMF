@@ -12,34 +12,6 @@ from django.db.models import  Q
 from .. import serializers
 
 
-@api_view(['POST'])
-def vulncreate(request,asset_id):
-    data = {
-      "code": 1,
-      "msg": "",
-      "count": '',
-      "data": []
-    }
-    user = request.user
-    if user.is_superuser:
-        asset_get = models.Asset.objects.filter(id=asset_id).first()
-    else:
-        asset_get = models.Asset.objects.filter(Q(user=user)|Q(group__user=user),id = asset_id).first()
-    if asset_get:
-        form = forms.VulnForm(request.POST)
-        if form.is_valid():
-            vuln_get = form.save()
-            vuln_get.asset = asset_get
-            vuln_get.save()
-            data['code'] = 0
-            data['msg'] = 'success'
-        else:
-            data['msg'] = form.errors
-    else:
-        data['msg'] = '请检查权限'
-    return JsonResponse(data)
-
-
 @api_view(['GET'])
 def vulndelete(request,vuln_id):
     data = {
