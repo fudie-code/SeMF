@@ -15,6 +15,13 @@ class roleslistField(serializers.CharField):
             data_list.append(row.name)
         return data_list
     
+class IdlistField(serializers.CharField):
+    def to_representation(self, value):
+        data_list = []
+        for item in value:
+            data_list.append(item.id)
+        return data_list
+    
 class parentlistField(serializers.CharField):
     def to_representation(self, value):
         data_list = []
@@ -34,9 +41,10 @@ class UserManageSerializer(serializers.ModelSerializer):
     mobilephone = serializers.CharField(source = 'profile.mobilephone')
     roles = roleslistField(source="profile.roles.all")
     parent = parentlistField(source="profile.parent.all")
+    roles_id = IdlistField(source='profile.roles.all')
     class Meta:
         model = User
-        fields = ('id','username','email','mobilephone','is_active','roles')  
+        fields = ('id','username','email','mobilephone','is_active','roles','roles_id')  
         
         
         
