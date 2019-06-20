@@ -12,14 +12,14 @@ class userlistField(serializers.CharField):
     def to_representation(self, value):
         data_list = []
         for item in value:
-            data_list.append(item.username)
+            data_list.append(item.id)
         return data_list
     
 class parentlistField(serializers.CharField):
     def to_representation(self, value):
         data_list = []
         for item in value:
-            data_list.append(item.name)
+            data_list.append(item.id)
         return data_list
 
 class ExterNameField(serializers.CharField):
