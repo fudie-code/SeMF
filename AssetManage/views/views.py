@@ -39,7 +39,8 @@ def mainlist(request):
                                             Q(manage__icontains = key)|
                                             Q(telephone__icontains = key)|
                                             Q(email__icontains = key),
-                                            user=user).order_by('updatetime')
+                                            Q(user=user)|
+                                            Q(group__user=user)).order_by('updatetime')
     list_count = list_get.count()
     pg = MyPageNumberPagination()
     list_page = pg.paginate_queryset(list_get, request,'self')

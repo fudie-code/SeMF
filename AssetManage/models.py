@@ -3,6 +3,19 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
+
+class Group(models.Model):
+    name = models.CharField('资产属性',max_length = 30)
+    user = models.ManyToManyField(User,related_name='assetgroup_for_user',verbose_name='所属用户',blank=True)
+    def __str__(self):
+        return self.name
+    
+    class Meta: 
+        verbose_name = 'Group' 
+        verbose_name_plural = '资产权限组' 
+
+
+
 class Type(models.Model):
     name = models.CharField('分类名称',max_length = 50)
     is_root = models.BooleanField('主节点',default=False)
@@ -47,6 +60,7 @@ class Asset(models.Model):
     manage = models.CharField('负责人',max_length = 100,null=True,blank=True)
     telephone = models.CharField('负责人电话',max_length=50,null=True,blank=True)
     email = models.EmailField('负责人邮箱',null=True,blank=True)
+    group = models.ManyToManyField(Group,related_name='asset_for_group',verbose_name='所属资源组',blank=True)
     user = models.ManyToManyField(User,related_name='asset_for_user',verbose_name='所属用户',blank=True)
     
     starttime = models.DateTimeField('添加时间',auto_now_add=True)
@@ -55,7 +69,7 @@ class Asset(models.Model):
     parent = models.ManyToManyField('self',verbose_name='资产关联',related_name='asset_connect',blank=True)
     
     def __str__(self):
-        return self.name
+        return self.key
     
     class Meta: 
         verbose_name = 'Asset' 

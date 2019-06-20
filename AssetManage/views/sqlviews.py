@@ -9,6 +9,7 @@ from rest_framework.decorators import api_view
 from SeMF.views import xssfilter
 from .. import models,forms
 from .. import serializers
+from django.db.models import  Q
 
 
 
@@ -38,7 +39,7 @@ def sqldetails(request,asset_id):
     if user.is_superuser:
         item_get = models.Asset.objects.filter(id = asset_id).first()
     else:
-        item_get = models.Asset.objects.filter(id = asset_id,user = user).first()
+        item_get = models.Asset.objects.filter(Q(user=user)|Q(group__user=user),id = asset_id).first()
     if item_get:
         sql_get = models.SQLInfo.objects.get_or_create(asset=item_get).first()
         sql_get = sql_get[0]
@@ -64,7 +65,7 @@ def sqlupdate(request,sql_id):
     if user.is_superuser:
         item_get = models.SQLInfo.objects.filter(id = sql_id).first()
     else:
-        item_get = models.SQLInfo.objects.filter(id = sql_id,asset__user = user).first()
+        item_get = models.SQLInfo.objects.filter(Q(asset__user = user)|Q(asset__group__user = user),id = sql_id).first()
     if item_get:
         form = forms.SQLInfoForm(request.POST,instance=item_get)
         if form.is_valid():

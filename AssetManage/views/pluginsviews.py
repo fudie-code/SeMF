@@ -9,6 +9,7 @@ from rest_framework.decorators import api_view
 from SeMF.views import MyPageNumberPagination,xssfilter
 from .. import models,forms
 from .. import serializers
+from django.db.models import  Q
 
 
 
@@ -27,7 +28,7 @@ def pluginslist(request,asset_id):
     if user.is_superuser:
         asset_get = models.Asset.objects.filter(id=asset_id).first()
     else:
-        asset_get = models.Asset.objects.filter(id=asset_id,user=user).first()
+        asset_get = models.Asset.objects.filter(Q(user=user)|Q(group__user=user),id = asset_id).first()
     if asset_get:
         list_get = models.PluginInfo.objects.filter(name__icontains = key).order_by('updatetime')
         list_count = list_get.count()
@@ -56,7 +57,7 @@ def plugincreate(request,asset_id):
     if user.is_superuser:
         asset_get = models.Asset.objects.filter(id=asset_id).first()
     else:
-        asset_get = models.Asset.objects.filter(id=asset_id,user=user).first()
+        asset_get = models.Asset.objects.filter(Q(user=user)|Q(group__user=user),id = asset_id).first()
     if asset_get:
         form = forms.PluginForm(request.POST)
         if form.is_valid():
@@ -90,7 +91,7 @@ def plugindelete(request,plugin_id):
     if user.is_superuser:
         item_get = models.PluginInfo.objects.filter(id = plugin_id).first()
     else:
-        item_get = models.PluginInfo.objects.filter(id = plugin_id,asset__user = user).first()
+        item_get = models.PluginInfo.objects.filter(Q(asset__user = user)|Q(asset__group__user = user),id = plugin_id).first()
     if item_get:
         item_get.delete()
         data['code'] = 0
@@ -112,7 +113,7 @@ def pluginupdate(request,plugin_id):
     if user.is_superuser:
         item_get = models.PluginInfo.objects.filter(id = plugin_id).first()
     else:
-        item_get = models.PluginInfo.objects.filter(id = plugin_id,asset__user = user).first()
+        item_get = models.PluginInfo.objects.filter(Q(asset__user = user)|Q(asset__group__user = user),id = plugin_id).first()
     if item_get:
         form = forms.PluginForm(request.POST,instance=item_get)
         if form.is_valid():

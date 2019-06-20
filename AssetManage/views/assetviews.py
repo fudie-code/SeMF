@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from .. import models,forms,serializers
 from SeMF.views import xssfilter
+from django.db.models import  Q
 
 
 @api_view(['POST'])
@@ -72,7 +73,7 @@ def assetdelete(request,asset_id):
     if user.is_superuser:
         item_get = models.Asset.objects.filter(id = asset_id).first()
     else:
-        item_get = models.Asset.objects.filter(id = asset_id,user = user).first()
+        item_get = models.Asset.objects.filter(Q(user=user)|Q(group__user=user),id = asset_id).first()
     if item_get:
         item_get.delete()
         data['code'] = 0
@@ -94,7 +95,7 @@ def assetdetails(request,asset_id):
     if user.is_superuser:
         item_get = models.Asset.objects.filter(id = asset_id).first()
     else:
-        item_get = models.Asset.objects.filter(id = asset_id,user = user).first()
+        item_get = models.Asset.objects.filter(Q(user=user)|Q(group__user=user),id = asset_id).first()
     if item_get:
         data_get = serializers.AssetListSerializer(instance= item_get)
         data['data'] = xssfilter(data_get.data)
@@ -117,7 +118,7 @@ def assetupdate(request,asset_id):
     if user.is_superuser:
         item_get = models.Asset.objects.filter(id = asset_id).first()
     else:
-        item_get = models.Asset.objects.filter(id = asset_id,user = user).first()
+        item_get = models.Asset.objects.filter(Q(user=user)|Q(group__user=user),id = asset_id).first()
     if item_get:
         form = forms.AssetForm(request.POST,instance=item_get)
         if form.is_valid():

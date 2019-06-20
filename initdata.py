@@ -10,7 +10,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'SeMF.settings')
 django.setup()
 from RBAC.models import Permission,Menu,Role
 from AssetManage import models as assetmodels
-#from VulnManage import models as vulnmodels
+from VulnManage import models as vulnmodels
 
 
 def initmenu():
@@ -147,7 +147,7 @@ def initLanguageType():
         item_get = assetmodels.LanguageType.objects.get_or_create(name=item['name'])
     print('initLanguageType ok')
 
-'''def initVulnLevel():
+def initVulnLevel():
     type_list=[
         {'name':'信息'},
         {'name':'低危'},
@@ -183,6 +183,7 @@ def initVulnType():
     print('initVulnType ok')
     
     
+'''
 def initTaskStatus():
     type_list=[
         {'name':'待执行'},
@@ -233,10 +234,10 @@ if __name__ == "__main__":
     initsqltype()
     initostype()
     initLanguageType()
-    '''initVulnLevel()
+    initVulnLevel()
     initVulnStatus()
     initVulnType()
-    initTaskStatus()
+    '''initTaskStatus()
     initArticleStatus()
     initArticleType()
     initNoticeStatus()'''
