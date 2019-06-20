@@ -13,7 +13,8 @@ layui.config({
     citypicker: 'city-picker/city-picker',
     tableSelect: 'tableSelect/tableSelect',
     cropper: 'cropper/cropper',
-    zTree: 'zTree/zTree'
+    zTree: 'zTree/zTree',
+    uncode:'uncode'
 }).use(['config', 'layer', 'element', 'index', 'admin', 'laytpl','table'], function () {
     var $ = layui.jquery;
     var layer = layui.layer;
@@ -56,15 +57,15 @@ layui.config({
 
     // 加载侧边栏
     admin.ajax({
-        url: 'json/menus.json'
+        url: '/rbac/menu/'
         , type: 'get'
         , dataType:'JSON'
         , success: (res) => {
-            laytpl(sideNav.innerHTML).render(res, function (html) {
+            laytpl(sideNav.innerHTML).render(res.data, function (html) {
                 $('.layui-layout-admin .layui-side .layui-nav').html(html);
                 element.render('nav');
             });
-            index.regRouter(res);  // 注册路由
+            index.regRouter(res.data);  // 注册路由
             index.loadHome({  // 加载主页
                 url: '#/index',
                 name: '<i class="layui-icon layui-icon-home"></i>'
@@ -73,9 +74,10 @@ layui.config({
     })
 
     // 移除loading动画
-    setTimeout(function () {
-        admin.removeLoading();
-    }, 100);
+    // setTimeout(function () {
+    //     admin.removeLoading();
+    // }, 100); 
+    admin.removeLoading();
 
 
 });
