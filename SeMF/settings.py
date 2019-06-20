@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'AssetManage',
     'VulnManage',
     'TaskManage',
+    'UserManage'
 ]
 
 

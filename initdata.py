@@ -17,14 +17,14 @@ from TaskManage import models as taskmodels
 def initmenu():
     menu_list = [
         
-         {'name':'资产管理','key':'assetmanage','icon':"layui-icon-form",'jump':'javascript:;','parent':''},
-         {'name':'资产列表','key':'list','icon':"",'jump':'#/assetmanage/list','parent':'assetmanage'},
+         {'name':'资产管理','key':'asset','icon':"layui-icon-form",'jump':'javascript:;','parent':''},
+         {'name':'资产列表','key':'list','icon':"",'jump':'#/assetmanage/list','parent':'asset'},
 
-         {'name':'漏洞管理','key':'vulnmanage','icon':"layui-icon-form",'jump':'javascript:;','parent':''},
-         {'name':'漏洞列表','key':'list','icon':"",'jump':'#/vulnmanage/list','parent':'vulnmanage'},
+         {'name':'漏洞管理','key':'vuln','icon':"layui-icon-form",'jump':'javascript:;','parent':''},
+         {'name':'漏洞列表','key':'list','icon':"",'jump':'#/vulnmanage/list','parent':'vuln'},
 
-         {'name':'任务管理','key':'taskmanage','icon':"layui-icon-template-1",'jump':'javascript:;','parent':''},
-         {'name':'任务列表','key':'list','icon':"",'jump':'#/taskmanage/list','parent':'taskmanage'},
+         {'name':'任务管理','key':'task','icon':"layui-icon-template-1",'jump':'javascript:;','parent':''},
+         {'name':'任务列表','key':'list','icon':"",'jump':'#/taskmanage/list','parent':'task'},
          ]
          
     for item in menu_list:
