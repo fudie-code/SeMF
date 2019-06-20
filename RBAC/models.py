@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import django.utils.timezone as timezone
-#from AssetManage import models as assetmodels
 
 # Create your models here.
         
@@ -75,6 +74,7 @@ class UserResetpsd(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     title =  models.CharField('职位名称',max_length=50,null=True,blank=True)
+    description = models.TextField('角色描述',null=True,blank=True)
     
     is_resetpsd = models.BooleanField('强制修改密码',default=True)
     

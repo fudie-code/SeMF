@@ -4,28 +4,9 @@ Created on 2018年10月29日
 
 @author: 残源
 '''
-#from django.contrib.auth.models import User
 from .. import models
 from rest_framework import serializers
 from django.contrib.auth.models import User
-
-class AreaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Area
-        fields = ('name', 'parent')
-
-
-class DepartmentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Department
-        fields = '__all__'
-        
-class CompanySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Company
-        fields = ('name','key','address','manage','idcard','mobilephone','teamname','teamaddress')
-
-
         
 
 class MenuSerializer(serializers.ModelSerializer):
@@ -59,9 +40,7 @@ class UsernameSerializer(serializers.ModelSerializer):
  
         
 class ProfileSerializer(serializers.ModelSerializer):
-    department = DepartmentSerializer()
     parent = UserSerializer(many=True)
-    area = AreaSerializer()
     role = RoleSerializer(many=True)
     
     class Meta:
