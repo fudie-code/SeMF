@@ -25,9 +25,14 @@ class parentlistField(serializers.CharField):
 class ExterNameField(serializers.CharField):
     def to_representation(self, value):
         return value.name
+    
+class ExterIdField(serializers.CharField):
+    def to_representation(self, value):
+        return value.id
 
 
 class AssetListSerializer(serializers.ModelSerializer):
+    type_id = serializers.CharField(source='type.id')
     type = ExterNameField()
     user = userlistField(source='user.all')
     parent = parentlistField(source='parent.all')
@@ -35,7 +40,7 @@ class AssetListSerializer(serializers.ModelSerializer):
     updatetime = serializers.DateTimeField(format='%Y-%m-%d %H:%M')
     class Meta:
         model = models.Asset
-        fields= "__all__"
+        fields= ("name",'key',"type",'type_id','description',"weight",'manage',"telephone",'email',"user",'starttime','updatetime','parent')
         
 class AssetTypeSerializer(serializers.ModelSerializer):
     class Meta:
