@@ -9,9 +9,11 @@ from rest_framework.decorators import api_view
 from .. import models,forms,serializers
 from SeMF.views import xssfilter
 from django.db.models import  Q
+from django.views.decorators.csrf import csrf_protect
 
 
 @api_view(['POST'])
+@csrf_protect
 def assetcreate(request):
     data = {
       "code": 1,
@@ -108,6 +110,7 @@ def assetdetails(request,asset_id):
 
 
 @api_view(['POST'])
+@csrf_protect
 def assetupdate(request,asset_id):
     data = {
       "code": 1,

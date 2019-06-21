@@ -12,6 +12,7 @@ from RBAC.models import Permission,Menu,Role
 from AssetManage import models as assetmodels
 from VulnManage import models as vulnmodels
 from TaskManage import models as taskmodels
+from ArticleManage import models as articlemodels
 
 
 def initmenu():
@@ -209,7 +210,7 @@ def initTaskStatus():
     for item in type_list:
         item_get = taskmodels.STATUS.objects.get_or_create(name=item['name'])
     print('initTaskStatus ok')
-'''
+
     
 def initArticleStatus():
     type_list=[
@@ -223,14 +224,14 @@ def initArticleStatus():
 
 def initArticleType():
     type_list=[
-        {'name':'知识库类型1'},
-        {'name':'知识库类型2'},
-        {'name':'知识库类型3'},
+        {'name':'安全通告'},
+        {'name':'安全管理'},
+        {'name':'经验总结'},
         ]
     for item in type_list:
         item_get = articlemodels.Type.objects.get_or_create(name=item['name'])
     print('initArticleType ok')
-
+'''
 def initNoticeStatus():
     type_list=[
         {'name':'草稿'},
@@ -254,6 +255,6 @@ if __name__ == "__main__":
     initVulnType()
     initTaskStatus()
     initTaskType()
-    '''initArticleStatus()
+    initArticleStatus()
     initArticleType()
-    initNoticeStatus()'''
+    #initNoticeStatus()

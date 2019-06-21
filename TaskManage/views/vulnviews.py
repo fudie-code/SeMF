@@ -12,6 +12,7 @@ from .. import models
 from VulnManage import models as vulnmodels
 from VulnManage import serializers
 
+
 @api_view(['GET'])
 def vulnlist(request,task_id):
     data = {

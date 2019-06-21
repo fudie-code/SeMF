@@ -10,6 +10,7 @@ from SeMF.views import xssfilter
 from .. import models,forms
 from .. import serializers
 from django.db.models import  Q
+from django.views.decorators.csrf import csrf_protect
 
 
 
@@ -54,6 +55,7 @@ def webinfodetails(request,asset_id):
 
 
 @api_view(['POST'])
+@csrf_protect
 def webinfoupdate(request,webinfo_id):
     data = {
       "code": 1,

@@ -10,6 +10,7 @@ from SeMF.views import MyPageNumberPagination,xssfilter
 from .. import models,forms
 from .. import serializers
 from django.db.models import  Q
+from django.views.decorators.csrf import csrf_protect
 import uuid
 
 
@@ -47,6 +48,7 @@ def fileslist(request,asset_id):
 
 
 @api_view(['POST'])
+@csrf_protect
 def filecreate(request,asset_id):
     data = {
       "code": 1,

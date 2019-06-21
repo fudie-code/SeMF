@@ -10,6 +10,7 @@ from SeMF.views import MyPageNumberPagination,xssfilter
 from .. import models,forms
 from django.db.models import  Q
 from .. import serializers
+from django.views.decorators.csrf import csrf_protect
 
 
 
@@ -46,6 +47,7 @@ def portslist(request,asset_id):
 
 
 @api_view(['POST'])
+@csrf_protect
 def portcreate(request,asset_id):
     data = {
       "code": 1,
@@ -104,6 +106,7 @@ def portdelete(request,port_id):
 
 
 @api_view(['POST'])
+@csrf_protect
 def portupdate(request,port_id):
     data = {
       "code": 1,

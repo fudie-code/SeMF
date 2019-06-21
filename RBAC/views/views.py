@@ -15,12 +15,15 @@ import hashlib
 from django.contrib.auth.hashers import make_password 
 from SeMF.settings import JWT_KEY
 from django.utils.html import escape
+from django.views.decorators.csrf import csrf_protect
+from django.template.context_processors import csrf
 
 
 cur_date = datetime.datetime.now().date()
 # Create your views here.
 
 @api_view(['POST'])
+@csrf_protect
 @permission_classes((AllowAny,))
 def login(request):
     json_data = {
@@ -116,7 +119,8 @@ def logout(request):
 
 
 
-@api_view(['POST'])    
+@api_view(['POST'])  
+@csrf_protect  
 def resetpsd(request):
     user = request.user
     data = {
@@ -166,6 +170,7 @@ def resetpsd(request):
 
 
 @api_view(['POST'])
+@csrf_protect
 @permission_classes((AllowAny,))
 def forgetpsd(request):
     json_data = {
@@ -201,6 +206,7 @@ def forgetpsd(request):
     return JsonResponse(json_data)
                
 @api_view(['POST'])
+@csrf_protect
 @permission_classes((AllowAny,))
 def forgetchangepsd(request):
     json_data = {
@@ -238,6 +244,7 @@ def forgetchangepsd(request):
 
 
 @api_view(['POST'])
+@csrf_protect
 @permission_classes((AllowAny,))
 def registinit(request):
     json_data = {

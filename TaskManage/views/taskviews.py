@@ -12,9 +12,11 @@ from .. import models,forms
 from django.db.models import  Q
 from .. import serializers
 from django.db.models import Count
+from django.views.decorators.csrf import csrf_protect
 
 
 @api_view(['POST'])
+@csrf_protect
 def taskcreate(request):
     data = {
       "code": 1,
@@ -69,6 +71,7 @@ def taskdelete(request,task_id):
 
 
 @api_view(['POST'])
+@csrf_protect
 def taskupdate(request,task_id):
     data = {
       "code": 1,
@@ -115,7 +118,7 @@ def taskdetails(request,task_id):
     if user.is_superuser:
         item_get = models.Task.objects.filter(id = task_id).first()
     else:
-        item_get = models.Task.objects.filter(Q(asset__user=user)|Q(asset__group__user=user),id = task_id).first()
+        item_get = models.Task.objects.filter(user=user,id = task_id).first()
     if item_get:
         data_get = serializers.TaskListSerializer(instance= item_get)
         data['data'] = xssfilter(data_get.data)

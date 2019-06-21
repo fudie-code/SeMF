@@ -11,6 +11,7 @@ from django.db.models import  Q
 from AdvanceManage.Functions.many2many import many_many_addall
 from SeMF.views import MyPageNumberPagination
 from SeMF.views import xssfilter
+from django.views.decorators.csrf import csrf_protect
 
 # Create your views here.
 
@@ -46,6 +47,7 @@ def user_list(request):
 
 
 @api_view(['POST'])
+@csrf_protect
 def user_create(request):
     data = {
       "code": 1,

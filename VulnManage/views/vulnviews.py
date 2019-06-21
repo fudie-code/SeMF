@@ -10,6 +10,7 @@ from SeMF.views import xssfilter
 from .. import models,forms
 from django.db.models import  Q
 from .. import serializers
+from django.views.decorators.csrf import csrf_protect
 
 
 @api_view(['GET'])
@@ -35,6 +36,7 @@ def vulndelete(request,vuln_id):
 
 
 @api_view(['POST'])
+@csrf_protect
 def vulnupdate(request,vuln_id):
     data = {
       "code": 1,

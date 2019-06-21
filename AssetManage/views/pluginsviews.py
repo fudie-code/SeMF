@@ -10,6 +10,7 @@ from SeMF.views import MyPageNumberPagination,xssfilter
 from .. import models,forms
 from .. import serializers
 from django.db.models import  Q
+from django.views.decorators.csrf import csrf_protect
 
 
 
@@ -46,6 +47,7 @@ def pluginslist(request,asset_id):
 
 
 @api_view(['POST'])
+@csrf_protect
 def plugincreate(request,asset_id):
     data = {
       "code": 1,
@@ -102,6 +104,7 @@ def plugindelete(request,plugin_id):
 
 
 @api_view(['POST'])
+@csrf_protect
 def pluginupdate(request,plugin_id):
     data = {
       "code": 1,

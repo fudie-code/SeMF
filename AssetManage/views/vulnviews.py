@@ -12,9 +12,11 @@ from .. import models,forms
 from VulnManage import models as vulnmodels
 from django.db.models import  Q
 from VulnManage import serializers
+from django.views.decorators.csrf import csrf_protect
 
 
 @api_view(['POST'])
+@csrf_protect
 def vulncreate(request,asset_id):
     data = {
       "code": 1,

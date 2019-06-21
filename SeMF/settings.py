@@ -55,13 +55,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'rest_framework',
     'RBAC',
     'AdvanceManage',
     'AssetManage',
     'VulnManage',
     'TaskManage',
-    'UserManage'
+    'UserManage',
+    'ArticleManage',
 ]
 
 
