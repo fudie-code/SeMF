@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'TaskManage',
     'UserManage',
     'ArticleManage',
+    'NoticeManage',
 ]
 
 

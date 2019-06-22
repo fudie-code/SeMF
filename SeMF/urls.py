@@ -31,6 +31,7 @@ urlpatterns = [
     path('task/',include('TaskManage.urls')),
     path('user/',include('UserManage.urls')),
     path('article/',include('ArticleManage.urls')),
+    path('notice/',include('NoticeManage.urls')),
     
     path('semf/', admin.site.urls),
 ]+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
