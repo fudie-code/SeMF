@@ -5,7 +5,7 @@ Created on 2019年6月20日
 @author: 残源
 '''
 from django.urls import path
-from .views import views,articleviews,fileviews,commentsviews
+from .views import views,articleviews,fileviews,commentsviews,chartviews
 
 urlpatterns = [
     path('articlelist/',views.mainlist,name='articlelist'),
@@ -25,4 +25,8 @@ urlpatterns = [
     
     path('commentlist/<str:article_id>/',commentsviews.commentlist,name='commentlist'),
     path('commentcreate/<str:article_id>/',commentsviews.commentcreate,name='commentcreate'),
+    
+    
+    path('articlestatuschart/',chartviews.articlestatuschart,name='articlestatuschart'),
+    path('articletypechart/',chartviews.articletypechart,name='articletypechart'),
     ]

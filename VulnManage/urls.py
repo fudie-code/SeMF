@@ -5,7 +5,7 @@ Created on 2019年6月20日
 @author: 残源
 '''
 from django.urls import path
-from .views import views,vulnviews
+from .views import views,vulnviews,chartviews
 
 urlpatterns = [
     path('vulnlist/',views.mainlist,name='vulnlist'),
@@ -18,4 +18,7 @@ urlpatterns = [
     path('vulnupdate/<str:vuln_id>/',vulnviews.vulnupdate,name='vulnupdate'),
     path('vulndetails/<str:vuln_id>/',vulnviews.vulndetails,name='vulndetails'),
     
+    path('vulnstatuschart/',chartviews.vulnstatuschart,name='vulnstatuschart'),
+    path('vulntypechart/',chartviews.vulntypechart,name='vulntypechart'),
+    path('vulnslevelchart/',chartviews.vulnslevelchart,name='vulnslevelchart'),
     ]
