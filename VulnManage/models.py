@@ -44,12 +44,32 @@ class Type(models.Model):
         verbose_name = 'Type' 
         verbose_name_plural = '漏洞分类' 
         
+        
+#漏洞来源，主要用来自定义漏洞来源，实现后续的动态扩展
+class Source(models.Model):
+    name = models.CharField('漏洞来源',max_length = 50)
+    descriptions = models.TextField('来源描述')
+    parent = models.ForeignKey('self',verbose_name='上级分类',related_name='source_vuln',null=True,blank=True,on_delete=models.SET_NULL)
+    
+    def __str__(self):
+        #显示层级菜单
+        title_list = [self.name]
+        p = self.parent
+        while p:
+            title_list.insert(0,p.name)
+            p = p.parent
+        return '-'.join(title_list)
+    
+    class Meta: 
+        verbose_name = 'Source' 
+        verbose_name_plural = '漏洞来源'    
 
 #用来记录各种来源与资产相关的漏洞
 class Vuln(models.Model):
     name = models.CharField('漏洞名称',max_length = 50)
     cve = models.CharField('CVE',max_length = 50,null=True,blank=True)
     type = models.ForeignKey(Type,verbose_name='漏洞分类',related_name='type_for_vuln',null=True,blank=True,on_delete=models.SET_NULL)
+    source = models.ForeignKey(Source,verbose_name='漏洞来源',related_name='source_for_vuln',null=True,blank=True,on_delete=models.SET_NULL)
     level = models.ForeignKey(LEVEL,verbose_name='漏洞分级',related_name='level_for_vuln',null=True,blank=True,on_delete=models.SET_NULL)
     introduce = models.TextField('漏洞简介',null=True)
     info = models.TextField('漏洞信息',null=True)
@@ -71,27 +91,6 @@ class Vuln(models.Model):
         verbose_name = 'Vuln' 
         verbose_name_plural = '资产漏洞' 
         
-        
-        
-#漏洞来源，主要用来自定义漏洞来源，实现后续的动态扩展
-class Source(models.Model):
-    name = models.CharField('漏洞来源',max_length = 50)
-    descriptions = models.TextField('来源描述')
-    parent = models.ForeignKey('self',verbose_name='上级分类',related_name='source_vuln',null=True,blank=True,on_delete=models.SET_NULL)
-    
-    def __str__(self):
-        #显示层级菜单
-        title_list = [self.name]
-        p = self.parent
-        while p:
-            title_list.insert(0,p.name)
-            p = p.parent
-        return '-'.join(title_list)
-    
-    class Meta: 
-        verbose_name = 'Source' 
-        verbose_name_plural = '漏洞来源' 
-
 
 #用来修正自动化扫描工具带来的误报，或者漏洞描述、修复方案的补充
 class AdvanceVuln(models.Model):
