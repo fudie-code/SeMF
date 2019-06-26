@@ -50,156 +50,6 @@
 </ul>
 </script>
 
-<!-- 表格弹窗 -->
-<div id="assetCreateForm" class="layui-hide">
-    <div class="layui-card-body" style="padding: 15px;" id='formedit'>
-        <form class="layui-form" action="" lay-filter="component-form-group">
-            <input type='hidden' name="csrfmiddlewaretoken" id='csrf'>
-            <input type='hidden' name="id" id='id'>
-            <div class="layui-form-item">
-                <label class="layui-form-label">资产名称</label>
-                <div class="layui-input-block">
-                    <input name="name" id="name" lay-verify="required" autocomplete="off" placeholder="请输入资产名称"
-                        class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">资产标识</label>
-                <div class="layui-input-block">
-                    <input name="key" id="key" lay-verify="required" autocomplete="off" placeholder="域名或IP地址"
-                        class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">资产类型</label>
-                <div class="layui-input-block">
-                    <select name="type" id="type" lay-verify="required">
-                        <option value=""></option>
-                    </select>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">负责人</label>
-                <div class="layui-input-block">
-                    <input name="manage" id="manage" lay-verify="required" autocomplete="off" placeholder="负责人"
-                        class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">联系电话</label>
-                <div class="layui-input-block">
-                    <input name="telephone" id="telephone" autocomplete="off" lay-verify="phone" placeholder="请输入手机号码"
-                        class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">邮箱</label>
-                <div class="layui-input-block">
-                    <input name="email" id="email" autocomplete="off" lay-verify="email" placeholder="请输入邮箱"
-                        class="layui-input">
-                </div>
-            </div>
-            <div id="view"></div>
-            <script id="demo" type="text/html">
-                        {{# if(d.deny == true) {}}
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">所属用户</label>
-                            <div class="layui-input-block">
-                                <select name="user" id="user" lay-verify="required">
-                                    <option value=""></option>
-                                    <option value="1">1</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">关联资产</label>
-                            <div class="layui-input-block">
-                                <select name="parent" id="parent" lay-verify="required">
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                        </div>
-                        {{#   }}}
-                    </script>
-            <div class="layui-form-item">
-                <label class="layui-form-label">资产描述</label>
-                <div class="layui-input-block">
-                    <textarea name="description" id="description" placeholder="请输入描述内容" class="layui-textarea"></textarea>
-                </div>
-            </div>
-            <div class="layui-form-item layui-col-xs-offset3">
-                <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit="" lay-filter="sub">立即提交</button>
-                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-<script>
-    layui.use(['admin', 'form', 'config', 'laytpl'], function () {
-        var $ = layui.$
-            , layer = layui.layer
-            , admin = layui.admin
-            , form = layui.form
-            , config = layui.config
-            , laytpl = layui.laytpl;
-
-        var data = {
-            "deny": config.getdeny()
-        }
-        var getTpl = demo.innerHTML
-            , view = document.getElementById('view');
-        laytpl(getTpl).render(data, function (html) {
-            view.innerHTML = html;
-        });
-        
-        form.render();
-
-        admin.ajax({
-            url: '/csrf/'
-            , type: 'GET'
-            , dataType: 'JSON'
-            , success: function (res) {
-                $('#csrf').val(res.data.token);
-            }
-        });
-        
-        admin.ajax({
-            url: '/asset/assettypelist/'
-            , type: 'GET'
-            , dataType: 'JSON'
-            , headers: {
-                ['Authorization']: 'JWT ' + config.getToken()
-            }
-            , success: function (res) {
-                let data = res.data;
-                $.each(data, function (index, item) {
-                    $('#type').append(new Option(item.name, item.id));
-                });
-                form.render()
-            }
-        });
-
-        admin.ajax({
-            url: '/asset/assetlist/'
-            , type: 'GET'
-            , dataType: 'JSON'
-            , headers: {
-                ['Authorization']: 'JWT ' + config.getToken()
-            }
-            , success: function (res) {
-                let data = res.data;
-                $.each(data, function (index, item) {
-                    $('#parent').append(new Option(item.name, item.id));
-                });
-                form.render()
-            }
-        });
-    });
-</script>
-
 <!-- <script src="assets/js/assetmanage/list.js"></script> -->
 <script>
     layui.use(['admin', 'table', 'form', 'dropdown', 'index', 'uncode'], function () {
@@ -320,7 +170,20 @@
         table.on('toolbar(rootasset-list)', function (obj) {
             switch (obj.event) {
                 case 'add':
-                showEditModel()
+                // showEditModel();
+                admin.open({
+                    title: '修改资产信息',
+                    area: ['500px', '680px'],
+                    fixed: true,
+                    maxmin: true,
+                    url: './views/assetmanage/assetcreate.html',
+                    success: function (layero, index) {
+
+                    },
+                    end: function () {
+                        table.reload('rootasset-list');
+                    }
+                });
                 break;
             };
         });
