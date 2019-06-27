@@ -40,7 +40,7 @@ class AssetListSerializer(serializers.ModelSerializer):
     updatetime = serializers.DateTimeField(format='%Y-%m-%d %H:%M')
     class Meta:
         model = models.Asset
-        fields= ("name",'key',"type",'type_id','description',"weight",'manage',"telephone",'email',"user",'starttime','updatetime','parent')
+        fields= ('id',"name",'key',"type",'type_id','description',"weight",'manage',"telephone",'email',"user",'starttime','updatetime','parent')
         
 class AssetTypeSerializer(serializers.ModelSerializer):
     class Meta:

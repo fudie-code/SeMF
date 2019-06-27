@@ -14,7 +14,7 @@ class ArticleListSerializer(serializers.ModelSerializer):
     update_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M')
     class Meta:
         model = models.Type
-        fields= ('name','abstract','body','status','type','type_id','user','create_time','update_time')
+        fields= ('id','name','abstract','body','status','type','type_id','user','create_time','update_time')
 
 
 
