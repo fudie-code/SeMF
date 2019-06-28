@@ -135,17 +135,17 @@
             admin.open({
                 type: 1,
                 title: (mUser ? '修改' : '添加') + '资产',
-                content:$('#assetCreateForm').html(),
+                content: $('#assetCreateForm').html(),
                 // url: './views/assetmanage/assetcreate.html',
                 area: ['500px', '680px'],
                 success: function (layero, dIndex) {
                     var url = mUser ? '/asset/assetupdate/' + mUser.id + '/' : '/asset/assetcreate/';
 
-                    form.val('component-form-group',mUser);
+                    form.val('component-form-group', mUser);
                     console.log(mUser);
                     form.on('submit(sub)', function (obj) {
                         admin.ajax({
-                            url:url
+                            url: url
                             , type: 'POST'
                             , data: obj.field
                             , dataType: 'JSON'
@@ -170,21 +170,58 @@
         table.on('toolbar(rootasset-list)', function (obj) {
             switch (obj.event) {
                 case 'add':
-                // showEditModel();
-                admin.open({
-                    title: '修改资产信息',
-                    area: ['500px', '680px'],
-                    fixed: true,
-                    maxmin: true,
-                    url: './views/assetmanage/assetcreate.html',
-                    success: function (layero, index) {
+                    admin.open({
+                        title: '修改资产信息',
+                        area: ['500px', '680px'],
+                        fixed: true,
+                        maxmin: true,
+                        url: './views/assetmanage/assetcreate.html',
+                        success: function (layero, index) {
+                            form.on('submit(sub)', function (obj) {
+                                let data = obj.field;
 
-                    },
-                    end: function () {
-                        table.reload('rootasset-list');
-                    }
-                });
-                break;
+                                let userlist = data.user_name;
+                                if (userlist == '') {
+                                    delete data.user;
+                                    delete data.user_name;
+                                }
+                                let parentlist = data.parent_name;
+                                if (parentlist == '') {
+                                    delete data.parent;
+                                    delete data.parent_name;
+                                }
+
+                                admin.ajax({
+                                    url: '/asset/assetcreate/'
+                                    , type: 'POST'
+                                    , data: data
+                                    , dataType: 'JSON'
+                                    , success: function (res) {
+                                        layer.close(index);
+                                        let msg = JSON.stringify(res.msg);
+                                        if (res.code == 0) {
+                                            layer.msg(res.msg, {
+                                                offset: '15px'
+                                                , icon: 1
+                                                , time: 1000
+                                            });
+                                        } else if (res.code == 1) {
+                                            layer.msg(msg, {
+                                                offset: '15px'
+                                                , icon: 1
+                                                , time: 1000
+                                            });
+                                        }
+                                    }
+                                });
+                                return false;
+                            });
+                        },
+                        end: function () {
+                            table.reload('rootasset-list');
+                        }
+                    });
+                    break;
             };
         });
 
@@ -198,7 +235,6 @@
                         type: 'GET',
                         dataType: 'JSON',
                         success: function (res) {
-                            //成功的提示与跳转
                             layer.msg(res.msg, {
                                 offset: '15px',
                                 icon: 1,
@@ -208,33 +244,72 @@
                             });
                         }
                     });
-                    obj.del();
                     layer.close(index);
                 });
             } else if (obj.event === 'detial') {
                 index.go('/assetmanage/detial/id=' + data.id);
             } else if (obj.event === 'edit') {
-                showEditModel(data);
-                // admin.open({
-                //     title: '修改资产信息',
-                //     area: ['500px', '660px'],
-                //     fixed: true,
-                //     maxmin: true,
-                //     url: './views/assetmanage/assetcreate.html',
-                //     success: function (layero, index) {
-                //         $("#id").val(data.id);
-                //         $("#name").val(uncode(data.name));
-                //         $("#key").val(uncode(data.key));
-                //         $("#type").html(data.type);
-                //         $("#manage").val(uncode(data.manage));
-                //         $("#telephone").val(data.telephone);
-                //         $("#email").val(uncode(data.email));
-                //         $("#description").val(uncode(data.description));
-                //     },
-                //     end: function () {
-                //         table.reload('rootasset-list');
-                //     }
-                // });
+                admin.open({
+                    title: '修改资产信息',
+                    area: ['500px', '680px'],
+                    fixed: true,
+                    maxmin: true,
+                    url: './views/assetmanage/assetcreate.html',
+                    success: function (layero, index) {
+                        $("#id").val(data.id);
+                        $("#name").val(uncode(data.name));
+                        $("#key").val(uncode(data.key));
+                        $("#type").html(data.type);
+                        $("#manage").val(uncode(data.manage));
+                        $("#telephone").val(data.telephone);
+                        $("#email").val(uncode(data.email));
+                        $("#description").val(uncode(data.description));
+
+                        form.on('submit(sub)', function (obj) {
+                            let data = obj.field;
+
+                            let userlist = data.user_name;
+                            if (userlist == '') {
+                                delete data.user;
+                                delete data.user_name;
+                            }
+                            let parentlist = data.parent_name;
+                            if (parentlist == '') {
+                                delete data.parent;
+                                delete data.parent_name;
+                            }
+
+                            admin.ajax({
+                                url: '/asset/assetupdate/' + obj.field.id + '/'
+                                , type: 'POST'
+                                , data: data
+                                , dataType: 'JSON'
+                                , success: function (res) {
+                                    layer.close(index);
+                                    let msg = JSON.stringify(res.msg);
+                                    if (res.code == 0) {
+                                        layer.msg('编辑资产成功', {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                    } else if (res.code == 1) {
+                                        layer.msg(msg, {
+                                            offset: '15px'
+                                            , icon: 1
+                                            , time: 1000
+                                        });
+                                    }
+                                }
+                            });
+                            return false;
+                        });
+                        
+                    },
+                    end: function () {
+                        table.reload('rootasset-list');
+                    }
+                });
             };
         });
 
