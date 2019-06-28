@@ -55,7 +55,7 @@ class Asset(models.Model):
     type = models.ForeignKey(Type,related_name='type_for_asset',verbose_name='资产类型',on_delete=models.SET_NULL,null=True)
     description = models.TextField('资产说明',null=True,blank=True)
     is_delete = models.BooleanField('是否删除',default=False)
-    weight = models.IntegerField('权重1-n',default=1)
+    weight = models.IntegerField('权重1-n',default=1,blank=True)
     
     manage = models.CharField('负责人',max_length = 100,null=True,blank=True)
     telephone = models.CharField('负责人电话',max_length=50,null=True,blank=True)

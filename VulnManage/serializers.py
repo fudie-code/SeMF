@@ -13,9 +13,6 @@ class ExterNameField(serializers.CharField):
         return value.name
 
 class VulnListSerializer(serializers.ModelSerializer):
-    #type = ExterNameField()
-    #level = ExterNameField()
-    #fix_status = ExterNameField()
     create_data = serializers.DateTimeField(format='%Y-%m-%d %H:%M')
     update_data = serializers.DateTimeField(format='%Y-%m-%d %H:%M')
     class Meta:

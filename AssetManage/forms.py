@@ -11,7 +11,7 @@ from VulnManage import models as vulnmodels
 class AssetForm(ModelForm):
     class Meta:
         model  = models.Asset
-        fields = ('name','type','key','description','manage','telephone','email','user','parent')
+        fields = ('name','type','key','description','manage','telephone','weight','email','user','parent')
         
         
 class AssetUpdateForm(ModelForm):
