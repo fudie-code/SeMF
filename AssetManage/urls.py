@@ -48,6 +48,7 @@ urlpatterns = [
     
     
     path('vulncreate/<str:asset_id>/',vulnviews.vulncreate,name='vulncreate'),
+    path('vulnlist/<str:asset_id>/',vulnviews.vulnlist,name='assetvulnlist'),
     
     path('assettypechart/',chartviews.assettypechart,name='assettypechart'),
     path('assetvulnlevelchart/<str:asset_id>/',chartviews.assetvulnlevelchart,name='assetvulnlevelchart'),
