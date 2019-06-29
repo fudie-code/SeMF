@@ -42,7 +42,7 @@ def osdetails(request,asset_id):
     else:
         item_get = models.Asset.objects.filter(Q(user=user)|Q(group__user=user),id = asset_id).first()
     if item_get:
-        os_get = models.OsInfo.objects.get_or_create(asset=item_get).first()
+        os_get = models.OsInfo.objects.get_or_create(asset=item_get)
         os_get = os_get[0]
         data_get = serializers.OsInfoSerializer(instance= os_get)
         data['data'] = xssfilter(data_get.data)

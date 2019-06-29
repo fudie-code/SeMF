@@ -23,6 +23,9 @@ def mainlist(request):
     key = request.GET.get('key')
     if not key:
         key=''
+    type_id = request.GET.get('type')
+    if not type_id:
+        type_id=''
     if user.is_superuser:
         list_get = models.Asset.objects.filter(Q(name__icontains = key)|
                                             Q(key__icontains = key)|
@@ -30,7 +33,8 @@ def mainlist(request):
                                             Q(description__icontains = key)|
                                             Q(manage__icontains = key)|
                                             Q(telephone__icontains = key)|
-                                            Q(email__icontains = key)).order_by('updatetime')
+                                            Q(email__icontains = key),
+                                            type__id__icontains=type_id).order_by('updatetime')
     else:
         list_get = models.Asset.objects.filter(Q(name__icontains = key)|
                                             Q(key__icontains = key)|
@@ -40,7 +44,8 @@ def mainlist(request):
                                             Q(telephone__icontains = key)|
                                             Q(email__icontains = key),
                                             Q(user=user)|
-                                            Q(group__user=user)).order_by('updatetime')
+                                            Q(group__user=user),
+                                            type__id__icontains=type_id).order_by('updatetime')
     list_count = list_get.count()
     pg = MyPageNumberPagination()
     list_page = pg.paginate_queryset(list_get, request,'self')

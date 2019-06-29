@@ -42,7 +42,7 @@ def sqldetails(request,asset_id):
     else:
         item_get = models.Asset.objects.filter(Q(user=user)|Q(group__user=user),id = asset_id).first()
     if item_get:
-        sql_get = models.SQLInfo.objects.get_or_create(asset=item_get).first()
+        sql_get = models.SQLInfo.objects.get_or_create(asset=item_get)
         sql_get = sql_get[0]
         data_get = serializers.SQLSerializer(instance= sql_get)
         data['data'] = xssfilter(data_get.data)
