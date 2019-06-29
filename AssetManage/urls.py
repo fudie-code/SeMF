@@ -18,15 +18,15 @@ urlpatterns = [
     path('assetdetails/<str:asset_id>/',assetviews.assetdetails,name='assetdetails'),
     
     
-    path('portlist/<str:asset_id>',portsviews.portslist,name='portlist'),
-    path('portcreate/<str:asset_id>',portsviews.portcreate,name='portcreate'),
-    path('portdelete/<str:port_id>',portsviews.portdelete,name='portdelete'),
-    path('portupdate/<str:port_id>',portsviews.portupdate,name='portupdate'),
+    path('portlist/<str:asset_id>/',portsviews.portslist,name='portlist'),
+    path('portcreate/<str:asset_id>/',portsviews.portcreate,name='portcreate'),
+    path('portdelete/<str:port_id>/',portsviews.portdelete,name='portdelete'),
+    path('portupdate/<str:port_id>/',portsviews.portupdate,name='portupdate'),
     
-    path('pluginlist/<str:asset_id>',pluginsviews.pluginslist,name='pluginlist'),
-    path('plugincreate/<str:asset_id>',pluginsviews.plugincreate,name='plugincreate'),
-    path('plugindelete/<str:plugin_id>',pluginsviews.plugindelete,name='plugindelete'),
-    path('pluginupdate/<str:plugin_id>',pluginsviews.pluginupdate,name='pluginupdate'),
+    path('pluginlist/<str:asset_id>/',pluginsviews.pluginslist,name='pluginlist'),
+    path('plugincreate/<str:asset_id>/',pluginsviews.plugincreate,name='plugincreate'),
+    path('plugindelete/<str:plugin_id>/',pluginsviews.plugindelete,name='plugindelete'),
+    path('pluginupdate/<str:plugin_id>/',pluginsviews.pluginupdate,name='pluginupdate'),
     
     
     path('sqltypelist/',sqlviews.sqltypelist,name='sqltypelist'),
