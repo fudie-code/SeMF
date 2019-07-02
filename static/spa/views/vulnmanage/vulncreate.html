@@ -1,0 +1,142 @@
+<div class="layui-card-body" style="padding: 15px;" id='formedit'>
+    <form class="layui-form" action="" lay-filter="component-form-group">
+        <input type='hidden' name="csrfmiddlewaretoken" id='csrf'>
+        <div class="layui-col-md12 layui-form-item">
+            <div class="layui-col-md6">
+                <label class="layui-form-label">漏洞名称</label>
+                <div class="layui-input-block">
+                    <input name="name" id="name" lay-verify="required" autocomplete="off" placeholder="漏洞名称"
+                        class="layui-input">
+                </div>
+            </div>
+            <div class="layui-col-md6">
+                <label class="layui-form-label">CVE</label>
+                <div class="layui-input-block">
+                    <input name="cve" id="cve" autocomplete="off" placeholder="CVE" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md12 layui-form-item">
+            <div class="layui-col-md6">
+                <label class="layui-form-label">漏洞类型</label>
+                <div class="layui-input-block">
+                    <select name="type" id="type" lay-verify="required">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-col-md6">
+                <label class="layui-form-label">漏洞等级</label>
+                <div class="layui-input-block">
+                    <select name="level" id="level" lay-verify="required">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item" id="asset-item">
+            <label class="layui-form-label">所属资产</label>
+            <div class="layui-input-block">
+                <input type='hidden' name="asset" id='asset'>
+                <input name="parent_name" id="parent_name" autocomplete="off" lay-verify="" placeholder="所属资产"
+                    class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">漏洞简介</label>
+            <div class="layui-input-block">
+                <textarea name="introduce" id="introduce" placeholder="漏洞简介" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">漏洞信息</label>
+            <div class="layui-input-block">
+                <textarea name="info" id="info" placeholder="漏洞信息" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">影响范围</label>
+            <div class="layui-input-block">
+                <textarea name="scopen" id="scopen" placeholder="影响范围" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">修复方案</label>
+            <div class="layui-input-block">
+                <textarea name="fix" id="fix" placeholder="修复方案" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs-offset3">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="sub">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    layui.use(['admin', 'form', 'config', 'laytpl', 'tableSelect', 'uncode'], function () {
+        var $ = layui.$
+            , layer = layui.layer
+            , admin = layui.admin
+            , form = layui.form
+            , config = layui.config
+            , laytpl = layui.laytpl
+            , tableSelect = layui.tableSelect
+            , uncode = layui.uncode;
+
+            tableSelect.render({
+                elem: '#parent_name',
+                searchKey: 'key',
+                checkedKey: 'key',
+                searchPlaceholder: '资产名称',
+                table: {
+                    url: '/asset/assetlist/'
+                    , cols: [[
+                        { type: 'radio', fixed: true }
+                        , { field: 'key', title: '资产标识' }
+                        , { field: 'name', title: '资产名称' }
+                    ]]
+                    , limit: 5
+                },
+                done: function (elem, data) {
+                    $("input[name='parent']").val(data.data[0].id);
+                    $("input[name='parent_name']").val(data.data[0].name);
+                }
+            });
+        form.render();
+        admin.ajax({
+            url: '/csrf/'
+            , type: 'GET'
+            , dataType: 'JSON'
+            , success: function (res) {
+                $('#csrf').val(res.data.token);
+            }
+        });
+        admin.ajax({
+            url: '/vuln/typelist/'
+            , type: 'GET'
+            , dataType: 'JSON'
+            , success: function (res) {
+                let data = res.data;
+                $.each(data, function (index, item) {
+                    $('#type').append(new Option(item.name, item.id));
+                });
+                form.render()
+            }
+        });
+        admin.ajax({
+            url: '/vuln/levellist/'
+            , type: 'GET'
+            , dataType: 'JSON'
+            , success: function (res) {
+                let data = res.data;
+                $.each(data, function (index, item) {
+                    $('#level').append(new Option(item.name, item.id));
+                });
+                form.render()
+            }
+        });
+    });
+</script>

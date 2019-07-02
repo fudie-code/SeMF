@@ -1,0 +1,81 @@
+<div class="layui-card-body" style="padding: 15px;" id='formedit'>
+    <form class="layui-form" lay-filter="example">
+        <input type='hidden' name="csrfmiddlewaretoken" id='csrf'>
+        <div class="layui-form-item">
+            <label class="layui-form-label">域名地址</label>
+            <div class="layui-input-block">
+                <input name="key" id="key" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">中间件</label>
+            <div class="layui-input-block">
+                <input name="middleware" id="middleware" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">中间件版本</label>
+            <div class="layui-input-block">
+                <input name="middleware_version" id="middleware_version" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">编程语言</label>
+            <div class="layui-input-block">
+                <select name="language" id="language" lay-verify="">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">开发框架</label>
+            <div class="layui-input-block">
+                <input name="web_framwork" id="web_framwork" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">框架版本</label>
+            <div class="layui-input-block">
+                <input name="web_framwork_version" id="web_framwork_version" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-sm-offset4">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="sub">确定</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    layui.use(['form', 'admin'], () => {
+        var form = layui.form
+            , admin = layui.admin
+            , $ = layui.$;
+
+
+        admin.ajax({
+            url: '/csrf/'
+            , type: 'GET'
+            , dataType: 'JSON'
+            , success: function (res) {
+                $('#csrf').val(res.data.token);
+            }
+        });
+
+        admin.ajax({
+            url: '/asset/languagetypelist/'
+            , type: 'GET'
+            , dataType: 'JSON'
+            , success: function (res) {
+                let data = res.data;
+                $.each(data, function (index, item) {
+                    $('#language').append(new Option(item.name, item.id));
+                });
+                form.render()
+            }
+        });
+
+    });
+</script>

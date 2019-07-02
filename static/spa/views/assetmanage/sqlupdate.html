@@ -1,0 +1,67 @@
+<div class="layui-card-body" style="padding: 15px;" id='formedit'>
+    <form class="layui-form" lay-filter="example">
+        <input type='hidden' name="csrfmiddlewaretoken" id='csrf'>
+        <div class="layui-form-item">
+            <label class="layui-form-label">访问地址</label>
+            <div class="layui-input-block">
+                <input name="key" id="key" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">数据库分类</label>
+            <div class="layui-input-block">
+                <select name="os" id="os" lay-verify="">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">数据库版本</label>
+            <div class="layui-input-block">
+                <input name="version" id="version" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备份周期</label>
+            <div class="layui-input-block">
+                <input name="cycle" id="cycle" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-sm-offset4">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="sub">确定</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    layui.use(['form', 'admin'], () => {
+        var form = layui.form
+            , admin = layui.admin
+            , $ = layui.$;
+
+        admin.ajax({
+            url: '/csrf/'
+            , type: 'GET'
+            , dataType: 'JSON'
+            , success: function (res) {
+                $('#csrf').val(res.data.token);
+            }
+        });
+
+        admin.ajax({
+            url: '/asset/sqltypelist/'
+            , type: 'GET'
+            , dataType: 'JSON'
+            , success: function (res) {
+                let data = res.data;
+                $.each(data, function (index, item) {
+                    $('#os').append(new Option(item.name, item.id));
+                });
+                form.render()
+            }
+        });
+    });
+</script>

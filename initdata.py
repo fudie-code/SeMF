@@ -21,10 +21,10 @@ def initmenu():
          {'name':'资产管理','key':'asset','icon':"layui-icon-form",'jump':'javascript:;','parent':''},
          {'name':'资产列表','key':'list','icon':"",'jump':'#/assetmanage/list','parent':'asset'},
 
-         {'name':'漏洞管理','key':'vuln','icon':"layui-icon-form",'jump':'javascript:;','parent':''},
+         {'name':'漏洞管理','key':'vuln','icon':"iconfont icon-loudong",'jump':'javascript:;','parent':''},
          {'name':'漏洞列表','key':'list','icon':"",'jump':'#/vulnmanage/list','parent':'vuln'},
 
-         {'name':'任务管理','key':'task','icon':"layui-icon-template-1",'jump':'javascript:;','parent':''},
+         {'name':'任务管理','key':'task','icon':"iconfont icon-task",'jump':'javascript:;','parent':''},
          {'name':'任务列表','key':'list','icon':"",'jump':'#/taskmanage/list','parent':'task'},
          ]
          
