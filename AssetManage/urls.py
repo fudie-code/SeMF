@@ -39,8 +39,8 @@ urlpatterns = [
     path('osupdate/<str:os_id>/',osviews.osupdate,name='osupdate'),
     
     path('languagetypelist/',webinfoviews.LanguageTypelist,name='languagetypelist'),
-    path('webinfodetails/<str:asset_id>/',webinfoviews.webinfodetails,name='webinfodetails'),
-    path('webinfoupdate/<str:webinfo_id>/',webinfoviews.webinfoupdate,name='webinfoupdate'),
+    path('webdetails/<str:asset_id>/',webinfoviews.webinfodetails,name='webdetails'),
+    path('webupdate/<str:webinfo_id>/',webinfoviews.webinfoupdate,name='webupdate'),
     
     path('fileslist/<str:asset_id>/',fileviews.fileslist,name='fileslist'),
     path('filecreate/<str:asset_id>/',fileviews.filecreate,name='filecreate'),

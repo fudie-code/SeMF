@@ -133,4 +133,46 @@ def portupdate(request,port_id):
 
 
 
+@api_view(['GET'])
+def portallcheck(request,asset_id):
+    #资产全端口检查
+    data = {
+      "code": 1,
+      "msg": "",
+      "count": '',
+      "data": []
+    }
+    user = request.user
+    if user.is_superuser:
+        item_get = models.Asset.objects.filter(id = asset_id).first()
+    else:
+        item_get = models.Asset.objects.filter(Q(user = user)|Q(group__user = user),id = asset_id).first()
+    if item_get:
+        ##添加端口检查，并更新数据文件
+        data['code'] = 0
+        data['msg'] = ''
+    else:
+        data['msg'] = '请检查权限'
+    return JsonResponse(data)
 
+@api_view(['GET'])
+def portcheck(request,port_id):
+    #单独端口检查
+    data = {
+      "code": 1,
+      "msg": "",
+      "count": '',
+      "data": []
+    }
+    user = request.user
+    if user.is_superuser:
+        item_get = models.PortInfo.objects.filter(id = port_id).first()
+    else:
+        item_get = models.PortInfo.objects.filter(Q(asset__user = user)|Q(asset__group__user = user),id = port_id).first()
+    if item_get:
+        ##添加端口检查，并更新数据文件
+        data['code'] = 0
+        data['msg'] = '端口删除成功'
+    else:
+        data['msg'] = '请检查权限'
+    return JsonResponse(data)

@@ -170,7 +170,7 @@ class PortInfo(models.Model):
     version = models.CharField('应用版本',max_length=50,null=True,blank=True)
     port_info = models.TextField('端口介绍',null=True,blank=True)
     updatetime = models.DateTimeField('更新时间',auto_now=True)
-    is_delete = models.BooleanField('是否删除',default=False)
+    is_open = models.BooleanField('是否开放',default=False)
     
     asset = models.ForeignKey(Asset,related_name='port_for_asset',on_delete=models.CASCADE)
     
