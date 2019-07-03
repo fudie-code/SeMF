@@ -246,6 +246,50 @@
       , page: true
     });
     
+    table.on('toolbar(vuln-list)', function (obj) {
+      switch (obj.event) {
+        case 'add':
+          admin.open({
+            title: '添加漏洞',
+            area: ['520px', '753px'],
+            url: './views/vulnmanage/vulncreate.html',
+            success: function (layero, index) {
+              form.on('submit(sub)', function (obj) {
+                let data = obj.field;
+                admin.ajax({
+                  url: '/asset/vulncreate/' + router.search.id +'/'
+                  , type: 'POST'
+                  , data: data
+                  , dataType: 'JSON'
+                  , success: function (res) {
+                    layer.close(index);
+                    let msg = JSON.stringify(res.msg);
+                    if (res.code == 0) {
+                      layer.msg(res.msg, {
+                        offset: '15px'
+                        , icon: 1
+                        , time: 1000
+                      });
+                    } else if (res.code == 1) {
+                      layer.msg(msg, {
+                        offset: '15px'
+                        , icon: 1
+                        , time: 1000
+                      });
+                    }
+                  }
+                });
+                return false;
+              });
+            },
+            end: function () {
+              table.reload('vuln-list');
+            }
+          });
+          break;
+      };
+    });
+
 
     let getportlist = () => {
       $('#port-box').removeClass('layui-hide');
@@ -265,7 +309,50 @@
         ]]
         , page: true
       });
+      $('#port-add').click(()=>{
+        portpopup();
+      });
     };
+
+    let portpopup = (portdata) =>{
+      admin.open({
+        title: (portdata ? '修改' : '添加') + '端口信息',
+        area: ['520px', '520px'],
+        url: './views/assetmanage/portcreate.html',
+        success: function (layero, index) {
+          form.on('submit(sub)', function (obj) {
+            let data = obj.field;
+            admin.ajax({
+              url: '/asset/portcreate/' + router.search.id + '/'
+              , type: 'POST'
+              , data: data
+              , dataType: 'JSON'
+              , success: function (res) {
+                layer.close(index);
+                let msg = JSON.stringify(res.msg);
+                if (res.code == 0) {
+                  layer.msg(res.msg, {
+                    offset: '15px'
+                    , icon: 1
+                    , time: 1000
+                  });
+                } else if (res.code == 1) {
+                  layer.msg(msg, {
+                    offset: '15px'
+                    , icon: 1
+                    , time: 1000
+                  });
+                }
+              }
+            });
+            return false;
+          });
+        },
+        end: function () {
+          table.reload('vuln-list');
+        }
+      });
+    }
 
     let getassetdetialinfo = (type) => {
       admin.ajax({

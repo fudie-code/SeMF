@@ -1,0 +1,106 @@
+<div class="layui-card-body" style="padding: 15px;" id='formedit'>
+    <form class="layui-form" action="" lay-filter="component-form-group">
+        <input type='hidden' name="csrfmiddlewaretoken" id='csrf'>
+        <div class="layui-form-item">
+            <label class="layui-form-label">开放端口</label>
+            <div class="layui-input-block">
+                <input name="port" id="port" lay-verify="required" autocomplete="off" placeholder="请输入端口号"
+                    class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">服务名称</label>
+            <div class="layui-input-block">
+                <input name="name" id="name" lay-verify="required" autocomplete="off" placeholder="请输入服务名称"
+                    class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">产品信息</label>
+            <div class="layui-input-block">
+                <input name="product" id="product" lay-verify="required" autocomplete="off" placeholder="请输入产品信息"
+                    class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">应用版本</label>
+            <div class="layui-input-block">
+                <input name="version" id="version" autocomplete="off" lay-verify="required" placeholder="应用版本"
+                    class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">端口介绍</label>
+            <div class="layui-input-block">
+                <textarea name="port_info" id="port_info" placeholder="" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs-offset3">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="sub">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<script>
+    layui.use(['admin', 'form'], function () {
+        var $ = layui.$
+            , layer = layui.layer
+            , admin = layui.admin
+            , form = layui.form
+
+
+        form.render();
+
+        admin.ajax({
+            url: '/csrf/'
+            , type: 'GET'
+            , dataType: 'JSON'
+            , success: function (res) {
+                $('#csrf').val(res.data.token);
+            }
+        });
+
+
+
+        // form.on('submit(sub)', function (obj) {
+        //     if (obj.field.portid == "") {
+        //         admin.req({
+        //             url: '/assetmanage/portcreate/' + obj.field.assetid + '/'
+        //             , type: 'POST'
+        //             , data: obj.field
+        //             , done: function (res) {
+        //                 //成功的提示与跳转
+        //                 layer.msg(res.msg, {
+        //                     offset: '15px'
+        //                     , icon: 1
+        //                     , time: 1000
+        //                 }, function () {
+        //                     layui.index.render();
+        //                 });
+        //             }
+        //         });
+        //     } else {
+        //         admin.req({
+        //             url: '/assetmanage/portupdate/' + obj.field.portid + '/'//实际使用请改成服务端真实接口
+        //             , type: 'POST'
+        //             , data: obj.field
+        //             , done: function (res) {
+        //                 //成功的提示与跳转
+        //                 layer.msg(res.msg, {
+        //                     offset: '15px'
+        //                     , icon: 1
+        //                     , time: 1000
+        //                 }, function () {
+        //                     layui.index.render();
+        //                 });
+        //             }
+        //         });
+        //     }
+        //     return false;
+        // });
+    });
+</script>

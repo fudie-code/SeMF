@@ -34,12 +34,12 @@
                 </div>
             </div>
         </div>
-        <div class="layui-form-item" id="asset-item">
-            <label class="layui-form-label">所属资产</label>
+        <div class="layui-form-item">
+            <label class="layui-form-label">修复状态</label>
             <div class="layui-input-block">
-                <input type='hidden' name="asset" id='asset'>
-                <input name="parent_name" id="parent_name" autocomplete="off" lay-verify="" placeholder="所属资产"
-                    class="layui-input">
+                <select name="fix_status" id="fix_status" lay-verify="required">
+                    <option value=""></option>
+                </select>
             </div>
         </div>
         <div class="layui-form-item">
@@ -86,25 +86,6 @@
             , tableSelect = layui.tableSelect
             , uncode = layui.uncode;
 
-            tableSelect.render({
-                elem: '#parent_name',
-                searchKey: 'key',
-                checkedKey: 'key',
-                searchPlaceholder: '资产名称',
-                table: {
-                    url: '/asset/assetlist/'
-                    , cols: [[
-                        { type: 'radio', fixed: true }
-                        , { field: 'key', title: '资产标识' }
-                        , { field: 'name', title: '资产名称' }
-                    ]]
-                    , limit: 5
-                },
-                done: function (elem, data) {
-                    $("input[name='parent']").val(data.data[0].id);
-                    $("input[name='parent_name']").val(data.data[0].name);
-                }
-            });
         form.render();
         admin.ajax({
             url: '/csrf/'
@@ -122,6 +103,18 @@
                 let data = res.data;
                 $.each(data, function (index, item) {
                     $('#type').append(new Option(item.name, item.id));
+                });
+                form.render()
+            }
+        });
+        admin.ajax({
+            url: '/vuln/statuslist/'
+            , type: 'GET'
+            , dataType: 'JSON'
+            , success: function (res) {
+                let data = res.data;
+                $.each(data, function (index, item) {
+                    $('#fix_status').append(new Option(item.name, item.id));
                 });
                 form.render()
             }
