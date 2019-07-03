@@ -34,14 +34,14 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">联系电话</label>
 			<div class="layui-input-block">
-				<input name="telephone" id="telephone" autocomplete="off"  placeholder="请输入手机号码"
+				<input name="telephone" id="telephone" autocomplete="off"  lay-verify="telephone" placeholder="请输入手机号码"
 					class="layui-input">
 			</div>
 		</div>
 		<div class="layui-form-item">
 			<label class="layui-form-label">邮箱</label>
 			<div class="layui-input-block">
-				<input name="email" id="email" autocomplete="off" placeholder="请输入邮箱"
+				<input name="email" id="email" autocomplete="off" lay-verify="email" placeholder="请输入邮箱"
 					class="layui-input">
 			</div>
 		</div>
@@ -91,7 +91,7 @@
 			, tableSelect = layui.tableSelect
 			, uncode = layui.uncode;
 
-		var data = { //数据
+		var data = { 
 			"deny": config.getdeny()
 		}
 		var getTpl = demo.innerHTML
@@ -136,19 +136,12 @@
 					, limit: 5
 				},
 				done: function (elem, data) {
-					// var NEWJSON = [];
-					// var id_list = [];
-					// layui.each(data.data, function (index, item) {
-					// 	NEWJSON.push(item.name);
-					// 	id_list.push(item.id);
-					// });
-					// elem.val(uncode(NEWJSON.join(",")));
-					// $('#parent').val(id_list.join(","));
+					$("input[name='user']").val(data.data[0].id);
+					$("input[name='user_name']").val(data.data[0].name);
 				}
 			});
 		}
 		form.render();
-
 		admin.ajax({
 			url: '/csrf/'
 			, type: 'GET'
@@ -157,8 +150,6 @@
 				$('#csrf').val(res.data.token);
 			}
 		});
-
-
 		admin.ajax({
 			url: '/asset/assettypelist/'
 			, type: 'GET'
@@ -171,70 +162,5 @@
 				form.render()
 			}
 		});
-
-
-		// form.on('submit(sub)', function (obj) {
-		// 	let data = obj.field;
-			
-		// 	let userlist = data.user_name;
-		// 	if (userlist == ''){
-		// 		delete data.user;
-		// 		delete data.user_name;
-		// 	}
-		// 	let parentlist = data.parent_name;
-		// 	if (parentlist == ''){
-		// 		delete data.parent;
-		// 		delete data.parent_name;
-		// 	}
-		// 	console.log(data);
-		// 	// admin.ajax({
-		// 	// 	url: '/asset/assetcreate/'
-		// 	// 	, type: 'POST'
-		// 	// 	, data: obj.field
-		// 	// 	, dataType: 'JSON'
-		// 	// 	, success: function (res) {
-		// 	// 		layer.msg(res.msg, {
-		// 	// 			offset: '15px'
-		// 	// 			, icon: 1
-		// 	// 			, time: 1000
-		// 	// 		},function(){
-		// 	// 			parent.layer.close(index);
-		// 	// 		});
-		// 	// 	}
-		// 	// });
-		// 	if (obj.field.id == "") {
-		// 		admin.ajax({
-		// 			url: '/asset/assetcreate/'
-		// 			, type: 'POST'
-		// 			, data: data
-		// 			, dataType: 'JSON'
-		// 			, success: function (res) {
-		// 				layer.msg(res.msg, {
-		// 					offset: '15px'
-		// 					, icon: 1
-		// 					, time: 1000
-		// 				}, function () {
-		// 					layui.index.render();
-		// 				});
-		// 			}
-		// 		});
-		// 	} else {
-		// 		admin.req({
-		// 			url: '/assetmanage/assetupdate/' + obj.field.id + '/'
-		// 			, type: 'POST'
-		// 			, data: obj.field
-		// 			, done: function (res) {
-		// 				layer.msg(res.msg, {
-		// 					offset: '15px'
-		// 					, icon: 1
-		// 					, time: 1000
-		// 				}, function () {
-		// 					layui.index.render();
-		// 				});
-		// 			}
-		// 		});
-		// 	}
-		// 	return false;
-		// });
 	});
 </script>

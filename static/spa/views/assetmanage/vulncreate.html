@@ -1,0 +1,171 @@
+<div class="layui-card-body"  id='formedit'>
+	<form class="layui-form" action="" lay-filter="component-form-group">
+		<input type='hidden' name="csrfmiddlewaretoken" id='csrf'>
+		<div class="layui-col-md12 layui-form-item">
+			<div class="layui-col-md6">
+				<label class="layui-form-label">漏洞名称</label>
+				<div class="layui-input-block">
+					<input name="name" id="name" lay-verify="required" autocomplete="off" placeholder="漏洞名称"
+						class="layui-input">
+				</div>
+			</div>
+			<div class="layui-col-md6">
+				<label class="layui-form-label">CVE</label>
+				<div class="layui-input-block">
+					<input name="cve" id="cve" autocomplete="off" placeholder="CVE" class="layui-input">
+				</div>
+			</div>
+		</div>
+		<div class="layui-col-md12 layui-form-item">
+			<div class="layui-col-md6">
+				<label class="layui-form-label">漏洞类型</label>
+				<div class="layui-input-block">
+					<select name="type" id="type" lay-verify="required">
+						<option value=""></option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-col-md6">
+				<label class="layui-form-label">漏洞等级</label>
+				<div class="layui-input-block">
+					<select name="level" id="level" lay-verify="required">
+						<option value=""></option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item" id="asset-item">
+				<label class="layui-form-label">所属资产</label>
+				<div class="layui-input-block">
+					<input type='hidden' name="asset" id='asset'>
+					<input name="asset_name" id="asset_name" autocomplete="off" lay-verify="" placeholder="所属资产"
+						class="layui-input">
+				</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">漏洞简介</label>
+			<div class="layui-input-block">
+				<textarea name="introduce" id="introduce" placeholder="漏洞简介" class="layui-textarea"></textarea>
+			</div>
+		</div>
+
+        <div class="layui-form-item" >
+			<label class="layui-form-label">漏洞信息</label>
+			<div class="layui-input-block">
+				<textarea name="info" id="info" placeholder="漏洞信息" class="layui-textarea"></textarea>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">影响范围</label>
+			<div class="layui-input-block">
+				<textarea name="scopen" id="scopen" placeholder="影响范围" class="layui-textarea"></textarea>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">修复方案</label>
+			<div class="layui-input-block">
+				<textarea name="fix" id="fix" placeholder="修复方案" class="layui-textarea"></textarea>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs-offset5">
+			<div class="layui-input-block">
+				<button class="layui-btn" lay-submit="" lay-filter="sub">立即提交</button>
+				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+
+<script>
+	layui.use(['admin', 'form','tableSelect','uncode'], function () {
+		var $ = layui.$
+			, layer = layui.layer
+			, admin = layui.admin
+			, form = layui.form
+			, tableSelect = layui.tableSelect
+			, uncode = layui.uncode;
+
+
+		form.render();
+
+		admin.req({
+			url: '/csrf/' //实际使用请改成服务端真实接口
+			, type: 'GET'
+			, done: function (res) {
+				$('#csrf').val(res.data.token);
+			}
+		});
+		
+
+	tableSelect.render({
+			elem: '#asset_name',
+			searchKey: 'key',
+			checkedKey: 'id',
+			searchPlaceholder: '资产名称',
+			table: {
+				url: '/assetmanage/assetlist/'
+				,headers:{[layui.setter.request.tokenName]: 'JWT '+layui.data(layui.setter.tableName)[layui.setter.request.tokenName]}
+				,cols: [[
+					{ type: 'radio' , fixed: true}
+                  ,{field:'id', title: '资产ID'}
+				  ,{field:'name', title: '资产名称'}
+				]]
+				,limit:5
+			},
+			done: function (elem, data) {
+				// var NEWJSON = [];
+				// var id_list =[];
+				// layui.each(data.data, function (index, item) {
+				// 	NEWJSON.push(item.name);
+				// 	id_list.push(item.id);
+				// });
+				elem.val(uncode(data.data[0].name));
+				$('#asset').val(data.data[0].id);
+			}
+		});
+
+		admin.req({
+			url: '/vulnmanage/vulntype/' //实际使用请改成服务端真实接口
+			, type: 'GET'
+			, done: function (res) {
+				let data = res.data;
+				$.each(data, function (index, item) {
+					$('#type').append(new Option(item.name, item.id));// 下拉菜单里添加元素
+				});
+                form.render()
+			}
+        });
+        
+        admin.req({
+			url: '/vulnmanage/vulnlevel/' //实际使用请改成服务端真实接口
+			, type: 'GET'
+			, done: function (res) {
+				let data = res.data;
+				$.each(data, function (index, item) {
+					$('#level').append(new Option(item.name, item.id));// 下拉菜单里添加元素
+				});
+                form.render()
+			}
+		});
+
+        form.on('submit(sub)', function (obj) {
+            admin.req({
+                url: '/vulnmanage/vulncreate/' 
+                , type: 'POST'
+                , data: obj.field
+                , done: function (res) {
+                    //成功的提示与跳转
+                    layer.msg(res.msg, {
+                        offset: '15px'
+                        , icon: 1
+                        , time: 1000
+                    }, function () {
+                        layui.index.render();
+                    });
+                }
+            });
+            return false;
+        });
+	});
+</script>

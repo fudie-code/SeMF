@@ -1,0 +1,101 @@
+<div class="layui-card-body" style="padding: 15px;" id='formedit'>
+    <form class="layui-form" lay-filter="example">
+        <input type='hidden' name="csrfmiddlewaretoken" id='csrf'>
+        <div class="layui-form-item">
+            <label class="layui-form-label">IP地址</label>
+            <div class="layui-input-block">
+                <input name="key" id="key" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">主机名</label>
+            <div class="layui-input-block">
+                <input name="hostname" id="hostname" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">操作系统</label>
+            <div class="layui-input-block">
+                <select name="os" id="os" lay-verify="">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">CPU数量</label>
+            <div class="layui-input-block">
+                <input name="cpu_num" id="cpu_num" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">内存容量</label>
+            <div class="layui-input-block">
+                <input name="memory" id="memory" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">硬盘容量</label>
+            <div class="layui-input-block">
+                <input name="disk" id="disk" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-sm-offset4">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="sub">确定</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    layui.use(['form', 'admin'], () => {
+        var form = layui.form
+            , admin = layui.admin
+            , $ = layui.$;
+
+
+        admin.ajax({
+            url: '/csrf/'
+            , type: 'GET'
+            , dataType: 'JSON'
+            , success: function (res) {
+                $('#csrf').val(res.data.token);
+            }
+        });
+
+        admin.ajax({
+			url: '/asset/ostypelist/'
+			, type: 'GET'
+			, dataType: 'JSON'
+			, success: function (res) {
+				let data = res.data;
+				$.each(data, function (index, item) {
+					$('#os').append(new Option(item.name, item.id));
+				});
+				form.render()
+			}
+		});
+
+        //       form.on('submit(sub)', function (data) {
+        //     if (data.field.asset_type == 'os') {
+        //         admin.req({
+        //             url: '/assetmanage/typeinfoupdate/' + data.field.id + '/os/'
+        //             , type: 'POST'
+        //             , data: data.field
+        //             , done: function (res) {
+        //                 //成功的提示与跳转
+        //                 layer.msg(res.msg, {
+        //                     offset: '15px'
+        //                     , icon: 1
+        //                     , time: 1000
+        //                 }, function () {
+        //                     layui.index.render();
+        //                 });
+        //             }
+        //         })
+        //     }
+        //     return false;
+        // });
+    });
+</script>

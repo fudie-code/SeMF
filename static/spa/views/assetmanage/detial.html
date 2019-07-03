@@ -1,14 +1,3 @@
-<title>资产管理 - 项目详情</title>
-
-<div class="layui-card layadmin-header">
-  <div class="layui-breadcrumb" lay-filter="breadcrumb">
-    <a href='#'><cite>主页</cite></a>
-    <a><cite>资产管理</cite></a>
-    <a href='#/assetmanage/list'><cite>资产列表</cite></a>
-    <a><cite>资产详情</cite></a>
-  </div>
-</div>
-
 <div class="layui-fluid">
   <div class="layui-row layui-col-space15 layui-col-md12 layui-col-sm12">
 
@@ -16,25 +5,22 @@
     <!-- 资产信息概览 -->
     <div class="layui-col-md3 layui-col-xs4">
       <div class="layui-card layui-col-md12 layui-col-sm12">
-        <!-- <div class="layui-card-header">
-              <h3>资产信息概览</h3>
-            </div> -->
         <div class="layui-card-body layui-row layui-col-md12 layui-col-sm12" style="height:322px;">
           <fieldset class="layui-elem-field layui-field-title">
             <legend>资产信息概览</legend>
             <div class="layui-field-box">
               <div class="layui-col-md6 layui-col-sm6">
-                <div template lay-url="/assetmanage/rootassetdetails/{{ layui.router().search.id }}">
+                <div id ='assetdetailsbox'></div>
+                <script id="assetdetailselem" type="text/html">
                   <div class="layui-card-body">
-                    <div style="width: 250px">系统名称：{{ d.data.name }}</div>
-                    <div>系统描述：
-                      <p>{{d.data.description}}</p>
+                      <div style="width: 250px">资产名称：{{ d.name }}</div>
+                      <div style="width: 250px">资产属性：{{ d.key }}</div>
+                      <div style="width: 250px">资产类型：{{ d.type }}</div>
+                      <div>系统描述：
+                        <p>{{d.description}}</p>
+                      </div>
                     </div>
-                    <!-- <div>统计信息：
-                      <div></div>
-                    </div> -->
-                  </div>
-                </div>
+                </script>
               </div>
             </div>
           </fieldset>
@@ -52,38 +38,20 @@
       </div>
     </div>
 
-    <!-- 数据库信息 -->
-    <div class="layui-col-md4 layui-col-xs4 layui-hide" id="sql-box">
-      <div class="layui-card">
-        <div class="layui-card-header">
-          <div class="layui-col-xs6">
-            数据库信息
-          </div>
-          <i class="layui-icon" id="sql-up">&#xe67c;</i>
-        </div>
-        <div class="layui-card-body" style="height:258px;" id="sql-info">
-          <script id="sql-js" type="text/html">
-            <div id="sqlkey">访问地址：{{# if(d.key == 'None' ){ d.key = '' }}}{{ d.key|| ''   }}</div>
-            <div id="sqlos">数据库分类：{{# if(d.os.name == 'None' ){ d.os.name = '' }}}{{ d.os.name|| ''   }}</div>
-            <div id="sqlversion">数据库版本：{{# if(d.version == 'None' ){ d.version = '' }}}{{ d.version|| ''   }}</div>
-            <div id="sqlcycle">备份周期：{{# if(d.cycle == 'None' ){ d.cycle = '' }}}{{ d.cycle|| ''   }}</div>
-            <div>更新时间：{{# if(d.updatetime == 'None' ){ d.updatetime = '' }}}{{ d.updatetime || ''  }}</div>
-          </script>
-        </div>
-      </div>
-    </div>
 
-    <!-- 服务器信息 -->
-    <div class="layui-col-md4 layui-col-xs4 layui-hide" id="os-box">
+    <!-- 资产详细信息 -->
+    <div class="layui-col-md4 layui-col-xs4">
       <div class="layui-card">
         <div class="layui-card-header">
-          <div class="layui-col-xs6">
-            服务器信息
+          <div class="layui-col-xs10">
+            资产详细信息
           </div>
-          <i class="layui-icon" id="os-up">&#xe67c;</i>
+          <i class="layui-icon" id="assettypeinfoupdate">&#xe67c;</i>
         </div>
-        <div class="layui-card-body" style="height:258px;" id="os-info">
-          <script id="os-js" type="text/html">
+        <div class="layui-card-body" style="height:258px;" id="assettypeinfobox"></div>
+          <script id="assettypeinfo" type="text/html">
+            {{# console.log(d) }}
+            {{# if(d.type == 'os'){ }}
             <div id="_key">IP地址：{{# if(d.key == 'None' ){ d.key = '' }}}{{ d.key || ''  }}</div>
             <div id="_hostname">主机名：{{# if(d.hostname == 'None' ){ d.hostname = '' }}}{{ d.hostname || ''  }}</div>
             <div id="_os">操作系统：{{# if(d.os.name == 'None' ){ d.os.name = '' }}}{{ d.os.name || '' }}</div>
@@ -91,34 +59,24 @@
             <div id="_memory">内存大小：{{# if(d.memory == 'None' ){ d.memory = '' }}}{{ d.memory || ''  }}</div>
             <div id="_disk">硬盘大小：{{# if(d.disk == 'None' ){ d.disk = '' }}}{{ d.disk || '' }}</div>
             <div>更新时间：{{# if(d.updatetime == 'None' ){ d.updatetime = '' }}}{{ d.updatetime|| ''  }}</div>
+            {{# }else if(d.type == 'sql'){ }}
+            <div id="sqlkey">访问地址：{{# if(d.key == 'None' ){ d.key = '' }}}{{ d.key|| ''   }}</div>
+            <div id="sqlos">数据库分类：{{# if(d.os.name == 'None' ){ d.os.name = '' }}}{{ d.os.name|| ''   }}</div>
+            <div id="sqlversion">数据库版本：{{# if(d.version == 'None' ){ d.version = '' }}}{{ d.version|| ''   }}</div>
+            <div id="sqlcycle">备份周期：{{# if(d.cycle == 'None' ){ d.cycle = '' }}}{{ d.cycle|| ''   }}</div>
+            <div>更新时间：{{# if(d.updatetime == 'None' ){ d.updatetime = '' }}}{{ d.updatetime || ''  }}</div>
+            {{# }else if(d.type == 'web'){ }}
+            <div id="webkey">域名地址：{{# if(d.key == 'None' ){ d.key = '' }}}{{ d.key }}</div>
+            <div id="_middleware">中间件：{{# if(d.middleware == 'None' ){ d.middleware = '' }}}{{ d.middleware }}</div>
+            <div id="_middleware_version">中间件版本：{{# if(d.middleware_version == 'None' ){ d.middleware_version = '' }}}{{ d.middleware_version}}</div>
+            <div id="_language">编程语言：{{# if(d.language.name == 'None' ){ d.language.name = '' }}}{{ d.language.name || ''}}</div>
+            <div id="_web_framwork">开发框架：{{# if(d.web_framwork == 'None' ){ d.web_framwork = '' }}}{{ d.web_framwork }}</div>
+            <div id="_web_framwork_version">开发框架版本：{{# if(d.web_framwork_version == 'None' ){ d.web_framwork_version = '' }}}{{ d.web_framwork_version }}</div>
+            <div>更新时间：{{# if(d.updatetime == 'None' ){ d.updatetime = '' }}}{{ d.updatetime }}</div>
+            {{# } }}
           </script>
-        </div>
       </div>
     </div>
-
-    <!-- 网站信息 -->
-    <div class="layui-col-md4 layui-col-xs4 layui-hide" id="web-box">
-      <div class="layui-card">
-        <div class="layui-card-header">
-          <div class="layui-col-xs6">
-            网站信息
-          </div>
-          <i class="layui-icon" id="web-up">&#xe67c;</i>
-        </div>
-        <div class="layui-card-body" style="height:258px;" id="web-info">
-          <script id="web-js" type="text/html">
-                  <div id="webkey">域名地址：{{# if(d.key == 'None' ){ d.key = '' }}}{{ d.key }}</div>
-                  <div id="_middleware">中间件：{{# if(d.middleware == 'None' ){ d.middleware = '' }}}{{ d.middleware }}</div>
-                  <div id="_middleware_version">中间件版本：{{# if(d.middleware_version == 'None' ){ d.middleware_version = '' }}}{{ d.middleware_version}}</div>
-                  <div id="_language">编程语言：{{# if(d.language.name == 'None' ){ d.language.name = '' }}}{{ d.language.name || ''}}</div>
-                  <div id="_web_framwork">开发框架：{{# if(d.web_framwork == 'None' ){ d.web_framwork = '' }}}{{ d.web_framwork }}</div>
-                  <div id="_web_framwork_version">开发框架版本：{{# if(d.web_framwork_version == 'None' ){ d.web_framwork_version = '' }}}{{ d.web_framwork_version }}</div>
-                  <div>更新时间：{{# if(d.updatetime == 'None' ){ d.updatetime = '' }}}{{ d.updatetime }}</div>
-                </script>
-        </div>
-      </div>
-    </div>
-
 
     <!-- 资产漏洞数据表 -->
     <div class="layui-col-md12">
@@ -205,7 +163,7 @@
 
 
 <script>
-  layui.use(['admin', 'form', 'table', 'element', 'uncode', 'laytpl', 'aliossUploader'], function () {
+  layui.use(['admin', 'form', 'table', 'element', 'uncode', 'laytpl'], function () {
     var $ = layui.$
       , layer = layui.layer
       , admin = layui.admin
@@ -216,240 +174,42 @@
       , element = layui.element
       , uncode = layui.uncode
       , laytpl = layui.laytpl;
-
-    form.render();
+    
     element.render();
-
-
-    admin.req({
-      url: '/csrf/' //实际使用请改成服务端真实接口
-      , type: 'GET'
-      , done: function (res) {
-        $('#csrf').val(res.data.token);
-      }
+    var assettypeinfoid;
+    var assettypeinfodata;
+    $(() => {
+      admin.ajax({
+        url:'/asset/assettypeinfolist/'+router.search.id + '/'
+        , type: 'GET'
+        , dataType: 'JSON'
+        , success: function (res) {
+          console.log(res.data);
+          $.each(res.data, (index, item) => {
+            partInfo(item.key);
+          })
+        }
+      });
     });
 
-    $(() => {
-      admin.req({
-        url: '/vulnmanage/get_asset_score/' + router.search.id + '/'
-        , type: 'GET'
-        , done: function (res) {
-          chart(res.score)
-        }
-      });
-    })
-
-    var two = echarts.init(document.getElementById('root-chart-two'), layui.echartsTheme);
-
-
-    let chart = (score) => {
-      admin.req({
-        url: '/vulnmanage/assetvulnchart/' + router.search.id + '/'
-        , type: 'GET'
-        , done: function (res) {
-          //获取风险总数
-          let count = 0;
-          let data = res.data;
-          if (data == '') {
-            data = [
-              { value: 0, name: '信息' },
-              { value: 0, name: '低危' },
-              { value: 0, name: '中危' },
-              { value: 0, name: '高危' },
-              { value: 0, name: '紧急' }
-            ]
-          }
-          for (let i = 0; i < res.data.length; i++) {
-            count = res.data[i].value + count
-          }
-          let option = {
-            title: {
-              text: '安全评分\n' + score,
-              // subtext: '安全评分：'+score,
-              x: 'center',
-              align: 'right',
-              padding: [130, 0]
-            },
-            toolbox: {
-              show: true,
-              feature: {
-                saveAsImage: { show: true }
-              },
-              left: 100
-            },
-            tooltip: {
-              trigger: 'item',
-              formatter: "{a} <br/>{b}: {c} ({d}%)"
-            },
-            legend: {
-              orient: 'vertical',
-              x: 'left',
-              data: res.categories
-            },
-            series: [
-              {
-                name: '风险总数',
-                type: 'pie',
-                radius: ['50%', '70%'],
-                avoidLabelOverlap: false,
-                label: {
-                  normal: {
-                    show: false,
-                    position: 'center'
-                  },
-                  emphasis: {
-                    show: true,
-                    textStyle: {
-                      fontSize: '30',
-                      fontWeight: 'bold'
-                    }
-                  }
-                },
-                labelLine: {
-                  normal: {
-                    show: false
-                  }
-                },
-                data: data
-              }
-            ]
-          };
-          two.setOption(option);
-        }
-      });
-
-    }
-    //获取风险汇总信息图表
-    
-    let getsqllist = () => {
-      admin.req({
-        url: '/assetmanage/typeinfodetails/' + router.search.id + '/sql/'
-        , type: 'GET'
-        , done: (res) => {
-          let d = res.data
-          let getTpl = document.getElementById('sql-js').innerHTML
-            , view = document.getElementById('sql-info');
-          laytpl(getTpl).render(d, function (html) {
-            view.innerHTML = html;
-          });
-        }
-      })
-    };
-    let getweblist = () => {
-      admin.req({
-        url: '/assetmanage/typeinfodetails/' + router.search.id + '/web/'
-        , type: 'GET'
-        , done: (res) => {
-          let d = res.data
-          let getTpl = document.getElementById('web-js').innerHTML
-            , view = document.getElementById('web-info');
-          laytpl(getTpl).render(d, function (html) {
-            view.innerHTML = html;
-          });
-        }
-      })
-    }
-    let getpluginlist = () => {
-      $('#plugin-box').removeClass('layui-hide');
-      table.render({
-        elem: '#plugin-list'
-        , url: '/assetmanage/pluginlist/' + router.search.id + '/'
-        , headers: { [layui.setter.request.tokenName]: 'JWT ' + layui.data(layui.setter.tableName)[layui.setter.request.tokenName] }
-        , title: '组件列表'
-        , cols: [[
-          { field: 'name', title: '组件名称', align: 'center', unresize: true }
-          , { field: 'version', title: '应用版本', align: 'center', unresize: true }
-          , { field: 'plugin_info', title: '组件简介', align: 'center', unresize: true }
-          // , { field: 'starttime', title: '添加时间', align: 'center', unresize: true }
-          , { field: 'updatetime', title: '更新时间', align: 'center', unresize: true }
-          , { fixed: 'right', title: '操作', toolbar: '#bar', align: 'center', unresize: true }
-        ]]
-        , page: true
-      });
-    }
-    let getoslist = () => {
-      admin.req({
-        url: '/assetmanage/typeinfodetails/' + router.search.id + '/os/'
-        , type: 'GET'
-        , done: (res) => {
-          let d = res.data
-          let getTpl = document.getElementById('os-js').innerHTML
-            , view = document.getElementById('os-info');
-          laytpl(getTpl).render(d, function (html) {
-            view.innerHTML = html;
-          });
-        }
-      })
-    }
-    let getportlist = () => {
-      $('#port-box').removeClass('layui-hide');
-      table.render({
-        elem: '#port-list'
-        , url: '/assetmanage/portlist/' + router.search.id + '/'
-        , headers: { [layui.setter.request.tokenName]: 'JWT ' + layui.data(layui.setter.tableName)[layui.setter.request.tokenName] }
-        , title: '资产端口表'
-        , cols: [[
-          { field: 'port', title: '开放端口', align: 'center', unresize: true }
-          , { field: 'name', title: '服务名称', align: 'center', unresize: true }
-          , { field: 'product', title: '产品信息', align: 'center', unresize: true }
-          , { field: 'version', title: '应用版本', align: 'center', unresize: true }
-          , { field: 'port_info', title: '端口介绍', align: 'center', unresize: true }
-          , { field: 'updatetime', title: '更新时间', align: 'center', unresize: true }
-          , { field: 'id', title: 'ID', hide: true }
-          , { fixed: 'right', title: '操作', toolbar: '#bar', align: 'center', unresize: true }
-        ]]
-        , page: true
-      });
-    }
-    let getfilelist = () => {
-      $('#file-box').removeClass('layui-hide');
-      table.render({
-        elem: '#file-list'
-        , url: '/assetmanage/filelist/' + router.search.id + '/'
-        // , toolbar: '#file-list-toolbar'
-        , headers: { [layui.setter.request.tokenName]: 'JWT ' + layui.data(layui.setter.tableName)[layui.setter.request.tokenName] }
-        , title: '附件列表'
-        , cols: [[
-          { field: 'name', title: '附件名称', align: 'center', unresize: true }
-          , { field: 'updatetime', title: '上传时间', align: 'center', unresize: true }
-          , { fixed: 'right', title: '操作', toolbar: '#file-list-toolbar', align: 'center', unresize: true }
-        ]]
-        , page: true
-      });
-    }
-
-    //获取资产类型信息
-    admin.req({
-      url: '/assetmanage/assettypeinfo/' + router.search.id + '/' //实际使用请改成服务端真实接口
+    admin.ajax({
+      url: '/asset/assetdetails/' + router.search.id + '/'
       , type: 'GET'
-      , done: function (res) {
-        for (let i = 0; i < res.data.length; i++) {
-          if (res.data[i].id == 5) {
-            getportlist();
-          } else if (res.data[i].id == 3) {
-            getpluginlist();
-          } else if (res.data[i].id == 6) {
-            getfilelist();
-          } else if (res.data[i].id == 1) {
-            $('#sql-box').removeClass('layui-hide');
-            getsqllist();
-          } else if (res.data[i].id == 4) {
-            $('#os-box').removeClass('layui-hide');
-            getoslist();
-          } else if (res.data[i].id == 2) {
-            $('#web-box').removeClass('layui-hide');
-            getweblist();
-          }
-        };
+      , dataType: 'JSON'
+      , success: function (res) {
+        let getTpl = assetdetailselem.innerHTML
+          , view = document.getElementById('assetdetailsbox');
+        laytpl(getTpl).render(res.data, function (html) {
+          view.innerHTML = html;
+        });
       }
     });
 
     //获得资产漏洞表
     table.render({
       elem: '#vuln-list'
-      , url: '/vulnmanage/assetvulnlist/' + router.search.id + '/'
+      , url: '/asset/vulnlist/' + router.search.id + '/'
       , toolbar: '#vuln-list-toolbar'
-      , headers: { [layui.setter.request.tokenName]: 'JWT ' + layui.data(layui.setter.tableName)[layui.setter.request.tokenName] }
       , title: '资产漏洞表'
       , cols: [[
         { field: 'name', title: '漏洞名称', align: 'center', unresize: true }
@@ -485,25 +245,44 @@
       ]]
       , page: true
     });
-
-    //监听资产漏洞列表头工具栏事件
+    
     table.on('toolbar(vuln-list)', function (obj) {
-      var checkStatus = table.checkStatus(obj.config.id);
       switch (obj.event) {
         case 'add':
-          admin.popup({
-            title: '新增漏洞'
-            , area: ['600px', '88%']
-            , fixed: true
-            , maxmin: true
-            , success: function (layero, index) {
-              //将 views 目录下的某视图文件内容渲染给该面板
-              layui.view(this.id).render('vulnmanage/vulncreate').done(function () {
-                $("#asset").val(router.search.id);
-                $('#asset-item').addClass('layui-hide');
+          admin.open({
+            title: '添加漏洞',
+            area: ['520px', '753px'],
+            url: './views/vulnmanage/vulncreate.html',
+            success: function (layero, index) {
+              form.on('submit(sub)', function (obj) {
+                let data = obj.field;
+                admin.ajax({
+                  url: '/asset/vulncreate/' + router.search.id +'/'
+                  , type: 'POST'
+                  , data: data
+                  , dataType: 'JSON'
+                  , success: function (res) {
+                    layer.close(index);
+                    let msg = JSON.stringify(res.msg);
+                    if (res.code == 0) {
+                      layer.msg(res.msg, {
+                        offset: '15px'
+                        , icon: 1
+                        , time: 1000
+                      });
+                    } else if (res.code == 1) {
+                      layer.msg(msg, {
+                        offset: '15px'
+                        , icon: 1
+                        , time: 1000
+                      });
+                    }
+                  }
+                });
+                return false;
               });
-            }
-            , end: function () {
+            },
+            end: function () {
               table.reload('vuln-list');
             }
           });
@@ -511,341 +290,152 @@
       };
     });
 
-    //监听资产漏洞列表行工具事件
-    table.on('tool(vuln-list)', function (obj) {
-      var data = obj.data;
-      if (obj.event === 'change') {
-        admin.popup({
-          title: '修改状态'
-          , area: ['400px', '60%']
-          , fixed: true
-          , maxmin: true
-          , success: function (layero, index) {
-            //将 views 目录下的某视图文件内容渲染给该面板
-            layui.view(this.id).render('vulnmanage/update').done(function () {
-              $("#id").val(data.id);
-            });
-          }
-          , end: function () {
-            table.reload('list');
-          }
-        });
-      } else if (obj.event === 'detial') {
-        admin.req({
-          url: '/vulnmanage/vulndetails/' + data.id + '/',
-          type: 'GET',
-          done: (res) => {
-            let data = res.data
-            admin.popup({
-              title: '漏洞详情'
-              , area: ['60%', '90%']
-              , fixed: true
-              , maxmin: true
-              , success: function (layero, index) {
-                //将 views 目录下的某视图文件内容渲染给该面板
-                layui.view(this.id).render('vulnmanage/vulndetail').done(function () {
-                  $('#info').html(data.info)
-                  $('#fix').html(data.fix)
-                  $('#introduce').html(data.introduce)
 
-                });
+    let getportlist = () => {
+      $('#port-box').removeClass('layui-hide');
+      table.render({
+        elem: '#port-list'
+        , url: '/asset/portlist/' + router.search.id + '/'
+        , title: '资产端口表'
+        , cols: [[
+          { field: 'port', title: '开放端口', align: 'center', unresize: true }
+          , { field: 'name', title: '服务名称', align: 'center', unresize: true }
+          , { field: 'product', title: '产品信息', align: 'center', unresize: true }
+          , { field: 'version', title: '应用版本', align: 'center', unresize: true }
+          , { field: 'port_info', title: '端口介绍', align: 'center', unresize: true }
+          , { field: 'updatetime', title: '更新时间', align: 'center', unresize: true }
+          , { field: 'id', title: 'ID', hide: true }
+          , { fixed: 'right', title: '操作', toolbar: '#bar', align: 'center', unresize: true }
+        ]]
+        , page: true
+      });
+      $('#port-add').click(()=>{
+        portpopup();
+      });
+    };
+
+    let portpopup = (portdata) =>{
+      admin.open({
+        title: (portdata ? '修改' : '添加') + '端口信息',
+        area: ['520px', '520px'],
+        url: './views/assetmanage/portcreate.html',
+        success: function (layero, index) {
+          form.on('submit(sub)', function (obj) {
+            let data = obj.field;
+            admin.ajax({
+              url: '/asset/portcreate/' + router.search.id + '/'
+              , type: 'POST'
+              , data: data
+              , dataType: 'JSON'
+              , success: function (res) {
+                layer.close(index);
+                let msg = JSON.stringify(res.msg);
+                if (res.code == 0) {
+                  layer.msg(res.msg, {
+                    offset: '15px'
+                    , icon: 1
+                    , time: 1000
+                  });
+                } else if (res.code == 1) {
+                  layer.msg(msg, {
+                    offset: '15px'
+                    , icon: 1
+                    , time: 1000
+                  });
+                }
               }
             });
-          }
-        })
-      }
-    });
+            return false;
+          });
+        },
+        end: function () {
+          table.reload('vuln-list');
+        }
+      });
+    }
 
-    //监听端口列表行工具事件
-    table.on('tool(port-list)', function (obj) {
-      var data = obj.data;
-      if (obj.event === 'del') {
-        layer.confirm('确定删除端口？', function (index) {
-          admin.req({
-            url: '/assetmanage/portdelete/' + data.id + "/" //实际使用请改成服务端真实接口
-            , type: 'GET'
-            , done: function (res) {
-              //成功的提示与跳转
-              layer.msg(res.msg, {
-                offset: '15px'
-                , icon: 1
-                , time: 1000
-              }, function () {
-                layui.index.render();
+    let getassetdetialinfo = (type) => {
+      admin.ajax({
+        url: '/asset/' + type + 'details/' + router.search.id + '/'
+        , type: 'GET'
+        , dataType: 'JSON'
+        , success: function (res) {
+          let data = res.data;
+          assettypeinfoid = data.id;
+          assettypeinfodata = res.data;
+          data.type = type;
+          let getTpl = assettypeinfo.innerHTML
+            , view = document.getElementById('assettypeinfobox');
+          laytpl(getTpl).render(data, function (html) {
+            view.innerHTML = html;
+          });
+        }
+      });
+    };
+
+    let partInfo = (type) =>{
+      if (type == 'os' || type == 'web' || type == 'sql') {
+        getassetdetialinfo(type);
+        $('#assettypeinfoupdate').click(() => {
+          admin.open({
+            title: type,
+            area: ['500px', '500px'],
+            url: './views/assetmanage/'+type+'update.html',
+            success: function (layero, index) {
+              // let osid = assettypeinfodata.os.id;
+              // delete assettypeinfodata.os;
+              // assettypeinfodata.os = osid;
+              // console.log(assettypeinfodata);
+              form.val('example', assettypeinfodata);
+              form.on('submit(sub)', function (obj) {
+                let data = obj.field;
+                admin.ajax({
+                  url: '/asset/'+type+'update/'+assettypeinfoid+'/'
+                  , type: 'POST'
+                  , data: data
+                  , dataType: 'JSON'
+                  , success: function (res) {
+                    layer.close(index);
+                    let msg = JSON.stringify(res.msg);
+                    if (res.code == 0) {
+                      layer.msg(res.msg, {
+                        offset: '15px'
+                        , icon: 1
+                        , time: 1000
+                      });
+                    } else if (res.code == 1) {
+                      layer.msg(msg, {
+                        offset: '15px'
+                        , icon: 2
+                        , time: 1000
+                      });
+                    }
+                  }
+                });
+                return false;
               });
+            },
+            end: function () {
+              getassetdetialinfo(type);
             }
           });
-          obj.del();
-          layer.close(index);
         });
-      } else if (obj.event === 'edit') {
-        admin.popup({
-          title: '修改端口信息'
-          , area: ['500px', '75%']
-          , fixed: true
-          , maxmin: true
-          , success: function (layero, index) {
-            //将 views 目录下的某视图文件内容渲染给该面板
-            layui.view(this.id).render('assetmanage/portcreate').done(function () {
-              $("#portid").val(data.id);
-              $('#assetid').val(router.search.id);
-              $("#port").val(data.port);
-              $("#name").val(uncode(data.name));
-              $("#product").val(uncode(data.product));
-              $("#version").val(uncode(data.version));
-              $("#port_info").val(uncode(data.port_info));
-            });
-          }
-          , end: function () {
-            table.reload('port-list');
-          }
-        });
-      }
+      }else if( type == 'port'){
+        getportlist();
+      };
+    };
+
+    table.render({
+      elem: '#file-list'
+      , url: '/asset/fileslist/' + router.search.id + '/'
+      , title: '附件列表'
+      , cols: [[
+        { field: 'name', title: '附件名称', align: 'center', unresize: true }
+        , { field: 'updatetime', title: '上传时间', align: 'center', unresize: true }
+        , { fixed: 'right', title: '操作', toolbar: '#file-list-toolbar', align: 'center', unresize: true }
+      ]]
+      , page: true
     });
 
-    //监听组件列表行工具事件
-    table.on('tool(plugin-list)', function (obj) {
-      var data = obj.data;
-      if (obj.event === 'del') {
-        layer.confirm('确定删除组件？', function (index) {
-          admin.req({
-            url: '/assetmanage/plugindelete/' + data.id + "/" //实际使用请改成服务端真实接口
-            , type: 'GET'
-            , done: function (res) {
-              //成功的提示与跳转
-              layer.msg(res.msg, {
-                offset: '15px'
-                , icon: 1
-                , time: 1000
-              }, function () {
-                layui.index.render();
-              });
-            }
-          });
-          obj.del();
-          layer.close(index);
-        });
-      } else if (obj.event === 'edit') {
-        admin.popup({
-          title: '修改组件信息'
-          , area: ['500px', '60%']
-          , fixed: true
-          , maxmin: true
-          , success: function (layero, index) {
-            //将 views 目录下的某视图文件内容渲染给该面板
-            layui.view(this.id).render('assetmanage/plugincreate').done(function () {
-              $("#pluginid").val(data.id);
-              $('#assetid').val(router.search.id);
-              $("#name").val(uncode(data.name));
-              $("#version").val(uncode(data.version));
-              $("#plugin_info").val(uncode(data.plugin_info));
-            });
-          }
-          , end: function () {
-            table.reload('plugin-list');
-          }
-        });
-      }
-    });
-
-    //监听文件列表行工具事件
-    table.on('tool(file-list)', function (obj) {
-      var data = obj.data;
-      if (obj.event === 'download') {
-        admin.req({
-          url: '/oss/fileurl/assetfile/' + data.id + '/',
-          type: 'GET',
-          done: (res) => {
-            window.open(res.data);
-          }
-        })
-      }
-    });
-
-    //OSS上传
-    aliossUploader.render({
-      elm: '#upload',
-      region: 'oss-cn-shenzhen',
-      bucket: 'seempro',
-      layerTitle: '上传数据文件',
-      accessidFiled: 'accessid',
-      callback: 'callback',
-      policyFiled: 'policy',
-      signatureFiled: 'signature',
-      fid: router.search.id,
-      dir: 'assetfile',
-      type: 'assetfile',
-      policyData: {},
-      policyHeader: {
-        [layui.setter.request.tokenName]: 'JWT ' + layui.data(layui.setter.tableName)[layui.setter.request.tokenName]
-      },
-      policyUrl: '/oss/token/assetfile/',
-      fileType: 'file',
-      multiple: false,
-      httpStr: 'https',
-      allUploaded: function (res) {
-        table.reload('file-list')
-      },
-      policyFailed: function (res) {
-        layer.msg(JSON.stringify(res));
-      }
-    });
-
-    //添加端口按钮事件
-    $('#port-add').click(() => {
-      admin.popup({
-        title: '添加端口'
-        , area: ['500px', '75%']
-        , fixed: true
-        , maxmin: true
-        , success: function (layero, index) {
-          //将 views 目录下的某视图文件内容渲染给该面板
-          layui.view(this.id).render('assetmanage/portcreate').done(function () {
-            $('#assetid').val(router.search.id);
-          });
-        }
-        , end: function () {
-          table.reload('port-list');
-        }
-      });
-    });
-
-    //添加组件按钮事件
-    $('#plugin-add').click(() => {
-      admin.popup({
-        title: '添加组件'
-        , area: ['500px', '60%']
-        , fixed: true
-        , maxmin: true
-        , success: function (layero, index) {
-          //将 views 目录下的某视图文件内容渲染给该面板
-          layui.view(this.id).render('assetmanage/plugincreate').done(function () {
-            $('#assetid').val(router.search.id);
-          });
-        }
-        , end: function () {
-          table.reload('plugin-list');
-        }
-      });
-    });
-
-    //更新OS
-    $('#os-up').click(() => {
-      admin.popup({
-        title: '更新系统信息'
-        , area: ['500px', '500px']
-        , fixed: true
-        , maxmin: true
-        , success: function (layero, index) {
-          layui.view(this.id).render('assetmanage/osupdate').done(function () {
-            admin.req({
-              url: '/assetmanage/assetinfo_type/os/'
-              , type: 'GET'
-              , done: (res) => {
-                let data = res.data;
-                layui.each(data, function (index, item) {
-                  $('#os').append(new Option(item.name, item.id));
-                  if (item.name == $('#_os').html().split('：')[1]) {
-                    $('#os').val(item.id)
-                  }
-                });
-                form.render();
-              }
-            });
-            form.val('example', {
-              "id": router.search.id
-              , "asset_type": "os"
-              , "key": $('#_key').html().split('：')[1]
-              , "hostname": $('#_hostname').html().split('：')[1]
-              , "cpu_num": $('#_cpu_num').html().split('：')[1]
-              , "memory": $('#_memory').html().split('：')[1]
-              , "disk": $('#_disk').html().split('：')[1]
-            })
-          });
-        }
-        , end: function () {
-          admin.events.refresh()
-        }
-      });
-    });
-
-    //更新SQL
-    $('#sql-up').click(() => {
-      admin.popup({
-        title: '更新数据库信息'
-        , area: ['500px', '500px']
-        , fixed: true
-        , maxmin: true
-        , success: function (layero, index) {
-          layui.view(this.id).render('assetmanage/sqlupdate').done(function () {
-            admin.req({
-              url: '/assetmanage/assetinfo_type/sql/'
-              , type: 'GET'
-              , done: (res) => {
-                let data = res.data;
-                layui.each(data, function (index, item) {
-                  $('#os').append(new Option(item.name, item.id));
-                  if (item.name == $('#sqlos').html().split('：')[1]) {
-                    $('#os').val(item.id)
-                  }
-                });
-                form.render();
-              }
-            });
-            form.val('example', {
-              "id": router.search.id
-              , "asset_type": "sql"
-              , "key": $('#sqlkey').html().split('：')[1]
-              , "version": $('#sqlversion').html().split('：')[1]
-              , "cycle": $('#sqlcycle').html().split('：')[1]
-            })
-          });
-        }
-        , end: function () {
-          admin.events.refresh()
-        }
-      });
-    });
-
-
-    //更新WEB
-    $('#web-up').click(() => {
-      admin.popup({
-        title: '更新网站信息'
-        , area: ['500px', '520px']
-        , fixed: true
-        , maxmin: true
-        , success: function (layero, index) {
-          layui.view(this.id).render('assetmanage/webupdate').done(function () {
-            admin.req({
-              url: '/assetmanage/assetinfo_type/web/'
-              , type: 'GET'
-              , done: (res) => {
-                let data = res.data;
-                layui.each(data, function (index, item) {
-                  $('#language').append(new Option(item.name, item.id));
-                  if (item.name == $('#_language').html().split('：')[1]) {
-                    $('#language').val(item.id)
-                  }
-                });
-                form.render();
-              }
-            });
-            form.val('example', {
-              "id": router.search.id
-              , "asset_type": "web"
-              , "key": $('#webkey').html().split('：')[1]
-              , "middleware": $('#_middleware').html().split('：')[1]
-              , "middleware_version": $('#_middleware_version').html().split('：')[1]
-              , "web_framwork": $('#_web_framwork').html().split('：')[1]
-              , "web_framwork_version": $('#_web_framwork_version').html().split('：')[1]
-            })
-          });
-        }
-        , end: function () {
-          admin.events.refresh()
-        }
-      });
-    });
   }); 
 </script>

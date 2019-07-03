@@ -74,175 +74,26 @@
 </script>
 
 <script>
-  layui.use(['admin', 'table', 'form', 'echarts', 'element'], function () {
+  layui.use(['admin', 'table', 'form', 'element'], function () {
     var table = layui.table,
       form = layui.form,
       $ = layui.$,
       admin = layui.admin,
-      echarts = layui.echarts
+      // echarts = layui.echarts
     element = layui.element;
-    var two = echarts.init(document.getElementById('vulnchart'), layui.echartsTheme);
-    var one = echarts.init(document.getElementById('levelchart'), 'macarons');
+    // var two = echarts.init(document.getElementById('vulnchart'), layui.echartsTheme);
+    // var one = echarts.init(document.getElementById('levelchart'), 'macarons');
 
     form.render();
     //漏洞汇总
-    admin.req({
-      url: '/vulnmanage/vulnchart/level/'  //level
-      , type: 'GET'
-      , done: function (res) {
-        //获取风险总数
-        let count = 0;
-        let data = res.data;
-        if (data == '') {
-          data = [
-            { value: 0, name: '信息' },
-            { value: 0, name: '低危' },
-            { value: 0, name: '中危' },
-            { value: 0, name: '高危' },
-            { value: 0, name: '紧急' }
-          ]
-        }
-        for (let i = 0; i < res.data.length; i++) {
-          count = res.data[i].value + count
-        }
-        let option = {
-          title: {
-            text: '漏洞等级汇总',
-            subtext: '未修复漏洞总数:' + count,
-            x: 'center',
-            align: 'right',
-            padding: [130, 0]
-          },
-          toolbox: {
-            show: true,
-            feature: {
-              saveAsImage: { show: true }
-            },
-            left: 100
-          },
-          tooltip: {
-            trigger: 'item',
-            formatter: "{a} <br/>{b}: {c} ({d}%)"
-          },
-          legend: {
-            orient: 'vertical',
-            x: 'left',
-            data: res.categories
-          },
-          series: [
-            {
-              name: '风险总数',
-              type: 'pie',
-              radius: ['50%', '70%'],
-              avoidLabelOverlap: false,
-              label: {
-                normal: {
-                  show: false,
-                  position: 'center'
-                },
-                emphasis: {
-                  show: true,
-                  textStyle: {
-                    fontSize: '30',
-                    fontWeight: 'bold'
-                  }
-                }
-              },
-              labelLine: {
-                normal: {
-                  show: false
-                }
-              },
-              data: data
-            }
-          ]
-        };
-        one.setOption(option);
-      }
-    });
 
-    //状态汇总
-    admin.req({
-      url: '/vulnmanage/vulnchart/status/'  //level
-      , type: 'GET'
-      , done: function (res) {
-        //获取风险总数
-        let count = 0;
-        let data = res.data;
-        if (data == '') {
-          data = [
-            { value: 0, name: '待修复' },
-            { value: 0, name: '已修复' },
-            { value: 0, name: '中危' },
-            { value: 0, name: '高危' },
-            { value: 0, name: '紧急' }
-          ]
-        }
-        for (let i = 0; i < res.data.length; i++) {
-          count = res.data[i].value + count
-        }
-        let option = {
-          title: {
-            text: '漏洞状态汇总',
-            subtext: '漏洞总数:' + count,
-            x: 'center',
-            align: 'right',
-            padding: [130, 0]
-          },
-          toolbox: {
-            show: true,
-            feature: {
-              saveAsImage: { show: true }
-            },
-            left: 100
-          },
-          tooltip: {
-            trigger: 'item',
-            formatter: "{a} <br/>{b}: {c} ({d}%)"
-          },
-          legend: {
-            orient: 'vertical',
-            x: 'left',
-            data: res.categories
-          },
-          series: [
-            {
-              name: '风险总数',
-              type: 'pie',
-              radius: ['50%', '70%'],
-              avoidLabelOverlap: false,
-              label: {
-                normal: {
-                  show: false,
-                  position: 'center'
-                },
-                emphasis: {
-                  show: true,
-                  textStyle: {
-                    fontSize: '30',
-                    fontWeight: 'bold'
-                  }
-                }
-              },
-              labelLine: {
-                normal: {
-                  show: false
-                }
-              },
-              data: data
-            }
-          ]
-        };
-        two.setOption(option);
-      }
-    });
 
+   
     //表格初始化
     table.render({
       elem: '#list'
-      , url: '/vulnmanage/scanvulnlist/'
+      , url: '/vuln/vulnlist/'
       , toolbar: '#toolbar'
-      , headers: { [layui.setter.request.tokenName]: 'JWT ' + layui.data(layui.setter.tableName)[layui.setter.request.tokenName] }
       , defaultToolbar: ['print', 'exports']
       , title: '漏洞列表'
       , cols: [[
@@ -282,25 +133,67 @@
       , page: true
     });
 
+
     //头工具栏事件
     table.on('toolbar(list)', function (obj) {
       switch (obj.event) {
         case 'add':
-          admin.popup({
-            title: '新增漏洞'
-            , area: ['600px', '81%']
-            , fixed: true
-            , maxmin: true
-            , success: function (layero, index) {
-              //将 views 目录下的某视图文件内容渲染给该面板
-              layui.view(this.id).render('vulnmanage/vulncreate').done(function () {
+          admin.open({
+            title: '添加资产',
+            area: ['520px', '753px'],
+            fixed: true,
+            maxmin: true,
+            url: './views/vulnmanage/vulncreate.html',
+            success: function (layero, index) {
+              form.on('submit(sub)', function (obj) {
+                let data = obj.field;
 
+                admin.ajax({
+                  url: '/asset/assetcreate/'
+                  , type: 'POST'
+                  , data: data
+                  , dataType: 'JSON'
+                  , success: function (res) {
+                    layer.close(index);
+                    let msg = JSON.stringify(res.msg);
+                    if (res.code == 0) {
+                      layer.msg(res.msg, {
+                        offset: '15px'
+                        , icon: 1
+                        , time: 1000
+                      });
+                    } else if (res.code == 1) {
+                      layer.msg(msg, {
+                        offset: '15px'
+                        , icon: 1
+                        , time: 1000
+                      });
+                    }
+                  }
+                });
+                return false;
               });
-            }
-            , end: function () {
-              table.reload('list');
+            },
+            end: function () {
+              table.reload('rootasset-list');
             }
           });
+        break;
+          // admin.popup({
+          //   title: '新增漏洞'
+          //   , area: ['600px', '81%']
+          //   , fixed: true
+          //   , maxmin: true
+          //   , success: function (layero, index) {
+          //     //将 views 目录下的某视图文件内容渲染给该面板
+          //     layui.view(this.id).render('vulnmanage/vulncreate').done(function () {
+
+          //     });
+          //   }
+          //   , end: function () {
+          //     table.reload('list');
+          //   }
+          // });
       };
     });
 

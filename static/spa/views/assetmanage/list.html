@@ -70,63 +70,52 @@
             defaultToolbar: ['print', 'exports'],
             title: '资产列表',
             cols: [
-                [{
-                    field: 'name',
-                    title: '资产名称',
-                    align: 'center',
-                    unresize: true
-                }, {
-                    field: 'key',
-                    title: '访问地址',
-                    align: 'center',
-                    unresize: true
-                }, {
-                    field: 'type',
-                    title: '类型',
-                    align: 'center',
-                    unresize: true
-                }, {
-                    field: 'manage',
-                    title: '负责人',
-                    align: 'center',
-                    unresize: true
-                }, {
-                    field: 'telephone',
-                    title: '联系电话',
-                    align: 'center',
-                    unresize: true
-                }, {
-                    field: 'email',
-                    title: '邮箱',
-                    align: 'center',
-                    unresize: true
-                }, {
-                    field: 'updatetime',
-                    title: '更新时间',
-                    align: 'center',
-                    unresize: true
-                }, {
-                    field: 'description',
-                    title: '工程描述',
-                    hide: true,
-                    unresize: true
-                }, {
-                    field: 'parent_check',
-                    title: 'parent',
-                    hide: true,
-                    unresize: true
-                }, {
-                    field: 'id',
-                    title: 'ID',
-                    hide: true
-                }, {
-                    fixed: 'right',
-                    title: '操作',
-                    toolbar: '#rootasset-bar',
-                    align: 'center',
-                    width: 150,
-                    unresize: true
-                }]
+                [
+                    { field: 'name', title: '资产名称', align: 'center', unresize: true },
+                    { field: 'key', title: '访问地址', align: 'center', unresize: true },
+                    { field: 'type', title: '类型', align: 'center', unresize: true },
+                    {
+                        field: 'manage',
+                        title: '负责人',
+                        align: 'center',
+                        unresize: true
+                    }, {
+                        field: 'telephone',
+                        title: '联系电话',
+                        align: 'center',
+                        unresize: true
+                    }, {
+                        field: 'email',
+                        title: '邮箱',
+                        align: 'center',
+                        unresize: true
+                    }, {
+                        field: 'updatetime',
+                        title: '更新时间',
+                        align: 'center',
+                        unresize: true
+                    }, {
+                        field: 'description',
+                        title: '工程描述',
+                        hide: true,
+                        unresize: true
+                    }, {
+                        field: 'parent_check',
+                        title: 'parent',
+                        hide: true,
+                        unresize: true
+                    }, {
+                        field: 'id',
+                        title: 'ID',
+                        hide: true
+                    }, {
+                        fixed: 'right',
+                        title: '操作',
+                        toolbar: '#rootasset-bar',
+                        align: 'center',
+                        width: 150,
+                        unresize: true
+                    }]
             ],
             page: true
         });
@@ -142,7 +131,6 @@
                     var url = mUser ? '/asset/assetupdate/' + mUser.id + '/' : '/asset/assetcreate/';
 
                     form.val('component-form-group', mUser);
-                    console.log(mUser);
                     form.on('submit(sub)', function (obj) {
                         admin.ajax({
                             url: url
@@ -171,7 +159,7 @@
             switch (obj.event) {
                 case 'add':
                     admin.open({
-                        title: '修改资产信息',
+                        title: '添加资产',
                         area: ['500px', '680px'],
                         fixed: true,
                         maxmin: true,
@@ -247,7 +235,9 @@
                     layer.close(index);
                 });
             } else if (obj.event === 'detial') {
-                index.go('/assetmanage/detial/id=' + data.id);
+                if(data.type != '企业项目'){
+                    index.go('/assetmanage/detial/id=' + data.id);
+                };
             } else if (obj.event === 'edit') {
                 admin.open({
                     title: '修改资产信息',
@@ -304,7 +294,7 @@
                             });
                             return false;
                         });
-                        
+
                     },
                     end: function () {
                         table.reload('rootasset-list');
