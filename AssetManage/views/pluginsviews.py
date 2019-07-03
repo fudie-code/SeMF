@@ -63,12 +63,11 @@ def plugincreate(request,asset_id):
     if asset_get:
         form = forms.PluginForm(request.POST)
         if form.is_valid():
-            plugin_get = models.PluginInfo.objects.get_or_create(name=form.cleaned_data['name'])
+            plugin_get = models.PluginInfo.objects.get_or_create(name=form.cleaned_data['name'],asset=asset_get)
             if plugin_get[1]:
                 plugin_get= plugin_get[0]
                 plugin_get.name = form.cleaned_data['version']
                 plugin_get.name = form.cleaned_data['plugin_info']
-                plugin_get.asset = asset_get
                 plugin_get.save()
                 data['code'] = 0
                 data['msg'] = '添加成功'

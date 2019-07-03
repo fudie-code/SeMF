@@ -63,14 +63,13 @@ def portcreate(request,asset_id):
     if asset_get:
         form = forms.PortForm(request.POST)
         if form.is_valid():
-            port_get = models.PortInfo.objects.get_or_create(port=form.cleaned_data['port'])
+            port_get = models.PortInfo.objects.get_or_create(port=form.cleaned_data['port'],asset=asset_get)
             if port_get[1]:
                 port_get= port_get[0]
                 port_get.name = form.cleaned_data['name']
                 port_get.name = form.cleaned_data['product']
                 port_get.name = form.cleaned_data['version']
                 port_get.name = form.cleaned_data['port_info']
-                port_get.asset = asset_get
                 port_get.save()
                 data['code'] = 0
                 data['msg'] = '添加成功'
