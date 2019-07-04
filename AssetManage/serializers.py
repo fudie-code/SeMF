@@ -84,7 +84,6 @@ class SQLSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.SQLInfo
         fields= "__all__"
-        depth = 1
         
 class OSTypeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -96,7 +95,6 @@ class OsInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.OsInfo
         fields= "__all__"
-        depth = 1
 
 
 class LanguageTypeSerializer(serializers.ModelSerializer):
@@ -109,4 +107,3 @@ class WebInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.WebInfo
         fields= "__all__"
-        depth = 1

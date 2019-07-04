@@ -13,12 +13,19 @@ class ExterNameField(serializers.CharField):
         return value.name
 
 class VulnListSerializer(serializers.ModelSerializer):
+    type_id = serializers.CharField(source='type.id')
+    type = ExterNameField()
+    level_id = serializers.CharField(source='level.id')
+    level = ExterNameField()
+    fix_status_id = serializers.CharField(source='fix_status.id')
+    fix_status = ExterNameField()
+    asset_id = serializers.CharField(source='asset.id')
+    asset = serializers.CharField(source='asset.key')
     create_data = serializers.DateTimeField(format='%Y-%m-%d %H:%M')
     update_data = serializers.DateTimeField(format='%Y-%m-%d %H:%M')
     class Meta:
         model = models.Vuln
-        fields= "__all__"
-        depth = 1
+        fields= ('id','name','type_id','type','level_id','level','fix_status_id','fix_status','asset_id','asset','create_data','update_data')
         
         
         
