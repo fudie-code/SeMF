@@ -76,7 +76,7 @@ def portcreate(request,asset_id):
             else:
                 data['msg'] = '组件已存在'
         else:
-            data['msg'] = form.errors
+            data['msg'] = '请检查参数'
     else:
         data['msg'] = '请检查权限'
     return JsonResponse(data)
@@ -125,7 +125,7 @@ def portupdate(request,port_id):
             data['code'] = 0
             data['msg'] = 'success'
         else:
-            data['msg'] = form.errors
+            data['msg'] = '请检查参数'
     else:
         data['msg'] = '请检查权限'
     return JsonResponse(data)

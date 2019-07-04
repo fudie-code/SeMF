@@ -43,7 +43,7 @@ def filecreate(request):
         data['msg'] = '添加成功'
         data['data']['url'] = '/article/fileget/'+ file_get.id +'/'
     else:
-        data['msg'] = form.errors
+        data['msg'] = '请检查参数'
     return JsonResponse(data)
 
 

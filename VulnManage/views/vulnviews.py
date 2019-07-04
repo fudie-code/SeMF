@@ -56,7 +56,7 @@ def vulnupdate(request,vuln_id):
             data['code'] = 0
             data['msg'] = 'success'
         else:
-            data['msg'] = form.errors
+            data['msg'] = '请检查参数'
     else:
         data['msg'] = '请检查权限'
     return JsonResponse(data)

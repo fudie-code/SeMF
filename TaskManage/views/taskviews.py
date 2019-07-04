@@ -44,7 +44,7 @@ def taskcreate(request):
         else:
             data['msg'] = '请选择资产是否授权'
     else:
-        data['msg'] = form.errors
+        data['msg'] = '请检查参数'
     return JsonResponse(data)
 
 
@@ -100,7 +100,7 @@ def taskupdate(request,task_id):
             else:
                 data['msg'] = '请选择资产是否授权给用户'
         else:
-            data['msg'] = form.errors
+            data['msg'] = '请检查参数'
     else:
         data['msg'] = '请检查权限'
     return JsonResponse(data)

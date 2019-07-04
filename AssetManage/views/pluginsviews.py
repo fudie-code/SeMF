@@ -74,7 +74,7 @@ def plugincreate(request,asset_id):
             else:
                 data['msg'] = '端口已存在'
         else:
-            data['msg'] = form.errors
+            data['msg'] = '请检查参数'
     else:
         data['msg'] = '请检查权限'
     return JsonResponse(data)
@@ -123,7 +123,7 @@ def pluginupdate(request,plugin_id):
             data['code'] = 0
             data['msg'] = 'success'
         else:
-            data['msg'] = form.errors
+            data['msg'] = '请检查参数'
     else:
         data['msg'] = '请检查权限'
     return JsonResponse(data)
