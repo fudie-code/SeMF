@@ -82,7 +82,7 @@ class Vuln(models.Model):
     
     is_check = models.BooleanField('是否删除',default=False)
     task = models.ForeignKey(Task,related_name='vuln_for_task',on_delete=models.SET_NULL,null=True,blank=True)
-    asset = models.ForeignKey(Asset,related_name='vuln_for_asset',on_delete=models.CASCADE,limit_choices_to={'type__is_root':False})
+    asset = models.ForeignKey(Asset,related_name='vuln_for_asset',on_delete=models.SET_NULL,null=True)
     
     def __str__(self):
         return self.name 
