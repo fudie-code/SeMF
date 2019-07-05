@@ -31,7 +31,7 @@ def portslist(request,asset_id):
     else:
         asset_get = models.Asset.objects.filter(Q(user=user)|Q(group__user=user),id = asset_id).first()
     if asset_get:
-        list_get = models.PortInfo.objects.filter(name__icontains = key).order_by('updatetime')
+        list_get = models.PortInfo.objects.filter(name__icontains = key,asset=asset_get).order_by('updatetime')
         list_count = list_get.count()
         pg = MyPageNumberPagination()
         list_page = pg.paginate_queryset(list_get, request,'self')

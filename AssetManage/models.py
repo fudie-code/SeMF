@@ -205,7 +205,7 @@ class File(models.Model):
     name = models.CharField('附件名称',max_length=200)
     type  = models.CharField('文件类型',max_length =100)
     file = models.FileField('附件内容',upload_to ='assetfiles/%Y/%m/%d/')
-    file_info = models.TextField('附件说明',null=True)
+    file_info = models.TextField('附件说明',null=True,blank=True)
     updatetime = models.DateTimeField('更新时间',auto_now=True)
     
     asset = models.ForeignKey(Asset,related_name='file_for_asset',on_delete=models.CASCADE)
