@@ -2,19 +2,27 @@
   <div class="layui-row layui-col-space15">
 
     <!-- 左图 -->
-    <div class="layui-col-md6">
+    <div class="layui-col-md4">
       <div class="layui-card">
         <div class="layui-card-body" style="height: 300px;">
-          <div id="vulnchart" style="height: 300px;"></div>
+          <div id="vulnslevelchart" style="height: 300px;"></div>
         </div>
       </div>
     </div>
 
-    <!-- 右表 -->
-    <div class="layui-col-md6">
+    <div class="layui-col-md4">
       <div class="layui-card">
         <div class="layui-card-body" style="height: 300px;">
-          <div id="levelchart" style="height: 300px;"></div>
+          <div id="vulnstatuschart" style="height: 300px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右图 -->
+    <div class="layui-col-md4">
+      <div class="layui-card">
+        <div class="layui-card-body" style="height: 300px;">
+          <div id="vulntypechart" style="height: 300px;"></div>
         </div>
       </div>
     </div>
@@ -49,6 +57,34 @@
         </div>
       </div>
     </div>
+
+    <div class="layui-col-md12 ">
+      <div class="layui-card-body layui-hide" id='vulnformedit'>
+        <form class="layui-form" action="" lay-filter="vulnform" style="padding: 15px;">
+          <input type='hidden' name="csrfmiddlewaretoken" id='csrf'>
+          <div class="layui-form-item">
+            <label class="layui-form-label">修复状态</label>
+            <div class="layui-input-block">
+              <select name="fix_status" id="fix_status" lay-verify="required">
+                <option value=""></option>
+              </select>
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">说明信息</label>
+            <div class="layui-input-block">
+              <textarea name="action" id="action" placeholder="说明信息" class="layui-textarea"></textarea>
+            </div>
+          </div>
+          <div class="layui-form-item layui-col-xs-offset3">
+            <div class="layui-input-block">
+              <button class="layui-btn" lay-submit="" lay-filter="sub">立即提交</button>
+              <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -66,8 +102,31 @@
       admin = layui.admin,
       element = layui.element;
 
-    var two = echarts.init(document.getElementById('vulnchart'));
-    var one = echarts.init(document.getElementById('levelchart'), 'macarons');
+    var vulnslevelchart = echarts.init(document.getElementById('vulnslevelchart'));
+    var vulntypechart = echarts.init(document.getElementById('vulntypechart'), 'macarons');
+    var vulnstatuschart = echarts.init(document.getElementById('vulnstatuschart'), 'macarons');
+
+    admin.ajax({
+      url: '/csrf/'
+      , type: 'GET'
+      , dataType: 'JSON'
+      , success: function (res) {
+        $('#csrf').val(res.data.token);
+      }
+    });
+
+    admin.ajax({
+      url: '/vuln/statuslist/'
+      , type: 'GET'
+      , dataType: 'JSON'
+      , success: function (res) {
+        let data = res.data;
+        $.each(data, function (index, item) {
+          $('#fix_status').append(new Option(item.name, item.id));
+        });
+        form.render()
+      }
+    });
 
     form.render();
     //漏洞汇总
@@ -94,7 +153,6 @@
         let option = {
           title: {
             text: '资产漏洞等级分布',
-            subtext: '安全评分：' + res.score,
             x: 'center',
             align: 'right',
             padding: [130, 0],
@@ -130,11 +188,125 @@
             }
           ]
         };
-        vulnchart.setOption(option);
+        vulnslevelchart.setOption(option);
       }
     });
 
-   
+    admin.ajax({
+      url: '/vuln/vulnstatuschart/'
+      , type: 'GET'
+      , dataType: 'json'
+      , success: function (res) {
+        //获取风险总数
+        let count = 0;
+        let data = res.data;
+        if (data == '') {
+          data = [
+            { value: 0, name: '信息' },
+            { value: 0, name: '低危' },
+            { value: 0, name: '中危' },
+            { value: 0, name: '高危' },
+            { value: 0, name: '紧急' }
+          ]
+        }
+        for (let i = 0; i < res.data.length; i++) {
+          count = res.data[i].value + count
+        }
+        let option = {
+          title: {
+            text: '资产漏洞状态分布',
+            x: 'center',
+            align: 'right',
+            padding: [130, 0],
+          },
+          toolbox: {
+            show: true,
+            feature: {
+              saveAsImage: { show: true }
+            },
+            left: 100
+          },
+          tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+          },
+          legend: {
+            orient: 'vertical',
+            x: 'left',
+            data: res.categories
+          },
+          series: [
+            {
+              name: '风险总数',
+              type: 'pie',
+              radius: ['50%', '70%'],
+              avoidLabelOverlap: false,
+              labelLine: {
+                normal: {
+                  show: false
+                }
+              },
+              data: data
+            }
+          ]
+        };
+        vulnstatuschart.setOption(option);
+      }
+    });
+
+    admin.ajax({
+      url: '/vuln/vulntypechart/'
+      , type: 'GET'
+      , dataType: 'json'
+      , success: function (res) {
+        //获取风险总数
+        let count = 0;
+        let data = res.data;
+        for (let i = 0; i < res.data.length; i++) {
+          count = res.data[i].value + count
+        }
+        let option = {
+          title: {
+            text: '资产漏洞类型分布',
+            x: 'center',
+            align: 'right',
+            padding: [130, 0],
+          },
+          toolbox: {
+            show: true,
+            feature: {
+              saveAsImage: { show: true }
+            },
+            left: 100
+          },
+          tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+          },
+          legend: {
+            orient: 'vertical',
+            x: 'left',
+            data: res.categories
+          },
+          series: [
+            {
+              name: '风险总数',
+              type: 'pie',
+              radius: ['50%', '70%'],
+              avoidLabelOverlap: false,
+              labelLine: {
+                normal: {
+                  show: false
+                }
+              },
+              data: data
+            }
+          ]
+        };
+        vulntypechart.setOption(option);
+      }
+    });
+    
     //表格初始化
     table.render({
       elem: '#list'
@@ -181,21 +353,7 @@
     table.on('tool(list)', function (obj) {
       var data = obj.data;
       if (obj.event === 'change') {
-        admin.popup({
-          title: '修改状态'
-          , area: ['400px', '370px']
-          , fixed: true
-          , maxmin: true
-          , success: function (layero, index) {
-            //将 views 目录下的某视图文件内容渲染给该面板
-            layui.view(this.id).render('vulnmanage/update').done(function () {
-              $("#id").val(data.id);
-            });
-          }
-          , end: function () {
-            table.reload('list');
-          }
-        });
+        vulnpopup(data);
       } else if (obj.event === 'detial') {
         admin.req({
           url: '/vulnmanage/vulndetails/' + data.id + '/',
@@ -235,7 +393,55 @@
           key: d.field.condition
         }
       });
-    })
+    });
+
+
+    let vulnpopup = (vulndata) =>{
+      admin.open({
+        type:1,
+        title:  '修改漏洞状态',
+        area: ['520px', '400px'],
+        content:$('#vulnformedit').html(),
+        success: function (layero, index) {
+          form.render();
+          if(vulndata){
+            vulndata.fix_status = vulndata.fix_status_id;
+            form.val('vulnform',vulndata)
+          }
+          form.on('submit(sub)', function (obj) {
+            let data = obj.field;
+            admin.ajax({
+              url: '/vuln/vulnupdate/' + vulndata.id + '/'
+              , type: 'POST'
+              , data: data
+              , dataType: 'JSON'
+              , success: function (res) {
+                layer.close(index);
+                let msg = JSON.stringify(res.msg);
+                if (res.code == 0) {
+                  layer.msg(res.msg, {
+                    offset: '15px'
+                    , icon: 1
+                    , time: 1000
+                  });
+                } else if (res.code == 1) {
+                  layer.msg(msg, {
+                    offset: '15px'
+                    , icon: 1
+                    , time: 1000
+                  });
+                }
+              }
+            });
+            return false;
+          });
+        },
+        end: function () {
+          table.reload('list');
+        }
+      });
+    };
+
 
   });
 </script>
