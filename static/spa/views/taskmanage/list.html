@@ -1,0 +1,222 @@
+<title>任务管理 - 任务列表</title>
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a href='#'><cite>主页</cite></a>
+    <a><cite>任务管理</cite></a>
+    <a><cite>任务列表</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid">
+  <div class="layui-row layui-col-space15">
+    <!-- 查询 -->
+    <div class="layui-col-md12">
+      <div class="layui-card">
+        <div class="layui-card-body layui-form layui-row layui-col-space10" id="projcet-query" lay-filter="projcet-query">
+          <div class="layui-col-md4">
+            <label class="layui-form-label">模糊查询</label>
+            <div class="layui-input-block">
+              <input type="text" name="condition" placeholder="" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-col-md2 layui-col-md-offset6">
+            <div class="layui-input-block">
+              <button class="layui-btn" lay-submit lay-filter="query">查询</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 任务列表 -->
+    <div class="layui-col-md12">
+      <div class="layui-card">
+        <div class="layui-card-header">任务列表</div>
+        <div class="layui-card-body">
+          <table class="layui-table" id="list" lay-filter="list"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/html" id="toolbar">
+    <div class="layui-btn-container">
+      <button class="layui-btn layui-btn-sm" lay-event="add">添加任务</button>
+      <button class="layui-btn layui-btn-sm" lay-event="import">一键导入</button>
+      <button class="layui-btn layui-btn-sm" lay-event="allscan">一键巡检</button>
+    </div>
+  </script>
+
+<script type="text/html" id="bar">
+  <div class="layui-btn-group">
+      {{# if(d.status=='待执行'){ }}
+        <a class="layui-btn layui-btn-xs" lay-event="start">开始</a>
+      {{# } else if(d.status=='执行中'){ }}
+        <div class="layui-btn-group">
+            <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="pause">暂停</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="stop">停止</a>
+        </div>
+      {{# } else if(d.status=='已暂停'){ }}
+        <a class="layui-btn layui-btn-xs" lay-event="resume">重启</a>
+      {{# } else if(d.status=='已完成'){ }}
+        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="detial">详情</a>
+        <a class="layui-btn layui-btn-xs " lay-event="export">导出</a>
+      {{# } }}
+    </button>
+  </div> 
+</script>
+
+<script>
+  layui.use(['admin', 'table', 'form'], function () {
+    var table = layui.table,
+      form = layui.form,
+      $ = layui.$,
+      admin = layui.admin;
+
+    form.render();
+
+    //表格初始化
+    table.render({
+      elem: '#list'
+      , url: '/task/tasklist/'
+      , toolbar: '#toolbar'
+      , defaultToolbar: ['print', 'exports']
+      , title: '任务列表'
+      , cols: [[
+        { field: 'name', title: '任务名称', align: 'center' ,event:'info', unresize: true   }
+        , { field: 'target', title: '扫描目标', align: 'center' , unresize: true  }
+        , { field: 'status', title: '任务状态', align: 'center' , unresize: true  }
+        , { field: 'starttime', title: '开始时间', align: 'center'  , unresize: true }
+        , { field: 'endtime', title: '更新时间', align: 'center' , unresize: true  }
+        , { field: 'scanner', title: '扫描器', align: 'center' , unresize: true  }
+        , { field: 'police', title: '扫描策略', align: 'center' , unresize: true  }
+        , { fixed: 'right', title: '操作', toolbar: '#bar', align: 'center', unresize: true  }
+      ]]
+      , page: true
+    });
+
+    //头工具栏事件
+    table.on('toolbar(list)', function (obj) {
+      switch (obj.event) {
+        case 'add':
+          admin.popup({
+            title: '新增任务'
+            , area: ['600px', '500px']
+            , fixed: true
+            , maxmin: true
+            , success: function (layero, index) {
+              layui.view(this.id).render('taskmanage/taskcreate').done(function () {
+                
+              });
+            }
+            , end: function () {
+              table.reload('list');
+            }
+          });
+          break;
+        case 'import':
+        layer.load(1, {
+            shade: [0.1, '#fff'] 
+          });
+          admin.req({
+            url: '/taskmanage/search_mofang_all/',
+            complete: () => {
+              layer.closeAll('loading')
+            },
+            done: (res) => {
+              layer.msg(res.msg, {
+                offset: '15px'
+                , icon: 1
+                , time: 1000
+              });
+            }
+          });
+          break;
+        case 'allscan':
+          layer.confirm('巡检未检查资产', function (index) {
+            admin.req({
+              url: '/taskmanage/allscan/' 
+              , type: 'GET'
+              , complete: () => {
+                layer.closeAll('loading')
+              }
+              , done: function (res) {
+                layer.msg(res.msg, {
+                  offset: '15px'
+                  , icon: 1
+                  , time: 1000
+                });
+              }
+            });
+            layer.close(index);
+          });
+      };
+    });
+
+    //监听行工具事件
+    table.on('tool(list)', function (obj) {
+      var data = obj.data;
+      if (obj.event === 'start') {
+        layer.load(1, {
+          shade: [0.1, '#fff'] //0.1透明度的白色背景
+        });
+        admin.req({
+          url: '/taskmanage/taskaction/' + data.id + '/start/',
+          complete: () => {
+            layer.closeAll('loading')
+          },
+          done:()=>{
+            table.reload('list')
+          }
+        })
+      }else if(obj.event == 'pause'){
+        admin.req({
+          url:'/taskmanage/taskaction/' + data.id +'/pause/',
+          done:()=>{
+            table.reload('list')
+          }
+        })
+      }else if(obj.event == 'stop'){
+        admin.req({
+          url:'/taskmanage/taskaction/' + data.id +'/stop/',
+          done:()=>{
+            table.reload('list')
+          }
+        })
+      }else if(obj.event == 'resume'){
+        admin.req({
+          url:'/taskmanage/taskaction/' + data.id +'/resume/',
+          done:()=>{
+            table.reload('list')
+          }
+        })
+      }else if(obj.event == 'detial'){
+        location.hash = '/taskmanage/taskdetial/id=' + data.id;
+      }else if(obj.event == 'export'){
+        admin.req({
+          url:'/taskmanage/getreport/'+data.id+'/',
+          type:'GET',
+          done:(res)=>{
+            window.open(res.data);
+          }
+        })
+      }
+    });
+
+
+    //查询并重载表格
+    form.on('submit(query)', (d) => {
+      table.reload('list', {
+        page: {
+          curr: 1 //重新从第 1 页开始
+        }
+        , where: {
+          key: d.field.condition
+        }
+      });
+    })
+
+  });
+</script>

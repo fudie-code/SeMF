@@ -26,6 +26,11 @@ def initmenu():
 
          {'name':'任务管理','key':'task','icon':"iconfont icon-task",'jump':'javascript:;','parent':''},
          {'name':'任务列表','key':'list','icon':"",'jump':'#/taskmanage/list','parent':'task'},
+
+         {'name':'知识库','key':'task','icon':"iconfont icon-task",'jump':'javascript:;','parent':''},
+         {'name':'文章列表','key':'list','icon':"",'jump':'#/taskmanage/list','parent':'task'},
+
+
          ]
          
     for item in menu_list:
