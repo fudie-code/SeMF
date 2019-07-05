@@ -122,7 +122,7 @@
     <!-- 资产插件数据表 -->
     <div class="layui-col-md12 layui-hide" id="plugin-box">
       <div class="layui-card">
-        <div class="layui-card-body layui-collapse" lay-filter="plugintable">
+        <div class="layui-card-body layui-collapse" lay-filter="plugintalbe">
           <div class="layui-colla-item">
             <h2 class="layui-colla-title" style="color: #000;">组件列表</h2>
             <div class="layui-colla-content">
@@ -283,7 +283,7 @@
     </div>
 
     <div class="layui-col-md12">
-      <div class="layui-card-body"  id='pluginformedit'>
+      <div class="layui-card-body layui-hide"  id='pluginformedit'>
         <form class="layui-form" style="padding: 15px;" lay-filter="pluginform">
           <input type='hidden' name="csrfmiddlewaretoken" id='csrf'>
           <div class="layui-form-item">
@@ -556,7 +556,7 @@
                 return '<span style="color: #3399FF">' + d.level + '</span>';
                 break;
               case '中危':
-                return '<span style="color: #FFFF33;">' + d.level + '</span>';
+                return '<span style="color: #CC0066;">' + d.level + '</span>';
                 break;
               case '高危':
                 return '<span style="color: #FFA500;">' + d.level + '</span>';
@@ -906,8 +906,8 @@
             });
             table.reload('file-list')
           }
-        })
-      }
+        });
+      };
     });
 
     element.on('collapse(vulntalbe)', function (data) {
