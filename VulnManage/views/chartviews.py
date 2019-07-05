@@ -9,6 +9,7 @@ from .. import models
 from django.db.models import Count
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.db.models import  Q
 
 @api_view(['GET'])
 def vulntypechart(request):
@@ -20,9 +21,9 @@ def vulntypechart(request):
     }
     user =request.user
     if user.is_superuser:
-        asset_chart = models.Vuln.objects.filter(is_delete=False).values('type__name').annotate(number=Count('id'))
+        asset_chart = models.Vuln.objects.all().values('type__name').annotate(number=Count('id'))
     else:
-        asset_chart = models.Vuln.objects.filter(user=user,is_delete=False).values('type__name').annotate(number=Count('id'))
+        asset_chart = models.Vuln.objects.filter(Q(asset__user=user)|Q(asset__group__user=user)).values('type__name').annotate(number=Count('id'))
     if asset_chart:
         for item in asset_chart:
             data['categories'].append(item['type__name'])
@@ -40,9 +41,9 @@ def vulnstatuschart(request):
     }
     user =request.user
     if user.is_superuser:
-        asset_chart = models.Vuln.objects.filter(is_delete=False).values('status__name').annotate(number=Count('id'))
+        asset_chart = models.Vuln.objects.all().values('status__name').annotate(number=Count('id'))
     else:
-        asset_chart = models.Vuln.objects.filter(user=user,is_delete=False).values('status__name').annotate(number=Count('id'))
+        asset_chart = models.Vuln.objects.filter(Q(asset__user=user)|Q(asset__group__user=user)).values('status__name').annotate(number=Count('id'))
     if asset_chart:
         for item in asset_chart:
             data['categories'].append(item['status__name'])
@@ -60,9 +61,9 @@ def vulnslevelchart(request):
     }
     user =request.user
     if user.is_superuser:
-        asset_chart = models.Vuln.objects.filter(is_delete=False).values('level__name').annotate(number=Count('id'))
+        asset_chart = models.Vuln.objects.all().values('level__name').annotate(number=Count('id'))
     else:
-        asset_chart = models.Vuln.objects.filter(user=user,is_delete=False).values('level__name').annotate(number=Count('id'))
+        asset_chart = models.Vuln.objects.filter(Q(asset__user=user)|Q(asset__group__user=user)).values('level__name').annotate(number=Count('id'))
     if asset_chart:
         for item in asset_chart:
             data['categories'].append(item['level__name'])
