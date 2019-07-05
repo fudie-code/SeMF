@@ -235,9 +235,7 @@
                     layer.close(index);
                 });
             } else if (obj.event === 'detial') {
-                if(data.type != '企业项目'){
                     index.go('/assetmanage/detial/id=' + data.id);
-                };
             } else if (obj.event === 'edit') {
                 admin.open({
                     title: '修改资产信息',

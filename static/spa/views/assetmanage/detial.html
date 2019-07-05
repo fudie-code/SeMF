@@ -2,6 +2,19 @@
   <div class="layui-row layui-col-space15 layui-col-md12 layui-col-sm12">
 
 
+    <style>
+      .a-upload input {
+        position: absolute;
+        width:100px;
+        font-size: 100px;
+        /* right: 200;
+        top: 0; */
+        opacity: 0;
+        filter: alpha(opacity=0);
+        cursor: pointer
+      }
+    </style>
+
     <!-- 资产信息概览 -->
     <div class="layui-col-md3 layui-col-xs4">
       <div class="layui-card layui-col-md12 layui-col-sm12">
@@ -81,10 +94,10 @@
     <!-- 资产漏洞数据表 -->
     <div class="layui-col-md12">
       <div class="layui-card">
-        <div class="layui-card-body layui-collapse">
+        <div class="layui-card-body layui-collapse" lay-filter="vulntalbe" >
           <div class="layui-colla-item">
             <h2 class="layui-colla-title" style="color: #000;">漏洞列表</h2>
-            <div class="layui-colla-content layui-show">
+            <div class="layui-colla-content">
               <table class="layui-table" id="vuln-list" lay-filter="vuln-list"></table>
             </div>
           </div>
@@ -95,11 +108,10 @@
     <!-- 资产端口数据表 -->
     <div class="layui-col-md12 layui-hide" id="port-box">
       <div class="layui-card">
-        <div class="layui-card-body layui-collapse">
+        <div class="layui-card-body layui-collapse" lay-filter="porttalbe">
           <div class="layui-colla-item">
             <h2 class="layui-colla-title" style="color: #000;">端口列表</h2>
-            <div class="layui-colla-content layui-show">
-              <button class="layui-btn layui-btn-sm" id="port-add">添加端口</button>
+            <div class="layui-colla-content">
               <table class="layui-table" id="port-list" lay-filter="port-list"></table>
             </div>
           </div>
@@ -110,11 +122,10 @@
     <!-- 资产插件数据表 -->
     <div class="layui-col-md12 layui-hide" id="plugin-box">
       <div class="layui-card">
-        <div class="layui-card-body layui-collapse">
+        <div class="layui-card-body layui-collapse" lay-filter="plugintable">
           <div class="layui-colla-item">
             <h2 class="layui-colla-title" style="color: #000;">组件列表</h2>
-            <div class="layui-colla-content layui-show">
-              <button class="layui-btn layui-btn-sm" id="plugin-add">添加组件</button>
+            <div class="layui-colla-content">
               <table class="layui-table" id="plugin-list" lay-filter="plugin-list"></table>
             </div>
           </div>
@@ -126,11 +137,17 @@
     <!-- 资产文件数据表 -->
     <div class="layui-col-md12">
       <div class="layui-card">
-        <div class="layui-card-body layui-collapse">
+        <div class="layui-card-body layui-collapse" lay-filter="filetalbe">
           <div class="layui-colla-item">
             <h2 class="layui-colla-title" style="color: #000;">附件列表</h2>
-            <div class="layui-colla-content layui-show">
-              <button class="layui-btn layui-btn-sm" id="upload">上传文件</button>
+            <div class="layui-colla-content">
+              <button class="layui-btn layui-btn-sm a-upload" id="upload">
+                <form enctype="multipart/form-data" id="file">
+                  <input type='hidden' name="csrfmiddlewaretoken" id='filecsrf'>
+                  <input type='hidden' name="file_info" id='file_info' value="12312">
+                  <input type="file" name="file" id='inputfile'>上传文件
+                </form>
+              </button>
               <table class="layui-table" id="file-list" lay-filter="file-list"></table>
             </div>
           </div>
@@ -138,13 +155,180 @@
       </div>
     </div>
 
+    <div class="layui-col-md12 ">
+      <div class="layui-card-body layui-hide" id='vulnformedit'>
+        <form class="layui-form" action="" lay-filter="vulnform" style="padding: 15px;">
+          <input type='hidden' name="csrfmiddlewaretoken" id='vulncsrf'>
+          <div class="layui-col-md12 layui-form-item">
+            <div class="layui-col-md6">
+              <label class="layui-form-label">漏洞名称</label>
+              <div class="layui-input-block">
+                <input name="name" id="name" lay-verify="required" autocomplete="off" placeholder="漏洞名称"
+                  class="layui-input">
+              </div>
+            </div>
+            <div class="layui-col-md6">
+              <label class="layui-form-label">CVE</label>
+              <div class="layui-input-block">
+                <input name="cve" id="cve" autocomplete="off" placeholder="CVE" class="layui-input">
+              </div>
+            </div>
+          </div>
+          <div class="layui-col-md12 layui-form-item">
+            <div class="layui-col-md6">
+              <label class="layui-form-label">漏洞类型</label>
+              <div class="layui-input-block">
+                <select name="type" id="type" lay-verify="required">
+                  <option value=""></option>
+                </select>
+              </div>
+            </div>
+            <div class="layui-col-md6">
+              <label class="layui-form-label">漏洞等级</label>
+              <div class="layui-input-block">
+                <select name="level" id="level" lay-verify="required">
+                  <option value=""></option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">修复状态</label>
+            <div class="layui-input-block">
+              <select name="fix_status" id="fix_status" lay-verify="required">
+                <option value=""></option>
+              </select>
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">漏洞简介</label>
+            <div class="layui-input-block">
+              <textarea name="introduce" id="introduce" placeholder="漏洞简介" class="layui-textarea"></textarea>
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">漏洞信息</label>
+            <div class="layui-input-block">
+              <textarea name="info" id="info" placeholder="漏洞信息" class="layui-textarea"></textarea>
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">影响范围</label>
+            <div class="layui-input-block">
+              <textarea name="scopen" id="scopen" placeholder="影响范围" class="layui-textarea"></textarea>
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">修复方案</label>
+            <div class="layui-input-block">
+              <textarea name="fix" id="fix" placeholder="修复方案" class="layui-textarea"></textarea>
+            </div>
+          </div>
+          <div class="layui-form-item layui-col-xs-offset3">
+            <div class="layui-input-block">
+              <button class="layui-btn" lay-submit="" lay-filter="sub">立即提交</button>
+              <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
 
+    <div class="layui-col-md12">
+      <div class="layui-card-body layui-hide"  id='portformedit'>
+        <form class="layui-form" style="padding: 15px;" lay-filter="portform">
+          <input type='hidden' name="csrfmiddlewaretoken" id='portcsrf'>
+          <div class="layui-form-item">
+            <label class="layui-form-label">开放端口</label>
+            <div class="layui-input-block">
+              <input name="port"  lay-verify="required" autocomplete="off" placeholder="请输入端口号"
+                class="layui-input">
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">服务名称</label>
+            <div class="layui-input-block">
+              <input name="name" lay-verify="required" autocomplete="off" placeholder="请输入服务名称"
+                class="layui-input">
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">产品信息</label>
+            <div class="layui-input-block">
+              <input name="product" lay-verify="required" autocomplete="off" placeholder="请输入产品信息"
+                class="layui-input">
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">应用版本</label>
+            <div class="layui-input-block">
+              <input name="version"  autocomplete="off" lay-verify="required" placeholder="应用版本"
+                class="layui-input">
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">端口介绍</label>
+            <div class="layui-input-block">
+              <textarea name="port_info"  placeholder="" class="layui-textarea"></textarea>
+            </div>
+          </div>
+          <div class="layui-form-item layui-col-xs-offset3">
+            <div class="layui-input-block">
+              <button class="layui-btn" lay-submit="" lay-filter="sub">立即提交</button>
+              <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="layui-col-md12">
+      <div class="layui-card-body"  id='pluginformedit'>
+        <form class="layui-form" style="padding: 15px;" lay-filter="pluginform">
+          <input type='hidden' name="csrfmiddlewaretoken" id='csrf'>
+          <div class="layui-form-item">
+            <label class="layui-form-label">组件名称</label>
+            <div class="layui-input-block">
+              <input name="name" id="name" lay-verify="required" autocomplete="off" placeholder="请输入组件名称"
+                class="layui-input">
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">应用版本</label>
+            <div class="layui-input-block">
+              <input name="version" id="version" autocomplete="off" lay-verify="required" placeholder=""
+                class="layui-input">
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">组件介绍</label>
+            <div class="layui-input-block">
+              <textarea name="plugin_info" id="plugin_info" placeholder="" class="layui-textarea"></textarea>
+            </div>
+          </div>
+          <div class="layui-form-item layui-col-xs-offset3">
+            <div class="layui-input-block">
+              <button class="layui-btn" lay-submit="" lay-filter="sub">立即提交</button>
+              <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
 
 
 <script type="text/html" id="vuln-list-toolbar">
   <button class="layui-btn layui-btn-sm" lay-event="add">新增漏洞</button>
+</script>
+
+<script type="text/html" id="port-list-toolbar">
+  <button class="layui-btn layui-btn-sm" lay-event="add">新增端口</button>
+</script>
+
+<script type="text/html" id="plugin-list-toolbar">
+  <button class="layui-btn layui-btn-sm" lay-event="add">新增组件</button>
 </script>
 
 <script type="text/html" id="file-list-toolbar">
@@ -170,14 +354,158 @@
       , form = layui.form
       , table = layui.table
       , router = layui.router()
-      // , echarts = layui.echarts
       , element = layui.element
       , uncode = layui.uncode
       , laytpl = layui.laytpl;
-    
+
+    form.render();
     element.render();
+
     var assettypeinfoid;
     var assettypeinfodata;
+    var vulnchart = echarts.init(document.getElementById('root-chart-two'),'macarons');
+
+    admin.ajax({
+      url: '/csrf/'
+      , type: 'GET'
+      , dataType: 'JSON'
+      , success: function (res) {
+        $('#filecsrf').val(res.data.token);
+      }
+    });
+
+    let getvulnchart = () => {
+      admin.ajax({
+        url: '/asset/assetvulnlevelchart/' + router.search.id + '/'
+        , type: 'GET'
+        , dataType: 'json'
+        , success: function (res) {
+          //获取风险总数
+          let count = 0;
+          let data = res.data;
+          if (data == '') {
+            data = [
+              { value: 0, name: '信息' },
+              { value: 0, name: '低危' },
+              { value: 0, name: '中危' },
+              { value: 0, name: '高危' },
+              { value: 0, name: '紧急' }
+            ]
+          }
+          for (let i = 0; i < res.data.length; i++) {
+            count = res.data[i].value + count
+          }
+          let option = {
+            title: {
+              text: '资产漏洞等级分布',
+              subtext: '安全评分：' + res.score,
+              x: 'center',
+              align: 'right',
+              padding: [130, 0],
+            },
+            toolbox: {
+              show: true,
+              feature: {
+                saveAsImage: { show: true }
+              },
+              left: 100
+            },
+            tooltip: {
+              trigger: 'item',
+              formatter: "{a} <br/>{b}: {c} ({d}%)"
+            },
+            legend: {
+              orient: 'vertical',
+              x: 'left',
+              data: res.categories
+            },
+            series: [
+              {
+                name: '风险总数',
+                type: 'pie',
+                radius: ['50%', '70%'],
+                avoidLabelOverlap: false,
+                labelLine: {
+                  normal: {
+                    show: false
+                  }
+                },
+                data: data
+              }
+            ]
+          };
+          vulnchart.setOption(option);
+        }
+      });
+
+    };
+    let vulnformready = () => {
+      admin.ajax({
+        url: '/csrf/'
+        , type: 'GET'
+        , dataType: 'JSON'
+        , success: function (res) {
+          $('#vulncsrf').val(res.data.token);
+        }
+      });
+      admin.ajax({
+        url: '/vuln/typelist/'
+        , type: 'GET'
+        , dataType: 'JSON'
+        , success: function (res) {
+          let data = res.data;
+          $.each(data, function (index, item) {
+            $('#type').append(new Option(item.name, item.id));
+          });
+          form.render()
+        }
+      });
+      admin.ajax({
+        url: '/vuln/statuslist/'
+        , type: 'GET'
+        , dataType: 'JSON'
+        , success: function (res) {
+          let data = res.data;
+          $.each(data, function (index, item) {
+            $('#fix_status').append(new Option(item.name, item.id));
+          });
+          form.render()
+        }
+      });
+      admin.ajax({
+        url: '/vuln/levellist/'
+        , type: 'GET'
+        , dataType: 'JSON'
+        , success: function (res) {
+          let data = res.data;
+          $.each(data, function (index, item) {
+            $('#level').append(new Option(item.name, item.id));
+          });
+          form.render()
+        }
+      });
+    }
+    let portfromready = () =>{
+      admin.ajax({
+        url: '/csrf/'
+        , type: 'GET'
+        , dataType: 'JSON'
+        , success: function (res) {
+          $("#portcsrf").val(res.data.token);
+        }
+      });
+    };
+    let pluginfromready = () => {
+      admin.ajax({
+        url: '/csrf/'
+        , type: 'GET'
+        , dataType: 'JSON'
+        , success: function (res) {
+          $("#pluginformedit input[name='csrfmiddlewaretoken']").val(res.data.token);
+        }
+      });
+    };
+    
     $(() => {
       admin.ajax({
         url:'/asset/assettypeinfolist/'+router.search.id + '/'
@@ -190,6 +518,8 @@
           })
         }
       });
+      getvulnchart();
+      vulnformready();
     });
 
     admin.ajax({
@@ -249,53 +579,26 @@
     table.on('toolbar(vuln-list)', function (obj) {
       switch (obj.event) {
         case 'add':
-          admin.open({
-            title: '添加漏洞',
-            area: ['520px', '753px'],
-            url: './views/vulnmanage/vulncreate.html',
-            success: function (layero, index) {
-              form.on('submit(sub)', function (obj) {
-                let data = obj.field;
-                admin.ajax({
-                  url: '/asset/vulncreate/' + router.search.id +'/'
-                  , type: 'POST'
-                  , data: data
-                  , dataType: 'JSON'
-                  , success: function (res) {
-                    layer.close(index);
-                    let msg = JSON.stringify(res.msg);
-                    if (res.code == 0) {
-                      layer.msg(res.msg, {
-                        offset: '15px'
-                        , icon: 1
-                        , time: 1000
-                      });
-                    } else if (res.code == 1) {
-                      layer.msg(msg, {
-                        offset: '15px'
-                        , icon: 1
-                        , time: 1000
-                      });
-                    }
-                  }
-                });
-                return false;
-              });
-            },
-            end: function () {
-              table.reload('vuln-list');
-            }
-          });
-          break;
+        vulnpopup();
+        break;
       };
     });
 
+    table.on('tool(vuln-list)', function (obj) {
+      var data = obj.data;
+      if (obj.event === 'change') {
+        vulnpopup(data);
+      } else if (obj.event === 'detial') {
+        // index.go('/assetmanage/detial/id=' + data.id);
+      };
+    });
 
     let getportlist = () => {
       $('#port-box').removeClass('layui-hide');
       table.render({
         elem: '#port-list'
         , url: '/asset/portlist/' + router.search.id + '/'
+        , toolbar: '#port-list-toolbar'
         , title: '资产端口表'
         , cols: [[
           { field: 'port', title: '开放端口', align: 'center', unresize: true }
@@ -309,21 +612,74 @@
         ]]
         , page: true
       });
-      $('#port-add').click(()=>{
-        portpopup();
+
+      table.on('toolbar(port-list)', function (obj) {
+        switch (obj.event) {
+          case 'add':
+            portpopup();
+            break;
+        };
+      });
+
+      table.on('tool(port-list)', function (obj) {
+        var data = obj.data;
+        if (obj.event === 'edit') {
+          portpopup(data);
+        };
       });
     };
 
-    let portpopup = (portdata) =>{
+    let getpluginlist = () => {
+      $('#plugin-box').removeClass('layui-hide');
+      table.render({
+        elem: '#plugin-list'
+        , url: '/asset/pluginlist/' + router.search.id + '/'
+        , toolbar: '#plugin-list-toolbar'
+        , title: '组件列表'
+        , cols: [[
+          { field: 'name', title: '组件名称', align: 'center', unresize: true }
+          , { field: 'version', title: '应用版本', align: 'center', unresize: true }
+          , { field: 'plugin_info', title: '组件简介', align: 'center', unresize: true }
+          , { field: 'updatetime', title: '更新时间', align: 'center', unresize: true }
+          , { fixed: 'right', title: '操作', toolbar: '#bar', align: 'center', unresize: true }
+        ]]
+        , page: true
+      });
+
+      table.on('toolbar(plugin-list)', function (obj) {
+        switch (obj.event) {
+          case 'add':
+            pluginpopup();
+            break;
+        };
+      });
+
+      table.on('tool(plugin-list)', function (obj) {
+        var data = obj.data;
+        if (obj.event === 'edit') {
+          pluginpopup(data);
+        };
+      });
+    }
+
+    let vulnpopup = (vulndata) =>{
       admin.open({
-        title: (portdata ? '修改' : '添加') + '端口信息',
-        area: ['520px', '520px'],
-        url: './views/assetmanage/portcreate.html',
+        type:1,
+        title:  (vulndata ? '修改' : '添加') + '漏洞信息',
+        area: ['520px', '753px'],
+        content:$('#vulnformedit').html(),
         success: function (layero, index) {
+          form.render();
+          if(vulndata){
+            vulndata.level = vulndata.level_id;
+            vulndata.type = vulndata.type_id;
+            vulndata.fix_status = vulndata.fix_status_id;
+            form.val('vulnform',vulndata)
+          }
           form.on('submit(sub)', function (obj) {
             let data = obj.field;
             admin.ajax({
-              url: '/asset/portcreate/' + router.search.id + '/'
+              url: (vulndata ? '/vuln/vulnupdate/' + vulndata.id + '/' : '/asset/vulncreate/' + router.search.id +'/')
               , type: 'POST'
               , data: data
               , dataType: 'JSON'
@@ -350,9 +706,98 @@
         },
         end: function () {
           table.reload('vuln-list');
+          getvulnchart();
         }
       });
-    }
+    };
+
+    let portpopup = (portdata) =>{
+      admin.open({
+        type:1,
+        title: (portdata ? '修改' : '添加') + '端口信息',
+        area: ['520px', '520px'],
+        content:$('#portformedit').html(),
+        success: function (layero, index) {
+          if(portdata){
+            form.val('portform',portdata);
+          };
+          form.on('submit(sub)', function (obj) {
+            let data = obj.field;
+            admin.ajax({
+              url: (portdata ? '/asset/portupdate/' + portdata.id + '/'  : '/asset/portcreate/' + router.search.id + '/' )
+              , type: 'POST'
+              , data: data
+              , dataType: 'JSON'
+              , success: function (res) {
+                layer.close(index);
+                let msg = JSON.stringify(res.msg);
+                if (res.code == 0) {
+                  layer.msg(res.msg, {
+                    offset: '15px'
+                    , icon: 1
+                    , time: 1000
+                  });
+                } else if (res.code == 1) {
+                  layer.msg(msg, {
+                    offset: '15px'
+                    , icon: 1
+                    , time: 1000
+                  });
+                }
+              }
+            });
+            return false;
+          });
+        },
+        end: function () {
+          table.reload('port-list');
+        }
+      });
+    };
+
+    let pluginpopup = (portdata) =>{
+      admin.open({
+        type:1,
+        title: (portdata ? '修改' : '添加') + '组件信息',
+        area: ['520px', '400px'],
+        content:$('#pluginformedit').html(),
+        success: function (layero, index) {
+          if(portdata){
+            form.val('pluginform',portdata);
+          };
+          form.on('submit(sub)', function (obj) {
+            let data = obj.field;
+            admin.ajax({
+              url: (portdata ? '/asset/portupdate/' + portdata.id + '/'  : '/asset/plugincreate/' + router.search.id + '/' )
+              , type: 'POST'
+              , data: data
+              , dataType: 'JSON'
+              , success: function (res) {
+                layer.close(index);
+                let msg = JSON.stringify(res.msg);
+                if (res.code == 0) {
+                  layer.msg(res.msg, {
+                    offset: '15px'
+                    , icon: 1
+                    , time: 1000
+                  });
+                } else if (res.code == 1) {
+                  layer.msg(msg, {
+                    offset: '15px'
+                    , icon: 1
+                    , time: 1000
+                  });
+                }
+              }
+            });
+            return false;
+          });
+        },
+        end: function () {
+          table.reload('plugin-list');
+        }
+      });
+    };
 
     let getassetdetialinfo = (type) => {
       admin.ajax({
@@ -421,7 +866,11 @@
           });
         });
       }else if( type == 'port'){
+        portfromready();
         getportlist();
+      }else if( type == 'plugin'){
+        pluginfromready();
+        getpluginlist();
       };
     };
 
@@ -437,5 +886,44 @@
       , page: true
     });
 
+
+    $(".a-upload").on("change", "input[type='file']", function () {
+      if ($('#inputfile').val() != '') {
+        var form = document.getElementById('file');
+        var fd = new FormData(form);
+        admin.ajax({
+          url: '/asset/filecreate/'+router.search.id+'/',
+          type: 'POST',
+          data: fd,
+          dataType:'json',
+          processData: false,
+          contentType: false,
+          success: (res) => {
+            layer.msg(res.msg, {
+              offset: '15px'
+              , icon: 1
+              , time: 1000
+            });
+            table.reload('file-list')
+          }
+        })
+      }
+    });
+
+    element.on('collapse(vulntalbe)', function (data) {
+      table.reload('vuln-list');
+    });
+
+    element.on('collapse(plugintalbe)', function (data) {
+      table.reload('plugin-list');
+    });
+
+    element.on('collapse(porttalbe)', function (data) {
+      table.reload('port-list');
+    });
+
+    element.on('collapse(filetalbe)', function (data) {
+      table.reload('file-list');
+    });
   }); 
 </script>
