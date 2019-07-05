@@ -41,13 +41,13 @@ def vulnstatuschart(request):
     }
     user =request.user
     if user.is_superuser:
-        asset_chart = models.Vuln.objects.all().values('status__name').annotate(number=Count('id'))
+        asset_chart = models.Vuln.objects.all().values('fix_status__name').annotate(number=Count('id'))
     else:
-        asset_chart = models.Vuln.objects.filter(Q(asset__user=user)|Q(asset__group__user=user)).values('status__name').annotate(number=Count('id'))
+        asset_chart = models.Vuln.objects.filter(Q(asset__user=user)|Q(asset__group__user=user)).values('fix_status__name').annotate(number=Count('id'))
     if asset_chart:
         for item in asset_chart:
-            data['categories'].append(item['status__name'])
-            data['data'].append({'name':item['status__name'],'value':item['number']})
+            data['categories'].append(item['fix_status__name'])
+            data['data'].append({'name':item['fix_status__name'],'value':item['number']})
     return Response(data)
 
 
