@@ -61,7 +61,7 @@ def vulnlist(request,asset_id):
     else:
         asset_get = models.Asset.objects.filter(Q(user=user)|Q(group__user=user),id=asset_id).first()
     if asset_get:
-        list_get = vulnmodels.Vuln.objects.filter(asset=asset_get)
+        list_get = vulnmodels.Vuln.objects.filter(asset=asset_get).order_by('update_data')
         list_count = list_get.count()
         pg = MyPageNumberPagination()
         list_page = pg.paginate_queryset(list_get, request,'self')
