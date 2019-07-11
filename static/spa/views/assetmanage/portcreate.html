@@ -61,46 +61,8 @@
             , dataType: 'JSON'
             , success: function (res) {
                 $('#csrf').val(res.data.token);
+                console.log($('#csrf').val())
             }
         });
-
-
-
-        // form.on('submit(sub)', function (obj) {
-        //     if (obj.field.portid == "") {
-        //         admin.req({
-        //             url: '/assetmanage/portcreate/' + obj.field.assetid + '/'
-        //             , type: 'POST'
-        //             , data: obj.field
-        //             , done: function (res) {
-        //                 //成功的提示与跳转
-        //                 layer.msg(res.msg, {
-        //                     offset: '15px'
-        //                     , icon: 1
-        //                     , time: 1000
-        //                 }, function () {
-        //                     layui.index.render();
-        //                 });
-        //             }
-        //         });
-        //     } else {
-        //         admin.req({
-        //             url: '/assetmanage/portupdate/' + obj.field.portid + '/'//实际使用请改成服务端真实接口
-        //             , type: 'POST'
-        //             , data: obj.field
-        //             , done: function (res) {
-        //                 //成功的提示与跳转
-        //                 layer.msg(res.msg, {
-        //                     offset: '15px'
-        //                     , icon: 1
-        //                     , time: 1000
-        //                 }, function () {
-        //                     layui.index.render();
-        //                 });
-        //             }
-        //         });
-        //     }
-        //     return false;
-        // });
     });
 </script>

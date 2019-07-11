@@ -63,7 +63,6 @@
         </div>
         <div class="layui-card-body" style="height:258px;" id="assettypeinfobox"></div>
           <script id="assettypeinfo" type="text/html">
-            {{# console.log(d) }}
             {{# if(d.type == 'os'){ }}
             <div id="_key">IP地址：{{# if(d.key == 'None' ){ d.key = '' }}}{{ d.key || ''  }}</div>
             <div id="_hostname">主机名：{{# if(d.hostname == 'None' ){ d.hostname = '' }}}{{ d.hostname || ''  }}</div>
@@ -512,7 +511,6 @@
         , type: 'GET'
         , dataType: 'JSON'
         , success: function (res) {
-          console.log(res.data);
           $.each(res.data, (index, item) => {
             partInfo(item.key);
           })
@@ -834,6 +832,7 @@
               form.val('example', assettypeinfodata);
               form.on('submit(sub)', function (obj) {
                 let data = obj.field;
+                data.csrfmiddlewaretoken = $('#csrf').val();
                 admin.ajax({
                   url: '/asset/'+type+'update/'+assettypeinfoid+'/'
                   , type: 'POST'
