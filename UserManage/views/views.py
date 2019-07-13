@@ -183,10 +183,10 @@ def user_update(request,user_id):
     if user.is_superuser:
         user_get = User.objects.filter(id= user_id).first()
         if user_get and user_get.is_superuser==False:
-            form = forms.UserCreateForm(request.POST)
+            form = forms.UserUpdateForm(request.POST)
             if form.is_valid():
                 user_get.profile.mobilephone = form.cleaned_data['mobilephone']
-                user_get.profile.description = form.cleaned_data['description']
+                user_get.email = form.cleaned_data['email']
                 user_get.save()
                 roles=form.cleaned_data['roles']
                 user_roles_list = models.Role.objects.filter(id__in = roles.split(','))
