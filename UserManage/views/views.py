@@ -70,10 +70,10 @@ def user_create(request):
                         res = User.objects.get_or_create(
                             username=form.cleaned_data['username'],
                             email=form.cleaned_data['email'],
-                            mobilephone=mobilephone,
                             )
                         if res[1]:
                             user_get = res[0]
+                            user.profile.mobilephone=mobilephone
                             user.set_password(password)
                             user.is_active=True
                             user = many_many_addall(user_get,user_get.profile.roles,user_roles_list)
