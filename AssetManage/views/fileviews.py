@@ -11,6 +11,8 @@ from .. import models,forms
 from .. import serializers
 from django.db.models import  Q
 from django.views.decorators.csrf import csrf_protect
+from django.utils.encoding import escape_uri_path
+from django.http import FileResponse
 import uuid
 
 
@@ -105,6 +107,33 @@ def filedelete(request,file_id):
         data['msg'] = '端口删除成功'
     else:
         data['msg'] = '请检查权限'
+    return JsonResponse(data)
+
+
+@api_view(['GET'])
+def file_get(request,file_id):
+    user= request.user
+    data = {
+          "code": 1
+          ,"msg": ""
+          ,"data": ''
+        }
+    if user.is_superuser:
+        file_get = models.File.objects.filter(id = file_id).first()
+    else:
+        file_get = models.File.objects.filter(Q(asset__user = user)|Q(asset__group__user = user),id = file_id).first()
+    if file_get:
+        file_path = file_get.file.path
+        file=open(file_path,'rb')
+        response =FileResponse(file)
+        response['Content-Type']='application/octet-stream'
+        response['Content-Disposition'] = "attachment; filename*=utf-8''{}".format(escape_uri_path(file_get.name))
+        
+        data['code'] = 0
+        data['msg'] = file_get.name + '授权成功'
+        return response
+    else:
+        data['msg'] = str(file_id) + '请检查请求参数，文件不存在或鉴权失败'
     return JsonResponse(data)
 
 

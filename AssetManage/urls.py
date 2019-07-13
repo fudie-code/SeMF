@@ -45,6 +45,7 @@ urlpatterns = [
     path('fileslist/<str:asset_id>/',fileviews.fileslist,name='fileslist'),
     path('filecreate/<str:asset_id>/',fileviews.filecreate,name='filecreate'),
     path('filedelete/<str:file_id>/',fileviews.filedelete,name='filedelete'),
+    path('file_get/<str:file_id>/',fileviews.file_get,name='file_get'),
     
     
     path('vulncreate/<str:asset_id>/',vulnviews.vulncreate,name='vulncreate'),
