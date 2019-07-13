@@ -5,7 +5,7 @@ Created on 2019年6月20日
 @author: 残源
 '''
 from django.urls import path
-from .views import views,taskviews,chartviews
+from .views import views,taskviews,chartviews,vulnviews
 
 urlpatterns = [
     path('tasklist/',views.mainlist,name='tasklist'),
@@ -22,5 +22,7 @@ urlpatterns = [
     
     path('taskstatuschart/',chartviews.taskstatuschart,name='taskstatuschart'),
     path('tasktypechart/',chartviews.tasktypechart,name='tasktypechart'),
+    
+    path('vulnlist/<str:task_id>/',vulnviews.vulnlist,name='vulnlist'),
     
     ]
