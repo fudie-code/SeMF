@@ -5,9 +5,8 @@ Created on 2019年4月27日
 @author: GY071
 '''
 
-from . import baseinfo
 from ..tasks import save_awvs_vulns
-from .. import models,tasks
+from .. import models
 from . import awvs
 
 def create_start_task(task_get):
@@ -27,6 +26,17 @@ def create_start_task(task_get):
 
 def pasuetask(task_get):
     if task_get.scanner.type == 'AWVS':
+        return False
+    return False
+
+
+def resumetask(task_get):
+    if task_get.scanner.type == 'AWVS':
+        return False
+    return False
+
+def stoptask(task_get):
+    if task_get.scanner.type == 'AWVS':
         res = awvs.stop_scan(task_get.scan_id,task_get.task_scanner.id)
         if res.get('status'):
             status_get = models.STATUS.objects.filter(name='已暂停').first()
@@ -36,48 +46,14 @@ def pasuetask(task_get):
     return False
 
 
-def resumetask(task_get):
-    if task_get.scanner.type == 'RSAS':
-        post_data = baseinfo.rsasactioninfo(task_get)
-        #res = rsas.task_resume(post_data)
-        res=1
-        if res.get('status'):
-            status_get = models.STATUS.objects.filter(name='执行中').first()
-            task_get.status = status_get
-            task_get.save()
-            tasks.get_rsas_vulns.delay(task_get.id)
-            return True
-    return False
-
-def stoptask(task_get):
-    if task_get.scanner.type == 'RSAS':
-        post_data = baseinfo.rsasactioninfo(task_get)
-        #res = rsas.task_stop(post_data)
-        res=1
-        if res.get('status'):
-            status_get = models.STATUS.objects.filter(name='已结束').first()
-            task_get.status = status_get
-            task_get.save()
-            return True
-    return False
-
-
 def statustask(task_get):
-    if task_get.scanner.type == 'RSAS':
-        post_data = baseinfo.rsasactioninfo(task_get)
-        #res = rsas.task_status(post_data)
-        res=1
-        if res.get('status'):
-            return res.get('scan_status')
+    if task_get.scanner.type == 'AWVS':
+        return False
     return False
 
 def reporttask(task_get):
-    if task_get.scanner.type == 'RSAS':
-        post_data = baseinfo.rsasactioninfo(task_get)
-        #res = rsas.task_report(post_data)
-        res=1
-        if res.get('status'):
-            return res.get('data')
+    if task_get.scanner.type == 'AWVS':
+        return False
     return False
 
 

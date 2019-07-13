@@ -23,12 +23,12 @@ def save_awvs_vulns(scan_id,task_id):
         status = awvs11.getstatus(scan_id,task.task_scanner.id)
         if status == 'completed':
             awvs.get_scan_result(scan_id,task_id,task.task_scanner.id)
-            task.task_status=4
+            task.task_status=models.STATUS.objects.filter(name= '已完成').first()
             task.save()
             break
         elif status == 'aborted':
             awvs.get_scan_result(scan_id,task_id,task.task_scanner.id)
-            task.task_status=5
+            task.task_status=models.STATUS.objects.filter(name= '已完成').first()
             task.save()
             break
         else:

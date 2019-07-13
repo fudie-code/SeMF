@@ -207,7 +207,7 @@ def initVulnSource():
 def initTaskType():
     type_list=[
         {'name':'系统扫描'},
-        {'name':'网站骚猫'},
+        {'name':'网站扫描'},
         {'name':'周期巡检'},
         ]
     for item in type_list:
