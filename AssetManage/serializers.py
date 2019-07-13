@@ -84,6 +84,7 @@ class SQLSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.SQLInfo
         fields= "__all__"
+        depth =1
         
 class OSTypeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -91,10 +92,12 @@ class OSTypeSerializer(serializers.ModelSerializer):
         fields= "__all__"
 
 class OsInfoSerializer(serializers.ModelSerializer):
+    #os = ExterNameField()
     updatetime = serializers.DateTimeField(format='%Y-%m-%d')
     class Meta:
         model = models.OsInfo
         fields= "__all__"
+        depth =1
 
 
 class LanguageTypeSerializer(serializers.ModelSerializer):
@@ -103,7 +106,9 @@ class LanguageTypeSerializer(serializers.ModelSerializer):
         fields= "__all__"
         
 class WebInfoSerializer(serializers.ModelSerializer):
+    #language = ExterNameField()
     updatetime = serializers.DateTimeField(format='%Y-%m-%d')
     class Meta:
         model = models.WebInfo
         fields= "__all__"
+        depth =1

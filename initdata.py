@@ -78,7 +78,7 @@ def initRole():
     
 def initassettype():
     type_list=[
-        {'name':'企业项目','is_root':False,'description':'虚拟资产项目分类，用于作为合规评测主体','parent':''},
+        #{'name':'企业项目','is_root':False,'description':'虚拟资产项目分类，用于作为合规评测主体','parent':''},
         {'name':'服务器','is_root':False,'description':'具象化资产','parent':''},
         {'name':'WEB应用','is_root':False,'description':'WEB服务','parent':''},
         {'name':'数据库','is_root':False,'description':'系统数据库','parent':''},

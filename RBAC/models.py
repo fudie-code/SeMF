@@ -12,9 +12,9 @@ class Menu(models.Model):
     order = models.IntegerField('排序',default = 0)
     name = models.CharField(verbose_name = '菜单名称',max_length = 100)
     key = models.CharField(verbose_name = '菜单标识',max_length = 50)
-    icon = models.CharField(verbose_name = '菜单图标',max_length = 100)
+    icon = models.CharField(verbose_name = '菜单图标',max_length = 100,null=True,blank=True)
     jump = models.CharField(verbose_name = '跳转地址',max_length = 200,null=True,blank=True)
-    parent = models.ForeignKey('self',verbose_name = '上级菜单',related_name='menu_menu',null=True,on_delete=models.SET_NULL)
+    parent = models.ForeignKey('self',verbose_name = '上级菜单',related_name='menu_menu',null=True,blank=True,on_delete=models.SET_NULL)
     
     def __str__(self):
         title_list = [self.name]

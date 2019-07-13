@@ -13,6 +13,7 @@ from VulnManage.models import Vuln
 from TaskManage.models import Task
 from AssetManage.models import Asset
 from SeMF.settings import TMP_PATH
+from VulnManage.Functions import exceptvuln
 
 
 vuln_level = {'informational':0,'low':1,'medium':2,'high':3}
@@ -48,14 +49,14 @@ def get_scan_result(scan_id,task_id,scanner_id):
         vuln_list = details['bug']
         asset =Asset.objects.filter(asset_key = asset_key).first()
         if vuln_list:
-            except_vuln,except_vuln_list = '1'
+            except_vuln,except_vuln_list =  exceptvuln.Get_except_vuln('AWVS')
             for vuln in vuln_list:
                 try:
                     num = Vuln.objects.latest('id').id
                 except Exception as e:
                     num = 0
                 vuln_id = '02' + str(time.strftime('%Y%m%d%H',time.localtime(time.time()))) +str( num)
-                vuln_type = 'Awvs'
+                vuln_type = 'AWVS'
                 vuln_name = vuln['name']
                 leave = vuln_level[vuln['level']]
                 vuln_info = vuln['request']

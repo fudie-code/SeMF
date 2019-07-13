@@ -67,9 +67,9 @@ def portcreate(request,asset_id):
             if port_get[1]:
                 port_get= port_get[0]
                 port_get.name = form.cleaned_data['name']
-                port_get.name = form.cleaned_data['product']
-                port_get.name = form.cleaned_data['version']
-                port_get.name = form.cleaned_data['port_info']
+                port_get.product = form.cleaned_data['product']
+                port_get.version = form.cleaned_data['version']
+                port_get.port_info = form.cleaned_data['port_info']
                 port_get.save()
                 data['code'] = 0
                 data['msg'] = '添加成功'

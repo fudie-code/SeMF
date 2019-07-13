@@ -11,8 +11,8 @@ from SeMF.views import xssfilter
 from .. import models,forms
 from django.db.models import  Q
 from .. import serializers
-from django.db.models import Count
 from django.views.decorators.csrf import csrf_protect
+from ..Functions import scanneraction
 
 
 @api_view(['POST'])
@@ -127,3 +127,50 @@ def taskdetails(request,task_id):
     else:
         data['msg'] = '请检查权限'
     return JsonResponse(data)
+
+@api_view(['GET'])
+def taskaction(request,task_id,action):
+    user = request.user
+    data = {
+      "code": 1,
+      "msg": "",
+      "count": '',
+      "data": []
+    }
+    if user.is_superuser:
+        task_get = models.Task.objects.filter(id= task_id).first()
+    else:
+        task_get = models.Task.objects.filter(id= task_id,user=user).first() 
+        
+    if task_get:
+        if action=='start':
+            try:
+                res = scanneraction.create_start_task(task_get)
+            except:
+                res =False
+        elif action=='stop':
+            try:
+                res = scanneraction.stoptask(task_get)
+            except:
+                res=False
+        elif action == 'pause':
+            try:
+                res = scanneraction.pasuetask(task_get)
+            except:
+                res=False
+        elif action == 'resume':
+            try:
+                res = scanneraction.resumetask(task_get)
+            except:
+                res =False
+        else:
+            res = False
+            data['msg'] = '参数非法'
+        if res:
+            data['code'] = 0
+            data['msg'] = '操作成功'
+        else:
+            data['msg'] = '扫描节点故障,或任务更新延迟，请刷新重试'
+    else:
+        data['msg'] = '权限错误'
+    return JsonResponse(data)  
