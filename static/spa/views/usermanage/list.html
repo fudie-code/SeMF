@@ -1,56 +1,68 @@
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
 
-      <!-- 查询 -->
-      <div class="layui-col-md12">
-        <div class="layui-card">
-          <div class="layui-card-body layui-form layui-row layui-col-space10" id="projcet-query"
-            lay-filter="projcet-query">
-            <div class="layui-col-md4">
-              <label class="layui-form-label">模糊查询</label>
-              <div class="layui-input-block">
-                <input type="text" name="condition" placeholder="" autocomplete="off" class="layui-input">
-              </div>
+        <!-- 查询 -->
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body layui-form layui-row layui-col-space10" id="projcet-query"
+                    lay-filter="projcet-query">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">模糊查询</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="condition" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md2 layui-col-md-offset6">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="query">查询</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="layui-col-md2 layui-col-md-offset6">
-              <div class="layui-input-block">
-                <button class="layui-btn" lay-submit lay-filter="query">查询</button>
-              </div>
+        </div>
+
+        <!-- 资产表格 -->
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">用户列表</div>
+                <div class="layui-card-body">
+                    <table class="layui-table" id="list" lay-filter="list"></table>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-  
-      <!-- 资产表格 -->
-      <div class="layui-col-md12">
-        <div class="layui-card">
-          <div class="layui-card-header">用户列表</div>
-          <div class="layui-card-body">
-            <table class="layui-table" id="list" lay-filter="list"></table>
-          </div>
-        </div>
-      </div>
-  
+
 
     </div>
-  </div>
-  
+</div>
+
 <script type="text/html" id="toolbar">
     <a class="layui-btn layui-btn-sm" lay-event="add">增加</a>
 </script>
 
-  <script type="text/html" id="bar">
-      <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="detial">详情</a>
-      <a class="layui-btn layui-btn-xs " lay-event="change">变更</a>
-  </script>
-  
-  <script>
-    layui.use(['admin', 'table', 'form', 'element'], function () {
-      var table = layui.table,
-        form = layui.form,
-        $ = layui.$,
-        admin = layui.admin,
-        element = layui.element;
+<script type="text/html" id="bar">
+    {{# if(d.is_active=='True'){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="deny">禁用</a>
+    {{# } else {}}
+    <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="access">启用</a>
+    {{# } }}
+    <a class="layui-btn layui-btn-xs layui-btn-normal" data-dropdown="#dropdown-{{d.id}}" data-anchor="top-right">
+      操作
+  </a>
+  <ul class="dropdown-menu-nav dropdown-bottom-right layui-hide" id="dropdown-{{d.id}}">
+    <div class="dropdown-anchor"></div>
+    <li><a lay-event="edit"><i class="layui-icon layui-icon-edit"></i>修改</a></li>
+    <li><a lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a></li>
+</ul>
+</script>
+
+<script>
+    layui.use(['admin', 'table', 'form', 'element', 'dropdown'], function () {
+        var table = layui.table,
+            form = layui.form,
+            $ = layui.$,
+            admin = layui.admin,
+            element = layui.element
+        dropdown = layui.dropdown;
 
         form.render();
 
@@ -61,36 +73,38 @@
             , defaultToolbar: []
             , cols: [[
                 { checkbox: true, fixed: true }
-                , { field: 'username', title: '用户名', width: 110 }
-                , { field: 'email', title: '邮箱' }
-                , { field: 'mobilephone', title: '联系电话' }
-                , { field: 'roles', title: '角色' }
-                , { field: 'parent', title: '管理人员' }
-                , { title: '高级选项', fixed: 'right', align: 'center', width: 130, toolbar: '#userlistbar' }
+                , { field: 'username', title: '用户名', align: 'center', unresize: true }
+                , { field: 'email', title: '邮箱', align: 'center', unresize: true }
+                , { field: 'mobilephone', title: '联系电话', align: 'center', unresize: true  }
+                , { field: 'roles', title: '角色', align: 'center', unresize: true  }
+                , { title: '操作', fixed: 'right', align: 'center', width: 130, toolbar: '#bar', align: 'center', unresize: true  }
             ]]
             , page: true
         });
-        
+
         let userupdate = (isuser) => {
             admin.open({
                 title: (isuser ? '修改' : '添加') + '用户',
-                area: ['520px', '520px'],
+                area: isuser ? ['520px', '330px']: ['520px', '520px'],
                 url: './views/usermanage/usercreate.html',
                 success: function (layero, index) {
                     if (isuser) {
+                        $('#updateignore').remove(); 
                         form.val('infoform', isuser);
+                        $('#user_roles_title').val(isuser.roles)
+                        $('#roles').val(isuser.roles_id)
                     };
                     form.on('submit(sub)', function (obj) {
                         let data = obj.field;
                         admin.ajax({
-                            url: (isuser ? '/asset/portupdate/' + portdata.id + '/' : '/user/usercreate/')
+                            url: (isuser ? '/user/user_update/' + isuser.id + '/' : '/user/usercreate/')
                             , type: 'POST'
                             , data: data
                             , dataType: 'JSON'
                             , success: function (res) {
-                                layer.close(index);
                                 let msg = JSON.stringify(res.msg);
                                 if (res.code == 0) {
+                                    layer.close(index);
                                     layer.msg(res.msg, {
                                         offset: '15px'
                                         , icon: 1
@@ -117,27 +131,86 @@
         table.on('toolbar(list)', function (obj) {
             switch (obj.event) {
                 case 'add':
-                userupdate()
-                break;
+                    userupdate()
+                    break;
             };
         });
 
-
-
-      //查询并重载表格
-      form.on('submit(query)', (d) => {
-        table.reload('list', {
-          page: {
-            curr: 1 //重新从第 1 页开始
-          }
-          , where: {
-            key: d.field.condition
-          }
+        table.on('tool(list)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('确定删除用户', function (index) {
+                    admin.ajax({
+                        url: '/user/userdelete/' + data.id + "/",
+                        type: 'GET',
+                        dataType: 'JSON',
+                        success: function (res) {
+                            layer.msg(res.msg, {
+                                offset: '15px',
+                                icon: 1,
+                                time: 1000
+                            }, function () {
+                                table.reload('list');
+                            });
+                        }
+                    });
+                    layer.close(index);
+                });
+            } else if (obj.event === 'deny') {
+                layer.confirm('确定要禁用用户', {
+                    btn: ['确定', '取消'] //按钮
+                }, function () {
+                    admin.ajax({
+                        url: '/user/usersction/deny/' + data.id + '/'
+                        , type: 'GET'
+                        , dataType: 'json'
+                        , success: function (res) {
+                            layer.msg(res.msg, {
+                                offset: '15px'
+                                , icon: 1
+                                , time: 1000
+                            }, function () {
+                                table.reload('list');
+                            });
+                        }
+                    });
+                }, function () {
+                    layer.closeAll();
+                });
+            } else if (obj.event === 'access') {
+                admin.ajax({
+                    url: '/user/usersction/access/' + data.id + '/'
+                    , type: 'GET'
+                    , dataType: 'json'
+                    , success: function (res) {
+                        layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        }, function () {
+                            table.reload('list');
+                        });
+                    }
+                });
+            } else if (obj.event === 'edit') {
+                userupdate(data);
+            };
         });
-      });
-  
 
-  
-  
+        //查询并重载表格
+        form.on('submit(query)', (d) => {
+            table.reload('list', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                , where: {
+                    key: d.field.condition
+                }
+            });
+        });
+
+
+
+
     });
-  </script>
+</script>
