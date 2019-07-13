@@ -6,9 +6,9 @@ Created on 2019年7月13日
 '''
 from ..models import AdvanceVuln
 
-def Get_except_vuln(vuln_type):
+def Get_except_vuln(source_type):
     except_vulns=[]
-    except_vuln_list = AdvanceVuln.objects.filter(source=vuln_type)
+    except_vuln_list = AdvanceVuln.objects.filter(source=source_type)
     if except_vuln_list:
         for except_vuln in except_vuln_list:
             except_vulns.append(except_vuln.vuln_name)

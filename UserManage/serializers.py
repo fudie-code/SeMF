@@ -44,7 +44,7 @@ class UserManageSerializer(serializers.ModelSerializer):
     roles_id = IdlistField(source='profile.roles.all')
     class Meta:
         model = User
-        fields = ('id','username','email','mobilephone','is_active','roles','roles_id')  
+        fields = ('id','username','email','mobilephone','is_active','parent','roles','roles_id')  
         
         
         
