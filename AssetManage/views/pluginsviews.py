@@ -72,7 +72,7 @@ def plugincreate(request,asset_id):
                 data['code'] = 0
                 data['msg'] = '添加成功'
             else:
-                data['msg'] = '端口已存在'
+                data['msg'] = '插件已存在'
         else:
             data['msg'] = '请检查参数'
     else:
@@ -96,7 +96,7 @@ def plugindelete(request,plugin_id):
     if item_get:
         item_get.delete()
         data['code'] = 0
-        data['msg'] = '端口删除成功'
+        data['msg'] = '插件删除成功'
     else:
         data['msg'] = '请检查权限'
     return JsonResponse(data)

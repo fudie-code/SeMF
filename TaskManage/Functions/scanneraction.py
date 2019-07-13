@@ -6,7 +6,7 @@ Created on 2019年4月27日
 '''
 
 from . import baseinfo
-from SeMF.views import checkips,checkurl
+from ..tasks import save_awvs_vulns
 from .. import models,tasks
 from . import awvs
 
@@ -19,7 +19,7 @@ def create_start_task(task_get):
             task_get.status = status_get
             task_get.scan_id = scan_id
             task_get.save()
-            tasks.get_rsas_vulns.delay(task_get.id)
+            save_awvs_vulns.delay(scan_id,task_get.task_id)
             return True
     return False
         
