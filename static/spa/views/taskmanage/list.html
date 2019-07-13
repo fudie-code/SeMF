@@ -40,56 +40,8 @@
       </div>
     </div>
 
-    <div class="layui-col-md12">
-      <div class="layui-card-body layui-hide" style="padding: 15px;" id='formedit'>
-        <form class="layui-form" action="" lay-filter="component-form-group">
-          <input type='hidden' name="csrfmiddlewaretoken" id='csrf'>
-          <div class="layui-form-item">
-            <label class="layui-form-label">任务名称</label>
-            <div class="layui-input-block">
-              <input name="name" id="name" lay-verify="required" autocomplete="off" placeholder="任务名称"
-                class="layui-input">
-            </div>
-          </div>
-          <div class="layui-form-item" id="asset-item">
-            <label class="layui-form-label">所属资产</label>
-            <div class="layui-input-block">
-              <input type='hidden' name="asset" id='asset'>
-              <input name="asset_name" id="asset_name" autocomplete="off" lay-verify="" placeholder="所属资产"
-                class="layui-input">
-            </div>
-          </div>
-          <div class="layui-form-item">
-            <label class="layui-form-label">扫描器</label>
-            <div class="layui-input-block">
-              <select name="scanner" id="scanner" lay-verify="required" lay-filter="scanner">
-                <option value=""></option>
-              </select>
-            </div>
-          </div>
-          <div class="layui-form-item">
-            <label class="layui-form-label">扫描策略</label>
-            <div class="layui-input-block">
-              <select name="police" id="police" lay-verify="required">
-                <option value=""></option>
-              </select>
-            </div>
-          </div>
-          <div class="layui-form-item">
-            <label class="layui-form-label">任务描述</label>
-            <div class="layui-input-block">
-              <textarea name="targetinfo" id="targetinfo" placeholder="请输入任务描述" class="layui-textarea"></textarea>
-            </div>
-          </div>
-          <div class="layui-form-item layui-col-xs-offset5">
-            <div class="layui-input-block">
-              <button class="layui-btn" lay-submit="" lay-filter="sub">立即提交</button>
-              <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
+
+
   </div>
 </div>
 
@@ -103,6 +55,8 @@
   <div class="layui-btn-group">
       {{# if(d.status=='待执行'){ }}
         <a class="layui-btn layui-btn-xs" lay-event="start">开始</a>
+        <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="del">删除</a>
+        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="update">更新</a>
       {{# } else if(d.status=='执行中'){ }}
         <div class="layui-btn-group">
             <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="pause">暂停</a>
@@ -111,21 +65,25 @@
       {{# } else if(d.status=='已暂停'){ }}
         <a class="layui-btn layui-btn-xs" lay-event="resume">重启</a>
       {{# } else if(d.status=='已完成'){ }}
-        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="detial">详情</a>
-        <a class="layui-btn layui-btn-xs " lay-event="export">导出</a>
+        <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="del">删除</a>
+        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="detail">详情</a>
       {{# } }}
-    </button>
   </div> 
+ 
 </script>
 
 <script>
-  layui.use(['admin', 'table', 'form'], function () {
+  layui.use(['admin', 'table', 'form', 'tableSelect', 'uncode','index'], function () {
     var table = layui.table,
       form = layui.form,
       $ = layui.$,
-      admin = layui.admin;
+      admin = layui.admin,
+      tableSelect = layui.tableSelect,
+      uncode = layui.uncode
+      index = layui.index;
 
     form.render();
+
 
     //表格初始化
     table.render({
@@ -151,57 +109,44 @@
     table.on('toolbar(list)', function (obj) {
       switch (obj.event) {
         case 'add':
-          admin.popup({
-            title: '新增任务'
-            , area: ['600px', '500px']
-            , fixed: true
-            , maxmin: true
-            , success: function (layero, index) {
-              layui.view(this.id).render('taskmanage/taskcreate').done(function () {
-
+          admin.open({
+            title: '添加任务',
+            area: ['500px', '550px'],
+            url: './views/taskmanage/taskcreate.html',
+            success: function (layero, index) {
+              form.on('submit(sub)', function (obj) {
+                let data = obj.field
+                admin.ajax({
+                  url: '/task/taskcreate/'
+                  , type: 'POST'
+                  , data: data
+                  , dataType: 'JSON'
+                  , success: function (res) {
+                    layer.close(index);
+                    let msg = JSON.stringify(res.msg);
+                    if (res.code == 0) {
+                      layer.msg(res.msg, {
+                        offset: '15px'
+                        , icon: 1
+                        , time: 1000
+                      });
+                    } else if (res.code == 1) {
+                      layer.msg(msg, {
+                        offset: '15px'
+                        , icon: 2
+                        , time: 1000
+                      });
+                    }
+                  }
+                });
+                return false;
               });
-            }
-            , end: function () {
+            },
+            end: function () {
               table.reload('list');
             }
           });
           break;
-        case 'import':
-          layer.load(1, {
-            shade: [0.1, '#fff']
-          });
-          admin.req({
-            url: '/taskmanage/search_mofang_all/',
-            complete: () => {
-              layer.closeAll('loading')
-            },
-            done: (res) => {
-              layer.msg(res.msg, {
-                offset: '15px'
-                , icon: 1
-                , time: 1000
-              });
-            }
-          });
-          break;
-        case 'allscan':
-          layer.confirm('巡检未检查资产', function (index) {
-            admin.req({
-              url: '/taskmanage/allscan/'
-              , type: 'GET'
-              , complete: () => {
-                layer.closeAll('loading')
-              }
-              , done: function (res) {
-                layer.msg(res.msg, {
-                  offset: '15px'
-                  , icon: 1
-                  , time: 1000
-                });
-              }
-            });
-            layer.close(index);
-          });
       };
     });
 
@@ -212,46 +157,102 @@
         layer.load(1, {
           shade: [0.1, '#fff'] //0.1透明度的白色背景
         });
-        admin.req({
-          url: '/taskmanage/taskaction/' + data.id + '/start/',
-          complete: () => {
-            layer.closeAll('loading')
-          },
-          done: () => {
-            table.reload('list')
-          }
-        })
-      } else if (obj.event == 'pause') {
-        admin.req({
-          url: '/taskmanage/taskaction/' + data.id + '/pause/',
-          done: () => {
-            table.reload('list')
-          }
-        })
-      } else if (obj.event == 'stop') {
-        admin.req({
-          url: '/taskmanage/taskaction/' + data.id + '/stop/',
-          done: () => {
-            table.reload('list')
-          }
-        })
-      } else if (obj.event == 'resume') {
-        admin.req({
-          url: '/taskmanage/taskaction/' + data.id + '/resume/',
-          done: () => {
-            table.reload('list')
-          }
-        })
-      } else if (obj.event == 'detial') {
-        location.hash = '/taskmanage/taskdetial/id=' + data.id;
-      } else if (obj.event == 'export') {
-        admin.req({
-          url: '/taskmanage/getreport/' + data.id + '/',
+        admin.ajax({
+          url: '/task/taskaction/' + data.id + '/start/',
           type: 'GET',
-          done: (res) => {
-            window.open(res.data);
+          dataType: 'json',
+          success: (res) => {
+            layer.msg(res.msg)
+            table.reload('list');
+            layer.closeAll('loading')
           }
+        });
+      } else if (obj.event == 'pause') {
+        admin.ajax({
+          url: '/task/taskaction/' + data.id + '/pause/',
+          type: 'GET',
+          dataType: 'json',
+          success: () => {
+            table.reload('list');
+          }
+        });
+      } else if (obj.event == 'stop') {
+        admin.ajax({
+          url: '/task/taskaction/' + data.id + '/stop/',
+          type: 'GET',
+          dataType: 'json',
+          success: () => {
+            table.reload('list');
+          }
+        });
+      } else if (obj.event == 'resume') {
+        admin.ajax({
+          url: '/task/taskaction/' + data.id + '/resume/',
+          type: 'GET',
+          dataType: 'json',
+          success: () => {
+            table.reload('list');
+          }
+        });
+      } else if (obj.event == 'detail') {
+        index.go('/taskmanage/detail/id=' + data.id);
+      } else if (obj.event == 'del') {
+        layer.confirm('确定删除任务', function (index) {
+          admin.ajax({
+            url: '/task/taskdelete/' + data.id + "/",
+            type: 'GET',
+            dataType: 'JSON',
+            success: function (res) {
+              layer.msg(res.msg, {
+                offset: '15px',
+                icon: 1,
+                time: 1000
+              }, function () {
+                table.reload('list');
+              });
+            }
+          });
+          layer.close(index);
         })
+      } else if(obj.event == 'update'){
+        admin.open({
+          title: '更改任务信息',
+          area: ['500px', '550px'],
+          url: './views/taskmanage/taskcreate.html',
+          success: function (layero, index) {
+            form.val('component-form-group',data);
+            form.on('submit(sub)', function (obj) {
+              let data = obj.field
+              admin.ajax({
+                url: '/task/taskcreate/'
+                , type: 'POST'
+                , data: data
+                , dataType: 'JSON'
+                , success: function (res) {
+                  layer.close(index);
+                  let msg = JSON.stringify(res.msg);
+                  if (res.code == 0) {
+                    layer.msg(res.msg, {
+                      offset: '15px'
+                      , icon: 1
+                      , time: 1000
+                    });
+                  } else if (res.code == 1) {
+                    layer.msg(msg, {
+                      offset: '15px'
+                      , icon: 2
+                      , time: 1000
+                    });
+                  }
+                }
+              });
+              return false;
+            });
+          },
+          end: function () {
+            table.reload('list');
+          }
+        });
       }
     });
 

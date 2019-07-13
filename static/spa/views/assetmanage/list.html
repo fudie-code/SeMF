@@ -39,7 +39,7 @@
  </script>
 
 <script type="text/html" id="rootasset-bar">
-    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="detial">详情</a>
+    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="detail">详情</a>
     <a class="layui-btn layui-btn-xs" data-dropdown="#dropdown-{{d.id}}" data-anchor="top-right">
       更多
   </a>
@@ -234,8 +234,8 @@
                     });
                     layer.close(index);
                 });
-            } else if (obj.event === 'detial') {
-                    index.go('/assetmanage/detial/id=' + data.id);
+            } else if (obj.event === 'detail') {
+                    index.go('/assetmanage/detail/id=' + data.id);
             } else if (obj.event === 'edit') {
                 admin.open({
                     title: '修改资产信息',

@@ -1,7 +1,7 @@
 /** EasyWeb spa v3.1.2 date:2019-06-05 License By http://easyweb.vip */
 
 layui.config({
-    version: true,   // 更新组件缓存，设为true不缓存，也可以设一个固定值
+    version: Date.now(),   // 更新组件缓存，设为true不缓存，也可以设一个固定值
     base: 'assets/module/'
 }).extend({
     formSelects: 'formSelects/formSelects-v4',
@@ -33,19 +33,7 @@ layui.config({
         return location.replace('views/system/login.html');
     }
 
-    // 获取用户信息
-    // admin.req('json/userInfo.json', {}, function (res) {
-    //     if (200 == res.code) {
-    //         config.putUser(res.user);
-    //         admin.renderPerm();  // 移除没有权限的元素
-    //         $('#huName').text(res.user.nickName);
-    //     } else {
-    //         layer.msg('获取用户失败', {icon: 2});
-    //     }
-    // }, 'get');
-
-
-    //注册全局路由\
+    //注册全局路由
     admin.ajax({
         url: 'json/router.json'
         , type: 'get'
