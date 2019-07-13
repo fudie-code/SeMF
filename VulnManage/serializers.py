@@ -25,7 +25,7 @@ class VulnListSerializer(serializers.ModelSerializer):
     update_data = serializers.DateTimeField(format='%Y-%m-%d %H:%M')
     class Meta:
         model = models.Vuln
-        fields= ('id','name','type_id','type','level_id','level','fix_status_id','fix_status','asset_id','asset','create_data','update_data')
+        fields= ('id','name','cve','info','fix','introduce','scopen','type_id','type','level_id','level','fix_status_id','fix_status','asset_id','asset','create_data','update_data')
         
         
         

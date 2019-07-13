@@ -6,22 +6,18 @@ Created on 2019年4月27日
 '''
 
 from . import baseinfo
-from SeMF.views import checkips
+from SeMF.views import checkips,checkurl
 from .. import models,tasks
+from . import awvs
 
 def create_start_task(task_get):
-    if task_get.scanner.type == 'RSAS':
-        post_data = baseinfo.rasacreateinfo(task_get)
-        if checkips(task_get.target):
-            #res = rsas.create_vulnerabilities_scan_task(post_data)
-            res=1
-        else:
-            #res = rsas.create_web_scan_task(post_data)
-            res=1
-        if res.get('status'):
+    if task_get.scanner.type == 'AWVS':
+        scan_id = awvs.add_scan(task_get.scanner.id, task_get.target, task_get.targetinfo)
+        scan_id = awvs.start_scan(task_get.scanner.id,scan_id)
+        if scan_id:
             status_get = models.STATUS.objects.filter(name='执行中').first()
             task_get.status = status_get
-            task_get.scan_id = res.get('scan_id')
+            task_get.scan_id = scan_id
             task_get.save()
             tasks.get_rsas_vulns.delay(task_get.id)
             return True
