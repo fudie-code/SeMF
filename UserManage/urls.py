@@ -14,6 +14,6 @@ urlpatterns = [
     path('userdelete/<str:user_id>/',views.user_delete,name='user_delete'),
     path('user_update/<str:user_id>/',views.user_update,name='user_update'),
     path('roleslist/',views.roleslist,name='roleslist'),
-    path('usersction/<str:action>/<int:user_id>/',views.user_action,name='usersction'),
+    path('useraction/<str:action>/<int:user_id>/',views.user_action,name='usersction'),
     
     ]

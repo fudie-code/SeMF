@@ -18,6 +18,11 @@ class UserCreateForm(forms.Form):
     roles = forms.CharField(label='角色',max_length=75)
     
     
+class UserUpdateForm(forms.Form):
+    email = forms.EmailField(label='邮箱')
+    mobilephone = forms.CharField(label='手机号码')
+    roles = forms.CharField(label='角色',max_length=75)
+    
     
 class UserProfile(ModelForm):
     class Meta:

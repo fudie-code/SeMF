@@ -195,6 +195,15 @@ def initVulnType():
         item_get = vulnmodels.Type.objects.get_or_create(name=item['name'])
     print('initVulnType ok')
     
+def initVulnSource():
+    type_list=[
+        {'name':'AWVS'},
+        {'name':'Nessus'},
+        ]
+    for item in type_list:
+        item_get = vulnmodels.Source.objects.get_or_create(name=item['name'])
+    print('initVulnType ok')
+    
 def initTaskType():
     type_list=[
         {'name':'系统扫描'},

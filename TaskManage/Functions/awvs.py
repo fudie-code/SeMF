@@ -9,7 +9,7 @@ import time
 
 from AdvanceManage.Functions import awvs11
 from AdvanceManage.Functions import parse_awvs_xml
-from VulnManage.models import Vuln
+from VulnManage.models import Vuln,STATUS
 from TaskManage.models import Task
 from AssetManage.models import Asset
 from SeMF.settings import TMP_PATH
@@ -51,11 +51,6 @@ def get_scan_result(scan_id,task_id,scanner_id):
         if vuln_list:
             except_vuln,except_vuln_list =  exceptvuln.Get_except_vuln('AWVS')
             for vuln in vuln_list:
-                try:
-                    num = Vuln.objects.latest('id').id
-                except Exception as e:
-                    num = 0
-                vuln_id = '02' + str(time.strftime('%Y%m%d%H',time.localtime(time.time()))) +str( num)
                 vuln_type = 'AWVS'
                 vuln_name = vuln['name']
                 leave = vuln_level[vuln['level']]
@@ -67,26 +62,25 @@ def get_scan_result(scan_id,task_id,scanner_id):
                     vuln_gets = except_vuln_list.filter(vuln_name=vuln_name).first()
                     leave = vuln_gets.leave
                     fix = vuln_gets.fix
-                vuln_list = Vuln.objects.get_or_create(vuln_name=vuln_name,
-                                                                     vuln_type=vuln_type,
-                                                                     leave=leave,
-                                                                     introduce=introduce,
-                                                                     vuln_info=vuln_info,
-                                                                     scopen=scopen,
-                                                                     fix=fix,
-                                                                     vuln_asset = asset
-                                                                     )
+                vuln_list = Vuln.objects.get_or_create(name=vuln_name,
+                                                     type=vuln_type,
+                                                     level=leave,
+                                                     introduce=introduce,
+                                                     info=vuln_info,
+                                                     scopen=scopen,
+                                                     fix=fix,
+                                                     asset = asset
+                                                     )
                 vuln_get = vuln_list[0]
-                if vuln_get.vuln_id:
-                    if vuln_get.fix_status == '1':
-                        vuln_get.fix_status= '3'
+                if vuln_list[1]:
+                    if vuln_get.fix_status == STATUS.objects.filter(name='已修复').first():
+                        vuln_get.fix_status= STATUS.objects.filter(name='漏洞重现').first()
                 else:
-                    vuln_get.vuln_id = vuln_id
                     if leave == 0:
-                        vuln_get.fix_status= '0'
+                        vuln_get.fix_status= STATUS.objects.filter(name='已忽略').first()
                     elif leave == 1:
-                        vuln_get.fix_status= '0'
+                        vuln_get.fix_status= STATUS.objects.filter(name='已忽略').first()
                     else:
-                        vuln_get.fix_status= '2'
+                        vuln_get.fix_status= STATUS.objects.filter(name='待修复').first()
                 vuln_get.task_id= task
                 vuln_get.save()
