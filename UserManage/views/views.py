@@ -76,6 +76,7 @@ def user_create(request):
                             user.profile.mobilephone=mobilephone
                             user.set_password(password)
                             user.is_active=True
+                            user.save()
                             user = many_many_addall(user_get,user_get.profile.roles,user_roles_list)
                             data['code'] = 0
                             data['msg'] = '用户创建成功'

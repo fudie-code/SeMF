@@ -5,7 +5,6 @@ Created on 2019年7月5日
 @author: 残源
 '''
 
-import time 
 
 from AdvanceManage.Functions import awvs11
 from AdvanceManage.Functions import parse_awvs_xml
