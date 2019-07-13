@@ -26,10 +26,8 @@ def create_start_task(task_get):
 
 
 def pasuetask(task_get):
-    if task_get.scanner.type == 'RSAS':
-        post_data = baseinfo.rsasactioninfo(task_get)
-        #res = rsas.task_pause(post_data)
-        res=1
+    if task_get.scanner.type == 'AWVS':
+        res = awvs.stop_scan(task_get.scan_id,task_get.task_scanner.id)
         if res.get('status'):
             status_get = models.STATUS.objects.filter(name='已暂停').first()
             task_get.status = status_get

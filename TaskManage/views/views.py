@@ -5,6 +5,8 @@ from SeMF.views import MyPageNumberPagination,xssfilter
 from .. import models
 from django.db.models import  Q
 from .. import serializers
+from AdvanceManage import serializers as advanceserializers
+from AdvanceManage import models as advancemodels
 
 
 
@@ -70,6 +72,35 @@ def statuslist(request):
     }
     list_get = models.STATUS.objects.all().order_by('id')
     serializers_get = serializers.STATUSSerializer(instance= list_get,many=True)
+    data['msg'] = 'success'
+    data['data'] = xssfilter(serializers_get.data)
+    return JsonResponse(data)
+
+@api_view(['GET'])
+def scannerlist(request):
+    data = {
+      "code": 0,
+      "msg": "",
+      "data": []
+    }
+    #user = request.user
+    list_get = advancemodels.Scanner.objects.all().order_by('id')
+    serializers_get = advanceserializers.ScannerSerializer(instance= list_get,many=True)
+    data['msg'] = 'success'
+    data['data'] = xssfilter(serializers_get.data)
+    return JsonResponse(data)
+
+
+@api_view(['GET'])
+def policieslist(request):
+    data = {
+      "code": 0,
+      "msg": "",
+      "data": []
+    }
+    #user = request.user
+    list_get = advancemodels.Policies.objects.all().order_by('id')
+    serializers_get = advanceserializers.ScannerSerializer(instance= list_get,many=True)
     data['msg'] = 'success'
     data['data'] = xssfilter(serializers_get.data)
     return JsonResponse(data)

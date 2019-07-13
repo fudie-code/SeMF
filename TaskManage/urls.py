@@ -10,6 +10,8 @@ from .views import views,taskviews,chartviews
 urlpatterns = [
     path('tasklist/',views.mainlist,name='tasklist'),
     path('typelist/',views.typelist,name='typelist'),
+    path('scannerlist/',views.scannerlist,name='scannerlist'),
+    path('policieslist/',views.policieslist,name='policieslist'),
     path('statuslist/',views.statuslist,name='statuslist'),
     
     path('taskcreate/<str:asset_id>/',taskviews.taskcreate,name='taskcreate'),
