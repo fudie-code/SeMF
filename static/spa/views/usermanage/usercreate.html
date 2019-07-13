@@ -1,0 +1,112 @@
+<div class="layui-col-md12 ">
+    <div class="layui-card-body " id='formedit'>
+        <form class="layui-form" lay-filter="infoform" style="padding: 15px;">
+            <input type='hidden' name="csrfmiddlewaretoken" id='csrf'>
+            <div class="layui-box" id="updateignore">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="username" required lay-verify="required" placeholder="请输入用户名"
+                            autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">密码</label>
+                    <div class="layui-input-block">
+                        <input type="password" name="password" required lay-verify="required" placeholder="请输入密码"
+                            class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">确认密码</label>
+                    <div class="layui-input-block">
+                        <input type="password" name="repassword" required lay-verify="required" placeholder="请输入密码"
+                            class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户邮箱</label>
+                <div class="layui-input-block">
+                    <input type="email" name="email" lay-verify="required" autocomplete="off" placeholder="请输入用户邮箱"
+                        class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">联系电话</label>
+                <div class="layui-input-block">
+                    <input type="tel" name="mobilephone" lay-verify="required|phone" autocomplete="off"
+                        placeholder="请输入用户手机号" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">角色</label>
+                <div class="layui-input-block">
+                    <input type='hidden' name="roles" id='roles'>
+                    <input name="roles_title" id="user_roles_title" lay-verify="required" autocomplete="off"
+                        placeholder="所属角色" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs-offset3">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="sub">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    layui.use(['admin', 'table', 'form', 'element', 'tableSelect'], function () {
+        var table = layui.table,
+            form = layui.form,
+            $ = layui.$,
+            admin = layui.admin,
+            element = layui.element
+        tableSelect = layui.tableSelect;
+
+
+
+        admin.ajax({
+            url: '/csrf/'
+            , type: 'GET'
+            , dataType: 'JSON'
+            , success: function (res) {
+                $('#csrf').val(res.data.token);
+            }
+        });
+
+
+
+
+
+        tableSelect.render({
+            elem: '#user_roles_title',
+            searchKey: 'key',
+            checkedKey: 'id',
+            table: {
+                url: '/user/roleslist/'
+                , cols: [[
+                    { checkbox: true, fixed: true }
+                    , { field: 'name', title: '角色名称' }
+                    , { field: 'description', title: '角色描述' }
+                ]]
+                , limit: 5
+            },
+            done: function (elem, data) {
+                var NEWJSON = [];
+                var id_list = [];
+                layui.each(data.data, function (index, item) {
+                    NEWJSON.push(item.name);
+                    id_list.push(item.id);
+                });
+                elem.val(NEWJSON.join(","));
+                $('#roles').val(id_list.join(","));
+            }
+        });
+
+
+
+    });
+</script>
