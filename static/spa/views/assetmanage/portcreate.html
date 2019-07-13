@@ -61,7 +61,6 @@
             , dataType: 'JSON'
             , success: function (res) {
                 $('#csrf').val(res.data.token);
-                console.log($('#csrf').val())
             }
         });
     });
