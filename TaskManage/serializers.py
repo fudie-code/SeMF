@@ -26,7 +26,6 @@ class TaskListSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Task
         fields= ('id','name','target','type','type_id','targetinfo','status','status_id','starttime','endtime','scanner','scanner_id','police','police_id','asset','user')
-        depth = 1
         
         
 class TypeSerializer(serializers.ModelSerializer):
