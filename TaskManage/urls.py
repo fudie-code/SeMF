@@ -16,6 +16,7 @@ urlpatterns = [
     path('taskdelete/<str:task_id>/',taskviews.taskdelete,name='taskdelete'),
     path('taskupdate/<str:task_id>/',taskviews.taskupdate,name='taskupdate'),
     path('taskdetails/<str:task_id>/',taskviews.taskdetails,name='taskdetails'),
+    path('taskaction/<str:task_id>/<str:action>/',taskviews.taskaction,name='taskaction'),
     
     path('taskstatuschart/',chartviews.taskstatuschart,name='taskstatuschart'),
     path('tasktypechart/',chartviews.tasktypechart,name='tasktypechart'),
