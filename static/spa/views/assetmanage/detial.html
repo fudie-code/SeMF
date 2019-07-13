@@ -342,11 +342,12 @@
 <!-- 端口和组件编辑按钮 -->
 <script type="text/html" id="bar">
   <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="del">删除</a>
 </script>
 
 
 <script>
-  layui.use(['admin', 'form', 'table', 'element', 'uncode', 'laytpl'], function () {
+  layui.use(['admin', 'form', 'table', 'element', 'uncode', 'laytpl','config'], function () {
     var $ = layui.$
       , layer = layui.layer
       , admin = layui.admin
@@ -355,7 +356,8 @@
       , router = layui.router()
       , element = layui.element
       , uncode = layui.uncode
-      , laytpl = layui.laytpl;
+      , laytpl = layui.laytpl
+      , config = layui.config;
 
     form.render();
     element.render();
@@ -587,7 +589,16 @@
       if (obj.event === 'change') {
         vulnpopup(data);
       } else if (obj.event === 'detial') {
-        // index.go('/assetmanage/detial/id=' + data.id);
+        admin.open({
+          title: '漏洞详情',
+          area: ['500px', '680px'],
+          url: './views/vulnmanage/detial.html',
+          success: function (layero, index) {
+            $('#vuln-info').html(data.info);
+            $('#vuln-fix').html(data.fix);
+            $('#vuln-introduce').html(data.introduce)
+          }
+        });
       };
     });
 
@@ -623,6 +634,24 @@
         var data = obj.data;
         if (obj.event === 'edit') {
           portpopup(data);
+        }else if(obj.event ==='del'){
+          layer.confirm('确定删除端口', function (index) {
+            admin.ajax({
+              url: '/asset/portdelete/' + data.id + "/",
+              type: 'GET',
+              dataType: 'JSON',
+              success: function (res) {
+                layer.msg(res.msg, {
+                  offset: '15px',
+                  icon: 1,
+                  time: 1000
+                }, function () {
+                  table.reload('port-list');
+                });
+              }
+            });
+            layer.close(index);
+          });
         };
       });
     };
@@ -656,6 +685,24 @@
         var data = obj.data;
         if (obj.event === 'edit') {
           pluginpopup(data);
+        }else if(obj.event ==='del'){
+          layer.confirm('确定删除组件', function (index) {
+            admin.ajax({
+              url: '/asset/plugindelete/' + data.id + "/",
+              type: 'GET',
+              dataType: 'JSON',
+              success: function (res) {
+                layer.msg(res.msg, {
+                  offset: '15px',
+                  icon: 1,
+                  time: 1000
+                }, function () {
+                  table.reload('plugin-list');
+                });
+              }
+            });
+            layer.close(index);
+          });
         };
       });
     }
@@ -885,6 +932,25 @@
       , page: true
     });
 
+    table.on('tool(file-list)', function (obj) {
+      var data = obj.data;
+      if (obj.event === 'download') {
+
+        admin.ajax({
+          url: '/asset/file_get/' + data.id + '/',
+          type: 'GET',
+          dataType: 'json',
+          success: (res) => {
+            console.log(res.data);
+            var params = {
+              ['Authorization']: 'JWT ' + config.getToken()
+            };
+            var url = ['/asset/file_get/' + data.id + '/', $.param(params)].join('?');
+            window.location.href = url
+          }
+        });
+      };
+    });
 
     $(".a-upload").on("change", "input[type='file']", function () {
       if ($('#inputfile').val() != '') {

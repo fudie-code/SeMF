@@ -355,30 +355,16 @@
       if (obj.event === 'change') {
         vulnpopup(data);
       } else if (obj.event === 'detial') {
-        admin.req({
-          url: '/vulnmanage/vulndetails/' + data.id + '/',
-          type: 'GET',
-          done: (res) => {
-            let data = res.data
-            admin.popup({
-              title: '漏洞详情'
-              , area: ['60%', '90%']
-              , fixed: true
-              , maxmin: true
-              , success: function (layero, index) {
-                //将 views 目录下的某视图文件内容渲染给该面板
-                layui.view(this.id).render('vulnmanage/vulndetail').done(function () {
-                  $('#info').html(data.info)
-                  $('#fix').html(data.fix)
-                  $('#introduce').html(data.introduce)
-
-                });
-              }
-            });
+        admin.open({
+          title: '漏洞详情',
+          area: ['500px', '680px'],
+          url: './views/vulnmanage/detial.html',
+          success: function (layero, index) {
+            $('#vuln-info').html(data.info);
+            $('#vuln-fix').html(data.fix);
+            $('#vuln-introduce').html(data.introduce)
           }
-        })
-      } else if (obj.event == 'assetdetial') {
-        location.hash = '/assetmanage/detial/id=' + data.asset_id;
+        });
       };
     });
 
@@ -400,7 +386,7 @@
       admin.open({
         type:1,
         title:  '修改漏洞状态',
-        area: ['520px', '400px'],
+        area: ['520px', '370px'],
         content:$('#vulnformedit').html(),
         success: function (layero, index) {
           form.render();

@@ -1,0 +1,29 @@
+<div class="layui-collapse">
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">漏洞简介</h2>
+        <div class="layui-colla-content layui-show">
+            <p id="vuln-introduce"></p>
+        </div>
+    </div>
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">漏洞信息</h2>
+        <div class="layui-colla-content">
+            <pre class="layui-code" id="vuln-info">
+                </pre>
+        </div>
+    </div>
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">修复方案</h2>
+        <div class="layui-colla-content layui-show" id="vuln-fix"></div>
+    </div>
+</div>
+
+<script>
+    //注意：折叠面板 依赖 element 模块，否则无法进行功能性操作
+    layui.use(['element', 'code'], function () {
+        var element = layui.element
+        $ = layui.$
+        code = layui.code;
+        element.render()
+    });
+</script>
