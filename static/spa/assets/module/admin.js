@@ -563,7 +563,7 @@ layui.define(["layer", "config", "layRouter"], function(g) {
 				id: "pswForm",
 				title: "修改密码",
 				shade: 0,
-				url: p ? p : "components/tpl/password.html"
+				url: p ? p : "views/system/password.html"
 			})
 		},
 		logout: function() {

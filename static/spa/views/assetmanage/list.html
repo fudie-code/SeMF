@@ -185,9 +185,9 @@
                                     , data: data
                                     , dataType: 'JSON'
                                     , success: function (res) {
-                                        layer.close(index);
                                         let msg = JSON.stringify(res.msg);
                                         if (res.code == 0) {
+                                            layer.close(index);
                                             layer.msg(res.msg, {
                                                 offset: '15px'
                                                 , icon: 1
