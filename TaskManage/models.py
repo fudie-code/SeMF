@@ -55,7 +55,7 @@ class Task(models.Model):
     police = models.ForeignKey(Policies,related_name='police_to_task',null=True,on_delete=models.CASCADE,verbose_name='扫描策略')
     
     asset = models.ManyToManyField(Asset,related_name='asset_to_task',verbose_name='资产绑定',limit_choices_to={'type__is_root':False})
-    user = models.ForeignKey(User,related_name='task_for_user',on_delete=models.CASCADE,verbose_name='任务用户')
+    user = models.ForeignKey(User,related_name='task_for_user',null=True,on_delete=models.CASCADE,verbose_name='任务用户')
     
     def __str__(self):
         return self.name
