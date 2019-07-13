@@ -18,6 +18,7 @@ class IdlistField(serializers.CharField):
 class TaskListSerializer(serializers.ModelSerializer):
     asset = IdlistField(source='asset.all')
     type_id = serializers.CharField(source='type.id')
+    status= serializers.CharField(source='status.name')
     status_id = serializers.CharField(source='status.id')
     scanner_id = serializers.CharField(source='scanner.id')
     police_id = serializers.CharField(source='police.id')
