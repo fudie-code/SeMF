@@ -40,7 +40,7 @@ class Scanner(models.Model):
 
 class Policies(models.Model):
     name = models.CharField('策略名称',max_length=50,help_text='扫描策略为扫描器策略名称')
-    key = models.CharField('策略编号',max_length=50,null=True)
+    key = models.CharField('策略编号',max_length=50,null=True,blank=True)
     scanner = models.ForeignKey(Scanner,verbose_name='节点关联',related_name='police_for_scanner',on_delete=models.CASCADE)
     
     def __str__(self):

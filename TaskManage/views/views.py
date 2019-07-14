@@ -92,14 +92,14 @@ def scannerlist(request):
 
 
 @api_view(['GET'])
-def policieslist(request):
+def policieslist(request,scanner_id):
     data = {
       "code": 0,
       "msg": "",
       "data": []
     }
     #user = request.user
-    list_get = advancemodels.Policies.objects.all().order_by('id')
+    list_get = advancemodels.Policies.objects.filter(scanner__id=scanner_id).order_by('id')
     serializers_get = advanceserializers.ScannerSerializer(instance= list_get,many=True)
     data['msg'] = 'success'
     data['data'] = xssfilter(serializers_get.data)
