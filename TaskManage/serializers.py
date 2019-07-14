@@ -14,13 +14,22 @@ class IdlistField(serializers.CharField):
         for item in value:
             data_list.append(item.id)
         return data_list
+    
+class namelistField(serializers.CharField):
+    def to_representation(self, value):
+        data_list = ''
+        for item in value:
+            data_list = data_list + item.name + ';'
+        return data_list
 
 class TaskListSerializer(serializers.ModelSerializer):
-    asset = IdlistField(source='asset.all')
+    asset = namelistField(source='asset.all')
     type_id = serializers.CharField(source='type.id')
     status= serializers.CharField(source='status.name')
     status_id = serializers.CharField(source='status.id')
+    scanner = serializers.CharField(source='scanner.name')
     scanner_id = serializers.CharField(source='scanner.id')
+    police = serializers.CharField(source='police.name')
     police_id = serializers.CharField(source='police.id')
     starttime = serializers.DateTimeField(format='%Y-%m-%d %H:%M')
     endtime = serializers.DateTimeField(format='%Y-%m-%d %H:%M')

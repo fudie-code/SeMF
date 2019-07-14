@@ -32,7 +32,7 @@ def taskcreate(request):
             check = True
         else:
             asset_list_get = form.cleaned_data['asset']
-            if asset_list_get.Count() == asset_list_get.filter(Q(user=user)|Q(group__user = user)).Count():
+            if asset_list_get.count() == asset_list_get.filter(Q(user=user)|Q(group__user = user)).count():
                 check =True
         if check:
             task_get = form.save()
@@ -64,7 +64,7 @@ def taskdelete(request,task_id):
     if item_get:
         item_get.delete()
         data['code'] = 0
-        data['msg'] = '端口删除成功'
+        data['msg'] = '任务删除成功'
     else:
         data['msg'] = '请检查权限'
     return JsonResponse(data)

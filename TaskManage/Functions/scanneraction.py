@@ -11,6 +11,7 @@ from . import awvs
 
 def create_start_task(task_get):
     if task_get.scanner.type == 'AWVS':
+        target = ''
         scan_id = awvs.add_scan(task_get.scanner.id, task_get.target, task_get.targetinfo)
         scan_id = awvs.start_scan(task_get.scanner.id,scan_id)
         if scan_id:
