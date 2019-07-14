@@ -222,11 +222,11 @@
           success: function (layero, index) {
             form.val('component-form-group',data);
             form.on('submit(sub)', function (obj) {
-              let data = obj.field
+              let taskinfo = obj.field
               admin.ajax({
-                url: '/task/taskcreate/'
+                url: '/task/taskupdate/' + data.id +'/'
                 , type: 'POST'
-                , data: data
+                , data: taskinfo
                 , dataType: 'JSON'
                 , success: function (res) {
                   layer.close(index);
