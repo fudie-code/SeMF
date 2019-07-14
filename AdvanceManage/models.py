@@ -21,7 +21,7 @@ class Scanner(models.Model):
     name = models.CharField('节点名称',max_length=50)
     type = models.CharField('节点类型',max_length=50,choices=SCANNER_TYPE)
     url = models.URLField('节点地址')
-    status = models.BooleanField('节点状态',default=False)
+    status = models.BooleanField('节点状态',default=True)
     apikey = models.CharField('API_KEY',max_length=100)
     apisec = models.CharField('API_SEC',max_length=100,blank=True)
     description = models.TextField('节点描述')

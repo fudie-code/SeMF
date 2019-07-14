@@ -12,3 +12,12 @@ class VulnForm(ModelForm):
     class Meta:
         model  = models.Vuln
         fields= ('name','cve','type','level','introduce','info','scopen','fix','fix_status')
+        
+        
+class VulnChangeForm(ModelForm):
+    class Meta:
+        model  = models.Vuln
+        fields= ('fix_status','action')
+        
+        
+        

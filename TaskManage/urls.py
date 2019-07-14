@@ -11,7 +11,7 @@ urlpatterns = [
     path('tasklist/',views.mainlist,name='tasklist'),
     path('typelist/',views.typelist,name='typelist'),
     path('scannerlist/',views.scannerlist,name='scannerlist'),
-    path('policieslist/<str:scanner_id>/',views.policieslist,name='policieslist'),
+    path('policieslist/',views.policieslist,name='policieslist'),
     path('statuslist/',views.statuslist,name='statuslist'),
     
     path('taskcreate/',taskviews.taskcreate,name='taskcreate'),

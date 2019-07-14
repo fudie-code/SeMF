@@ -50,7 +50,7 @@ def vulnupdate(request,vuln_id):
     else:
         item_get = models.Vuln.objects.filter(Q(asset__user = user)|Q(asset__group__user = user),id = vuln_id).first()
     if item_get:
-        form = forms.VulnForm(request.POST,instance=item_get)
+        form = forms.VulnChangeForm(request.POST,instance=item_get)
         if form.is_valid():
             form.save()
             data['code'] = 0
