@@ -26,8 +26,8 @@ def get_scannerinfo(scanner_id):
     
     scanner = Scanner.objects.filter(id=scanner_id).first()
 
-    url = scanner.scanner_url
-    apikey = scanner.scanner_apikey
+    url = scanner.url
+    apikey = scanner.apikey
     return url,apikey
 
 def build_url(url,resource):

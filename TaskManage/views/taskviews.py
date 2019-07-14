@@ -89,8 +89,12 @@ def taskupdate(request,task_id):
         if form.is_valid():
             check =False
             asset_list_get = form.cleaned_data['asset']
-            if asset_list_get.Count() == asset_list_get.filter(Q(user=item_get.user)|Q(group__user = item_get.user)).Count():
-                check =True
+            if user.is_superuser:
+                check = True
+            else:
+                asset_list_get = form.cleaned_data['asset']
+                if asset_list_get.count() == asset_list_get.filter(Q(user=user)|Q(group__user = user)).count():
+                    check =True
             if check:
                 task_get = form.save()
                 task_get.status = models.STATUS.objects.filter(name ='待执行').first()

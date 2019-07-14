@@ -28,7 +28,7 @@ def mainlist(request):
                                             Q(target__icontains = key)|
                                             Q(type__name__icontains = key)|
                                             Q(status__name__icontains = key)|
-                                            Q(asset__name__icontains = key)).order_by('endtime')
+                                            Q(asset__name__icontains = key)).order_by('-endtime')
     else:
         list_get = models.Task.objects.filter(Q(name__icontains = key)|
                                            Q(target__icontains = key)|
@@ -36,7 +36,7 @@ def mainlist(request):
                                             Q(status__name__icontains = key)|
                                             Q(asset__name__icontains = key),
                                             Q(asset__user=user)|
-                                            Q(asset__group__user=user)).order_by('endtime')
+                                            Q(asset__group__user=user)).order_by('-endtime')
     list_count = list_get.count()
     pg = MyPageNumberPagination()
     list_page = pg.paginate_queryset(list_get, request,'self')

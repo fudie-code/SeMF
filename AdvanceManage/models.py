@@ -5,12 +5,12 @@ from AssetManage.models import Type as AssetType
 # Create your models here.
 SCANNER_TYPE = (
                 ('System',(
-                           ('RSAS','RSAS'),
-                           ('Nessus-sc','Nessus-sc'),
+                           #('RSAS','RSAS'),
+                           ('Nessus','Nessus'),
                            )
                  ),
                 ('Web',(
-                           ('RSAS','RSAS'),
+                           #('RSAS','RSAS'),
                            ('AWVS','AWVS'),
                            )
                  ),

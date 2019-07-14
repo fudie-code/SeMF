@@ -13,9 +13,9 @@ def get_scannerinfo(scanner_id):
     
     scanner = Scanner.objects.filter(id=scanner_id).first()
 
-    url = scanner.scanner_url
-    Access_Key = scanner.scanner_apikey
-    Secret_Key = scanner.scanner_apisec
+    url = scanner.url
+    Access_Key = scanner.apikey
+    Secret_Key = scanner.apisec
     return url,Access_Key,Secret_Key
 
 
