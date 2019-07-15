@@ -50,7 +50,7 @@ class Type(models.Model):
     
 
 class Article(models.Model):
-    name = models.CharField(verbose_name=u'文章标题', max_length=500,unique=True)
+    name = models.CharField(verbose_name=u'文章标题', max_length=200,unique=True)
     key = models.ManyToManyField(Key,related_name='key_for_article',blank=True,verbose_name='文章分类')
     abstract = models.TextField(verbose_name=u'文章简介',null=True)
     body = models.TextField(verbose_name=u'文章内容',null=True)
