@@ -5,13 +5,9 @@
 本平台旨在帮助安全人员少，业务线繁杂，周期巡检困难，自动化程度低的甲方，更好的实现企业内部的安全管理。
 
 #### 软件架构
-后端系统 python3 + django2 + rabbitmq 实现。
+后端系统 python3.x + django2.x + rabbitmq 实现。
+前端使用 easyweb 实现。
 
-#### 项目特点
-1.  可自定义用户类型及权限信息，初始化中生成安全人员，运维人员，网络人员和业务人员四种类型
-2.  资产类型和资产属性可在后台自定义，根据需要进行扩展
-3.  内网资产发现和端口扫描可自动化进行
-4.  完整的漏洞跟进和扫描器漏洞过滤
 
 
 
@@ -33,50 +29,9 @@
     python manage.py migrate
     python manage.py createsuperuser    //创建超级管理员
     python initdata.py        //初始化数据库，主要生成角色，权限等信息
-    python cnvd_xml.py        //用于同步cnvd漏洞数据文件，文件位于cnvd_xml目录下，可自行调整，该文件夹每周更新一次，
     celery -A SeMF worker -l info    //用于开启消费者，执行异步任务
     python manage.py runserver 0.0.0.0:8000    //运行成功，访问即可
     
     如需使用周期巡检和漏洞同步功能，需前往
     http://localhost:8000/semf/        页面设置扫描器API参数，当前支持nessus，后续会根据反馈添加其他扫描器
     ```
-    
-
-=======
-# SeMF
-
-#### 介绍
-内部更新
-
-#### 软件架构
-软件架构说明
-
-
-#### 安装教程
-
-1. xxxx
-2. xxxx
-3. xxxx
-
-#### 使用说明
-
-1. xxxx
-2. xxxx
-3. xxxx
-
-#### 参与贡献
-
-1. Fork 本仓库
-2. 新建 Feat_xxx 分支
-3. 提交代码
-4. 新建 Pull Request
-
-
-#### 码云特技
-
-1. 使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2. 码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3. 你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4. [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5. 码云官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6. 码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
