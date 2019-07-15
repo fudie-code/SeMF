@@ -10,7 +10,6 @@ djangorestframework==3.9.4
 djangorestframework-simplejwt==4.3.0
 idna==2.6
 kombu==4.6.3
-mysqlclient==1.4.2.post1
 nessrest==0.40
 PyJWT==1.7.1
 PyMySQL==0.8.0
