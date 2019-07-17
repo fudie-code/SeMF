@@ -70,8 +70,8 @@ def csv_get_example(request):
     rows = dict()
     rows['headers'] = ["资产名称", "唯一标识(企业标识/ip/url)", "资产类型",'资产权重', "资产说明", "负责人", "负责人电话", "负责人邮箱", "项目关联，填写资产标识"]
     rows['1'] = ["AssetName1", "url", "web应用",'1', "项目详细说明", "王XX", "156XXXX0905", "abcXXXXXX@XX.com", ""]
-    rows['2'] = ["AssetName2", "129.1.12.x",'1', "数据库", "项目详细说明", "王XX", "156XXXX0905", "abcXXXXXX@XX.com", ""]
-    rows['3'] = ["AssetName3", "192.168.1.x",'1', "服务器", "项目详细说明", "王XX", "156XXXX0905", "abcXXXXXX@XX.com", "url/ip"]
+    rows['2'] = ["AssetName2", "129.1.12.x", "数据库",'1', "项目详细说明", "王XX", "156XXXX0905", "abcXXXXXX@XX.com", ""]
+    rows['3'] = ["AssetName3", "192.168.1.x", "服务器",'1', "项目详细说明", "王XX", "156XXXX0905", "abcXXXXXX@XX.com", "url/ip"]
 
     for row in rows.values():
         writer.writerow(row)
