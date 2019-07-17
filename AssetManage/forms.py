@@ -6,18 +6,19 @@ Created on 2019年6月15日
 '''
 from django.forms import ModelForm
 from . import models
+from django import forms
 from VulnManage import models as vulnmodels
 
 class AssetForm(ModelForm):
     class Meta:
         model  = models.Asset
-        fields = ('name','type','key','description','manage','telephone','weight','email','user','parent')
+        fields = ('name','type','key','weight','description','manage','telephone','email','user','parent')
         
         
 class AssetUpdateForm(ModelForm):
     class Meta:
         model  = models.Asset
-        fields = ('name','type','description','manage','telephone','email','user','parent')
+        fields = ('name','type','weight','description','manage','telephone','email','user','parent')
         
         
         
@@ -56,3 +57,8 @@ class VulnForm(ModelForm):
     class Meta:
         model  = vulnmodels.Vuln
         fields= ('name','cve','type','level','introduce','info','scopen','fix','fix_status')
+        
+        
+class UploadForm(forms.Form):
+    #id = forms.CharField(max_length=50)
+    file = forms.FileField()

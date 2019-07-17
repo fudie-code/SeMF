@@ -9,10 +9,11 @@ from .views import views,articleviews,fileviews,commentsviews,chartviews
 
 urlpatterns = [
     path('articlelist/',views.mainlist,name='articlelist'),
+    path('orderlist/',views.orderlist,name='orderlist'),
     path('typelist/',views.typelist,name='typelist'),
     path('statuslist/',views.statuslist,name='statuslist'),
     
-    path('articlecreate/<str:asset_id>/',articleviews.articlecreate,name='articlecreate'),
+    path('articlecreate/',articleviews.articlecreate,name='articlecreate'),
     path('articledelete/<str:article_id>/',articleviews.articledelete,name='articledelete'),
     path('articleupdate/<str:article_id>/',articleviews.articleupdate,name='articleupdate'),
     path('articledetails/<str:article_id>/',articleviews.articledetails,name='articledetails'),

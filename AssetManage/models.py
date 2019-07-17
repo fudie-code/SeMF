@@ -216,4 +216,18 @@ class File(models.Model):
     class Meta: 
         verbose_name = 'File' 
         verbose_name_plural = '文件信息'
+        
+        
+class checkcode(models.Model):
+    file = models.ForeignKey(File,related_name='checkcode_file',on_delete=models.CASCADE)
+    code = models.CharField(max_length=200)
+    is_use = models.BooleanField('是否使用',default=False)
+    starttime = models.DateTimeField('创建时间',auto_now_add=True)
+    
+    def __str__(self):
+        return self.code
+    
+    class Meta: 
+        verbose_name = 'checkcode' 
+        verbose_name_plural = '文件授权'
     

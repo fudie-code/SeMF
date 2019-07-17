@@ -55,7 +55,7 @@ class Article(models.Model):
     abstract = models.TextField(verbose_name=u'文章简介',null=True)
     body = models.TextField(verbose_name=u'文章内容',null=True)
     count = models.IntegerField(verbose_name='统计',default=0)
-    status = models.ForeignKey(STATUS,related_name='status_for_article', on_delete=models.DO_NOTHING)
+    status = models.ForeignKey(STATUS,related_name='status_for_article', on_delete=models.DO_NOTHING,null=True)
     type = models.ForeignKey(Type,related_name='type_for_article', on_delete=models.DO_NOTHING,null=True,verbose_name='文章分类')
     user = models.ForeignKey(User, related_name='article_for_user', on_delete=models.SET_NULL,null=True)
     create_time = models.DateTimeField(verbose_name=u'添加时间', auto_now_add=True)

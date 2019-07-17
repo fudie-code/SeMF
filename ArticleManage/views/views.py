@@ -25,16 +25,12 @@ def mainlist(request):
         key=''
     if user.is_superuser:
         list_get = models.Article.objects.filter(Q(name__icontains = key)|
-                                            Q(key__icontains = key)|
                                             Q(type__name__icontains = key)|
-                                            Q(status__name__icontains = key)|
-                                            Q(abstract__icontains = key)|
-                                            Q(user__name__icontains = key)).order_by('update_time')
+                                            Q(status__name__icontains = key)).order_by('update_time')
     else:
-        list_get = models.Article.objects.filter(Q(key__icontains = key)|
+        list_get = models.Article.objects.filter(Q(name__icontains = key)|
                                             Q(type__name__icontains = key)|
-                                            Q(abstract__icontains = key)|
-                                            Q(user__name__icontains = key),
+                                            Q(status__name__icontains = key),
                                             status__name = '发布').order_by('update_time')
     list_count = list_get.count()
     pg = MyPageNumberPagination()
@@ -44,6 +40,29 @@ def mainlist(request):
     data['count'] = list_count
     data['data'] = xssfilter(serializers_get.data)
     return JsonResponse(data)
+
+
+@api_view(['GET'])
+def orderlist(request):
+    data = {
+      "code": 0,
+      "msg": "",
+      "count": '',
+      "data": []
+    }
+    key = request.GET.get('key')
+    if not key:
+        key=''
+    list_get = models.Article.objects.filter(status__name = '发布').order_by('update_time')
+    list_count = list_get.count()
+    pg = MyPageNumberPagination()
+    list_page = pg.paginate_queryset(list_get, request,'self')
+    serializers_get = serializers.ArticleListSerializer(instance= list_page,many=True)
+    data['msg'] = 'success'
+    data['count'] = list_count
+    data['data'] = xssfilter(serializers_get.data)
+    return JsonResponse(data)
+
 
 
 @api_view(['GET'])

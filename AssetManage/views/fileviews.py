@@ -5,7 +5,8 @@ Created on 2019年6月17日
 @author: 残源
 '''
 from django.http import JsonResponse
-from rest_framework.decorators import api_view
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import api_view,permission_classes
 from SeMF.views import MyPageNumberPagination,xssfilter
 from .. import models,forms
 from .. import serializers
@@ -137,5 +138,54 @@ def file_get(request,file_id):
     return JsonResponse(data)
 
 
+@api_view(['GET'])
+def file_code(request,file_id):
+    user= request.user
+    data = {
+          "code": 1
+          ,"msg": ""
+          ,"data": ''
+        }
+    if user.is_superuser:
+        file_get = models.File.objects.filter(id = file_id).first()
+    else:
+        file_get = models.File.objects.filter(Q(asset__user = user)|Q(asset__group__user = user),id = file_id).first()
+    if file_get:
+        namespace = uuid.NAMESPACE_URL
+        code = str(uuid.uuid3(namespace,file_get.name))
+        models.checkcode.objects.get_or_create(file=file_get,code=code)
+        data['code'] = 0
+        data['msg'] = file_get.name + '授权成功'
+        data['data']= code
+    else:
+        data['msg'] = str(file_id) + '请检查请求参数，文件不存在或鉴权失败'
+    return JsonResponse(data)
+
+
+
+@api_view(['GET'])
+@permission_classes((AllowAny,))
+def file_download(request,checkcode):
+    data = {
+          "code": 1
+          ,"msg": ""
+          ,"data": ''
+        }
+    file_get = models.checkcode.objects.filter(code = checkcode,is_use=False).first().file
+    if file_get:
+        file_get.is_use=True
+        file_get.save()
+        file_path = file_get.file.path
+        file=open(file_path,'rb')
+        response =FileResponse(file)
+        response['Content-Type']='application/octet-stream'
+        response['Content-Disposition'] = "attachment; filename*=utf-8''{}".format(escape_uri_path(file_get.name))
+        
+        data['code'] = 0
+        data['msg'] = file_get.name + '授权成功'
+        return response
+    else:
+        data['msg'] = str(checkcode) + '请检查请求参数，文件不存在或鉴权失败'
+    return JsonResponse(data)
 
 

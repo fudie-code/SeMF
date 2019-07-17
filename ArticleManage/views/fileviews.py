@@ -7,12 +7,14 @@ Created on 2019年6月21日
 
 
 from django.http import JsonResponse
-from rest_framework.decorators import api_view
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import api_view,permission_classes
 from .. import models,forms
 from django.http import FileResponse
 from django.utils.encoding import escape_uri_path
 from django.views.decorators.csrf import csrf_protect
 import uuid
+from SeMF.settings import WEB_URL
 
 @api_view(['POST'])
 @csrf_protect
@@ -21,7 +23,7 @@ def filecreate(request):
       "code": 1,
       "msg": "",
       "count": '',
-      "data": []
+      "data": ''
     }
     #user = request.user
     form = forms.FileForm(request.POST,request.FILES)
@@ -41,13 +43,14 @@ def filecreate(request):
             file_get = file_get[0]
         data['code'] = 0
         data['msg'] = '添加成功'
-        data['data']['url'] = '/article/fileget/'+ file_get.id +'/'
+        data['data'] = WEB_URL +'/article/fileget/'+ str(file_get.id) +'/'
     else:
         data['msg'] = '请检查参数'
     return JsonResponse(data)
 
 
 @api_view(['GET'])
+@permission_classes((AllowAny,))
 def fileget(request,file_id):
     data = {
       "code": 1,

@@ -5,7 +5,7 @@ Created on 2019年6月17日
 @author: 残源
 '''
 from django.urls import path
-from .views import views,assetviews,portsviews,pluginsviews,sqlviews,osviews,webinfoviews,fileviews,vulnviews,chartviews
+from .views import views,assetviews,portsviews,pluginsviews,sqlviews,osviews,webinfoviews,fileviews,vulnviews,chartviews,csv_excuter
 
 urlpatterns = [
     path('assetlist/',views.mainlist,name='assetlist'),
@@ -46,6 +46,9 @@ urlpatterns = [
     path('filecreate/<str:asset_id>/',fileviews.filecreate,name='filecreate'),
     path('filedelete/<str:file_id>/',fileviews.filedelete,name='filedelete'),
     path('file_get/<str:file_id>/',fileviews.file_get,name='file_get'),
+    #随机值鉴权下载文件
+    path('file_code/<str:file_id>/',fileviews.file_code,name='file_code'),
+    path('file_download/<str:checkcode>/',fileviews.file_download,name='file_download'),
     
     
     path('vulncreate/<str:asset_id>/',vulnviews.vulncreate,name='vulncreate'),
@@ -53,5 +56,8 @@ urlpatterns = [
     
     path('assettypechart/',chartviews.assettypechart,name='assettypechart'),
     path('assetvulnlevelchart/<str:asset_id>/',chartviews.assetvulnlevelchart,name='assetvulnlevelchart'),
+    
+    path('get_example_csv/', csv_excuter.csv_get_example, name='get_example_csv'),
+    path('upload_csv/', csv_excuter.csv_upload_asset, name='upload_csv'),
     
     ]
