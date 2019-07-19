@@ -5,7 +5,6 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from SeMF.views import MyPageNumberPagination,xssfilter
 from .. import models
-from django.db.models import  Q
 from .. import serializers
 
 
@@ -22,7 +21,7 @@ def noticelist(request):
     key = request.GET.get('key')
     if not key:
         key=''
-    list_get = models.Notice.objects.filter(Q(user=user)|Q(user__isnull=True)).first()
+    list_get = models.Notice.objects.filter(user=user)
     list_count = list_get.count()
     pg = MyPageNumberPagination()
     list_page = pg.paginate_queryset(list_get, request,'self')
