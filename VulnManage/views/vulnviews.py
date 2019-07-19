@@ -50,6 +50,33 @@ def vulnupdate(request,vuln_id):
     else:
         item_get = models.Vuln.objects.filter(Q(asset__user = user)|Q(asset__group__user = user),id = vuln_id).first()
     if item_get:
+        form = forms.VulnForm(request.POST,instance=item_get)
+        if form.is_valid():
+            form.save()
+            data['code'] = 0
+            data['msg'] = 'success'
+        else:
+            data['msg'] = '请检查参数'
+    else:
+        data['msg'] = '请检查权限'
+    return JsonResponse(data)
+
+
+@api_view(['POST'])
+@csrf_protect
+def vulnstatus(request,vuln_id):
+    data = {
+      "code": 1,
+      "msg": "",
+      "count": '',
+      "data": []
+    }
+    user = request.user
+    if user.is_superuser:
+        item_get = models.Vuln.objects.filter(id = vuln_id).first()
+    else:
+        item_get = models.Vuln.objects.filter(Q(asset__user = user)|Q(asset__group__user = user),id = vuln_id).first()
+    if item_get:
         form = forms.VulnUpdateForm(request.POST,instance=item_get)
         if form.is_valid():
             form.save()
